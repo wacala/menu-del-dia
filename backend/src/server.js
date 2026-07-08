@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 
 const config = require('./config');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
 const { errorHandler } = require('./middleware/error');
 
 const app = express();
@@ -20,6 +21,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
