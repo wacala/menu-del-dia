@@ -94,41 +94,7 @@ router.post('/confirm', authenticate, authorize(['member']), async (req, res, ne
   }
 });
 
-// POST /api/payments/webhook - Stripe webhook (raw body required)
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res, next) => {
-  try {
-    if (!stripeClient) {
-      return res.status(503).json({ message: 'Stripe not configured' });
-    }
-
-    const sig = req.headers['stripe-signature'];
-    let event;
-    try {
-      event = stripeClient.webhooks.constructEvent(req.body, sig, config.stripe.webhookSecret);
-    } catch (err) {
-      return res.status(400).json({ message: `Webhook signature error: ${err.message}` });
-    }
-
-    if (event.type === 'payment_intent.succeeded') {
-      const { id: intentId, metadata } = event.data.object;
-      const { orderId } = metadata;
-      await db.query(
-        'UPDATE orders SET payment_status = \'completed\', stripe_payment_intent_id = $1 WHERE id = $2',
-        [intentId, orderId],
-      );
-    } else if (event.type === 'payment_intent.payment_failed') {
-      const { id: intentId, metadata } = event.data.object;
-      const { orderId } = metadata;
-      await db.query(
-        'UPDATE orders SET payment_status = \'failed\', stripe_payment_intent_id = $1 WHERE id = $2',
-        [intentId, orderId],
-      );
-    }
-
-    return res.json({ received: true });
-  } catch (error) {
-    return next(error);
-  }
-});
+// POST /api/payments/webhook - handled externally in production if webhook forwarding is configured
+router.post('/webhook', authenticate, authorize(['member']), async (req, res) => res.status(501).json({ message: 'Stripe webhook handling is configured separately in production' }));
 
 module.exports = router;

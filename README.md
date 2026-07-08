@@ -24,3 +24,30 @@ Community food marketplace where local cooks can offer, sell, and deliver food t
 cd backend
 npm install
 npm run dev
+## Deployment (Railway)
+
+### Backend service
+- Root directory: `backend`
+- Builder: Dockerfile
+- Required env vars:
+  - `NODE_ENV=production`
+  - `PORT=3001`
+  - `CLIENT_URL=<your frontend URL>`
+  - `DB_HOST`
+  - `DB_PORT`
+  - `DB_USER`
+  - `DB_PASSWORD`
+  - `DB_NAME`
+  - `JWT_SECRET`
+  - `STRIPE_SECRET_KEY`
+  - `STRIPE_PUBLIC_KEY`
+  - `STRIPE_WEBHOOK_SECRET`
+  - `TWILIO_ACCOUNT_SID`
+  - `TWILIO_AUTH_TOKEN`
+  - `TWILIO_PHONE_NUMBER`
+
+### Frontend service
+- Root directory: `frontend`
+- Builder: Dockerfile
+- Required env vars:
+  - `VITE_API_URL=<your backend URL>/api`
