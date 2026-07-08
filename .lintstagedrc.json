@@ -1,0 +1,4 @@
+{
+  "backend/src/**/*.js": ["eslint --fix"],
+  "backend/scripts/**/*.js": ["eslint --fix"]
+}

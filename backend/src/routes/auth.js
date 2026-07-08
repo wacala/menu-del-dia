@@ -29,7 +29,9 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const { email, password, firstName, lastName, role } = req.body;
+      const {
+        email, password, firstName, lastName, role,
+      } = req.body;
 
       const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
       if (existingUser.rows.length > 0) {
