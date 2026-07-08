@@ -47,6 +47,22 @@ router.post(
       );
 
       const user = result.rows[0];
+
+      // Create role-specific profile
+      if (role === 'cook') {
+        await db.query(
+          `INSERT INTO cook_profiles (user_id, status)
+           VALUES ($1, 'approved')`,
+          [user.id],
+        );
+      } else if (role === 'member') {
+        await db.query(
+          `INSERT INTO member_profiles (user_id)
+           VALUES ($1)`,
+          [user.id],
+        );
+      }
+
       const token = generateToken(user.id, user.email, user.role);
 
       return res.status(201).json({ message: 'User registered successfully', user, token });
