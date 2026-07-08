@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { menusAPI, ordersAPI } from '../api';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { menusAPI, ordersAPI, paymentsAPI } from '../api';
+import StripePaymentForm from '../components/StripePaymentForm';
 
 export default function MenuDetailPage() {
   const { menuId } = useParams();
@@ -9,9 +12,18 @@ export default function MenuDetailPage() {
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState({});
   const [deliveryType, setDeliveryType] = useState('pickup');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
   const [notes, setNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [placedOrder, setPlacedOrder] = useState(null);
+  const [clientSecret, setClientSecret] = useState('');
+  const [publishableKey, setPublishableKey] = useState('');
+
+  const stripePromise = useMemo(
+    () => (publishableKey ? loadStripe(publishableKey) : null),
+    [publishableKey],
+  );
 
   useEffect(() => {
     fetchMenu();
@@ -70,21 +82,40 @@ export default function MenuDetailPage() {
       setError('');
 
       const orderData = {
-        menuId: parseInt(menuId),
+        menuId: parseInt(menuId, 10),
         items: cartItems.map((item) => ({
           menuItemId: item.id,
           quantity: cart[item.id],
         })),
         deliveryType,
         specialInstructions: notes,
+        paymentMethod,
       };
 
-      await ordersAPI.create(orderData);
-      navigate('/marketplace/orders');
+      const response = await ordersAPI.create(orderData);
+      const order = response.data.order;
+
+      if (paymentMethod === 'cash') {
+        navigate('/marketplace/orders');
+        return;
+      }
+
+      const intentResponse = await paymentsAPI.createIntent(order.id);
+      setPlacedOrder(order);
+      setClientSecret(intentResponse.data.clientSecret);
+      setPublishableKey(intentResponse.data.publishableKey);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to place order');
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handlePaymentSuccess = () => {
+    if (placedOrder?.id) {
+      navigate(`/marketplace/orders/${placedOrder.id}`);
+    } else {
+      navigate('/marketplace/orders');
     }
   };
 
@@ -111,7 +142,6 @@ export default function MenuDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
       <nav className="bg-white shadow">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <Link to="/marketplace" className="text-blue-600 hover:underline">
@@ -120,7 +150,6 @@ export default function MenuDetailPage() {
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
@@ -129,7 +158,6 @@ export default function MenuDetailPage() {
         )}
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Menu Details */}
           <div className="md:col-span-2">
             <div className="card mb-6">
               <h1 className="text-3xl font-bold mb-2">{menu.title}</h1>
@@ -158,7 +186,6 @@ export default function MenuDetailPage() {
 
               <hr className="my-6" />
 
-              {/* Menu Items */}
               <h2 className="text-xl font-semibold mb-4">Available Items</h2>
               <div className="space-y-4">
                 {menu.items && menu.items.length > 0 ? (
@@ -167,28 +194,19 @@ export default function MenuDetailPage() {
                     const available = item.quantity_available > 0;
 
                     return (
-                      <div
-                        key={item.id}
-                        className="border rounded-lg p-4 hover:bg-gray-50"
-                      >
+                      <div key={item.id} className="border rounded-lg p-4 hover:bg-gray-50">
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h3 className="font-semibold">{item.name}</h3>
                             {item.description && (
-                              <p className="text-gray-600 text-sm">
-                                {item.description}
-                              </p>
+                              <p className="text-gray-600 text-sm">{item.description}</p>
                             )}
                             {item.dietary_tags && (
-                              <p className="text-xs text-blue-600 mt-1">
-                                🏷️ {item.dietary_tags}
-                              </p>
+                              <p className="text-xs text-blue-600 mt-1">🏷️ {item.dietary_tags}</p>
                             )}
                           </div>
                           <div className="text-right">
-                            <p className="text-lg font-bold text-blue-600">
-                              ${item.price}
-                            </p>
+                            <p className="text-lg font-bold text-blue-600">${item.price}</p>
                             <p className="text-xs text-gray-600">
                               {item.quantity_available - item.quantity_sold} available
                             </p>
@@ -204,9 +222,7 @@ export default function MenuDetailPage() {
                             >
                               −
                             </button>
-                            <span className="w-8 text-center font-medium">
-                              {quantity}
-                            </span>
+                            <span className="w-8 text-center font-medium">{quantity}</span>
                             <button
                               onClick={() => handleAddToCart(item.id)}
                               className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
@@ -215,9 +231,7 @@ export default function MenuDetailPage() {
                             </button>
                           </div>
                         ) : (
-                          <p className="text-red-600 text-sm font-medium">
-                            Sold out
-                          </p>
+                          <p className="text-red-600 text-sm font-medium">Sold out</p>
                         )}
                       </div>
                     );
@@ -229,23 +243,16 @@ export default function MenuDetailPage() {
             </div>
           </div>
 
-          {/* Order Summary Sidebar */}
           <div>
             <div className="card sticky top-4">
               <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
 
-              {/* Order Items */}
               <div className="bg-gray-50 p-3 rounded mb-4 max-h-64 overflow-y-auto">
                 {cartItems.length > 0 ? (
                   <div className="space-y-2">
                     {cartItems.map((item) => (
-                      <div
-                        key={item.id}
-                        className="flex justify-between text-sm"
-                      >
-                        <span>
-                          {item.name} x{cart[item.id]}
-                        </span>
+                      <div key={item.id} className="flex justify-between text-sm">
+                        <span>{item.name} x{cart[item.id]}</span>
                         <span className="font-medium">
                           ${(parseFloat(item.price) * cart[item.id]).toFixed(2)}
                         </span>
@@ -257,26 +264,30 @@ export default function MenuDetailPage() {
                 )}
               </div>
 
-              {/* Delivery Options */}
               <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">
-                  Delivery Type
-                </label>
+                <label className="block text-sm font-medium mb-2">Delivery Type</label>
                 <select
                   value={deliveryType}
                   onChange={(e) => setDeliveryType(e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 >
-                  {menu.pickup_available && (
-                    <option value="pickup">Pickup</option>
-                  )}
-                  {menu.delivery_available && (
-                    <option value="delivery">Delivery</option>
-                  )}
+                  {menu.pickup_available && <option value="pickup">Pickup</option>}
+                  {menu.delivery_available && <option value="delivery">Delivery</option>}
                 </select>
               </div>
 
-              {/* Notes */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Payment Method</label>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                >
+                  <option value="cash">Cash</option>
+                  <option value="stripe">Card (Stripe)</option>
+                </select>
+              </div>
+
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-2">Notes</label>
                 <textarea
@@ -288,22 +299,43 @@ export default function MenuDetailPage() {
                 />
               </div>
 
-              {/* Total and Button */}
-              <div className="border-t pt-4">
+              <div className="border-t pt-4 mb-4">
                 <div className="flex justify-between mb-4">
                   <span className="font-medium">Total:</span>
-                  <span className="text-2xl font-bold text-blue-600">
-                    ${cartTotal}
-                  </span>
+                  <span className="text-2xl font-bold text-blue-600">${cartTotal}</span>
                 </div>
                 <button
                   onClick={handlePlaceOrder}
                   disabled={cartItems.length === 0 || submitting}
                   className="w-full btn-primary disabled:opacity-50"
                 >
-                  {submitting ? 'Placing order...' : 'Place Order'}
+                  {submitting
+                    ? 'Placing order...'
+                    : paymentMethod === 'stripe'
+                      ? 'Continue to payment'
+                      : 'Place Order'}
                 </button>
               </div>
+
+              {clientSecret && stripePromise && placedOrder && (
+                <div className="border-t pt-4">
+                  <h4 className="font-semibold mb-3">Complete your card payment</h4>
+                  <Elements
+                    stripe={stripePromise}
+                    options={{ clientSecret }}
+                  >
+                    <StripePaymentForm
+                      orderId={placedOrder.id}
+                      onPaid={handlePaymentSuccess}
+                      onCancel={() => {
+                        setClientSecret('');
+                        setPublishableKey('');
+                        setPlacedOrder(null);
+                      }}
+                    />
+                  </Elements>
+                </div>
+              )}
             </div>
           </div>
         </div>
