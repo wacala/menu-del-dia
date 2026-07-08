@@ -60,3 +60,18 @@ Add these env vars for production monitoring:
 - `VITE_SENTRY_DSN` in `frontend/.env`
 
 This captures unexpected backend exceptions and frontend crashes.
+
+
+## Database Backups
+
+A scheduled GitHub Actions workflow creates a daily PostgreSQL dump and uploads it as an artifact.
+
+### Required GitHub secrets
+- `DATABASE_URL` (preferred)
+- or `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`
+
+### Manual backup
+```bash
+cd backend
+npm run db:backup
+```
