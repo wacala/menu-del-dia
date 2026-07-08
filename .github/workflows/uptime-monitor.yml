@@ -1,0 +1,21 @@
+name: Uptime Monitor
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check backend health
+        run: curl -fsSL "$BACKEND_HEALTH_URL" | python3 -c 'import sys, json; payload = json.load(sys.stdin); assert payload.get("status") == "API is running", "Backend health check failed"; print("Backend healthy")'
+        env:
+          BACKEND_HEALTH_URL: ${{ secrets.BACKEND_HEALTH_URL }}
+
+      - name: Check frontend availability
+        run: curl -fsSL "$FRONTEND_URL" >/dev/null
+        env:
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}

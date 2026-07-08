@@ -75,3 +75,12 @@ A scheduled GitHub Actions workflow creates a daily PostgreSQL dump and uploads 
 cd backend
 npm run db:backup
 ```
+
+
+## Uptime Monitoring
+
+A scheduled GitHub Actions workflow checks the public backend health endpoint and frontend URL every 15 minutes.
+
+### Required GitHub secrets
+- `BACKEND_HEALTH_URL` (example: `https://your-backend.railway.app/api/health`)
+- `FRONTEND_URL` (example: `https://your-frontend.railway.app`)
