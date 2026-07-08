@@ -6,9 +6,11 @@ import DashboardPage from './pages/DashboardPage';
 import MemberMarketplacePage from './pages/MemberMarketplacePage';
 import MenuDetailPage from './pages/MenuDetailPage';
 import MemberOrdersPage from './pages/MemberOrdersPage';
+import MemberOrderDetailPage from './pages/MemberOrderDetailPage';
 import CookDashboardPage from './pages/CookDashboardPage';
 import CookMenusPage from './pages/CookMenusPage';
 import CookOrdersPage from './pages/CookOrdersPage';
+import CookOrderDetailPage from './pages/CookOrderDetailPage';
 import './index.css';
 
 function ProtectedRoute({ children }) {
@@ -67,6 +69,14 @@ export default function App() {
           }
         />
         <Route
+          path="/marketplace/orders/:orderId"
+          element={
+            <MemberRoute>
+              <MemberOrderDetailPage />
+            </MemberRoute>
+          }
+        />
+        <Route
           path="/cook/dashboard"
           element={
             <CookRoute>
@@ -87,6 +97,14 @@ export default function App() {
           element={
             <CookRoute>
               <CookOrdersPage />
+            </CookRoute>
+          }
+        />
+        <Route
+          path="/cook/orders/:orderId"
+          element={
+            <CookRoute>
+              <CookOrderDetailPage />
             </CookRoute>
           }
         />
