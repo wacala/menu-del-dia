@@ -11,7 +11,6 @@
     "lint": "eslint \"src/**/*.js\" \"scripts/**/*.js\"",
     "lint:fix": "eslint \"src/**/*.js\" \"scripts/**/*.js\" --fix",
     "db:migrate": "node scripts/migrate.js",
-    "prepare": "husky",
     "db:backup": "node scripts/backup-db.js"
   },
   "keywords": [
