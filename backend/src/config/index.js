@@ -14,6 +14,9 @@ const baseConfig = {
     publicKey: process.env.STRIPE_PUBLIC_KEY || '',
     webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
   },
+  sentry: {
+    dsn: process.env.SENTRY_DSN || '',
+  },
   twilio: {
     accountSid: process.env.TWILIO_ACCOUNT_SID || '',
     authToken: process.env.TWILIO_AUTH_TOKEN || '',

@@ -1,3 +1,4 @@
+const Sentry = require('@sentry/node');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -11,6 +12,13 @@ const orderRoutes = require('./routes/orders');
 const paymentRoutes = require('./routes/payments');
 const notificationRoutes = require('./routes/notifications');
 const { errorHandler } = require('./middleware/error');
+
+if (config.sentry?.dsn) {
+  Sentry.init({
+    dsn: config.sentry.dsn,
+    environment: process.env.NODE_ENV || 'development',
+  });
+}
 
 const app = express();
 

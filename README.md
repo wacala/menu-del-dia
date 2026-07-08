@@ -51,3 +51,12 @@ npm run dev
 - Builder: Dockerfile
 - Required env vars:
   - `VITE_API_URL=<your backend URL>/api`
+
+
+## Error Tracking (Sentry)
+
+Add these env vars for production monitoring:
+- `SENTRY_DSN` in `backend/.env`
+- `VITE_SENTRY_DSN` in `frontend/.env`
+
+This captures unexpected backend exceptions and frontend crashes.
