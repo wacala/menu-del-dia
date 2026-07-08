@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import MemberMarketplacePage from './pages/MemberMarketplacePage';
+import MenuDetailPage from './pages/MenuDetailPage';
+import MemberOrdersPage from './pages/MemberOrdersPage';
 import CookDashboardPage from './pages/CookDashboardPage';
 import CookMenusPage from './pages/CookMenusPage';
 import CookOrdersPage from './pages/CookOrdersPage';
@@ -18,6 +20,12 @@ function CookRoute({ children }) {
   const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
   return token && user?.role === 'cook' ? children : <Navigate to="/dashboard" replace />;
+}
+
+function MemberRoute({ children }) {
+  const token = useAuthStore((state) => state.token);
+  const user = useAuthStore((state) => state.user);
+  return token && user?.role === 'member' ? children : <Navigate to="/dashboard" replace />;
 }
 
 export default function App() {
@@ -37,9 +45,25 @@ export default function App() {
         <Route
           path="/marketplace"
           element={
-            <ProtectedRoute>
+            <MemberRoute>
               <MemberMarketplacePage />
-            </ProtectedRoute>
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/marketplace/menu/:menuId"
+          element={
+            <MemberRoute>
+              <MenuDetailPage />
+            </MemberRoute>
+          }
+        />
+        <Route
+          path="/marketplace/orders"
+          element={
+            <MemberRoute>
+              <MemberOrdersPage />
+            </MemberRoute>
           }
         />
         <Route
