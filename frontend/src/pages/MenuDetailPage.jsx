@@ -76,7 +76,7 @@ export default function MenuDetailPage() {
           quantity: cart[item.id],
         })),
         deliveryType,
-        notes,
+        specialInstructions: notes,
       };
 
       await ordersAPI.create(orderData);

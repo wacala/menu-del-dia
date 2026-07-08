@@ -9,6 +9,16 @@ const baseConfig = {
     secret: process.env.JWT_SECRET || 'dev-secret-change-me',
     expiresIn: '7d',
   },
+  stripe: {
+    secretKey: process.env.STRIPE_SECRET_KEY || '',
+    publicKey: process.env.STRIPE_PUBLIC_KEY || '',
+    webhookSecret: process.env.STRIPE_WEBHOOK_SECRET || '',
+  },
+  twilio: {
+    accountSid: process.env.TWILIO_ACCOUNT_SID || '',
+    authToken: process.env.TWILIO_AUTH_TOKEN || '',
+    whatsappFrom: process.env.TWILIO_WHATSAPP_FROM || 'whatsapp:+14155238886',
+  },
 };
 
 const configByEnv = {

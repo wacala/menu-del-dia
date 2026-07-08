@@ -8,6 +8,8 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const menuRoutes = require('./routes/menus');
 const orderRoutes = require('./routes/orders');
+const paymentRoutes = require('./routes/payments');
+const notificationRoutes = require('./routes/notifications');
 const { errorHandler } = require('./middleware/error');
 
 const app = express();
@@ -25,7 +27,12 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/menus', menuRoutes);
+// Stripe webhook must use raw body — register before json middleware parses it
+app.use('/api/payments/webhook', require('./routes/payments'));
+
 app.use('/api/orders', orderRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });

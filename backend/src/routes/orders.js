@@ -3,6 +3,7 @@ const { body, validationResult } = require('express-validator');
 
 const db = require('../config/database');
 const { authenticate, authorize } = require('../middleware/auth');
+const { notifyOrderStatus } = require('./notifications');
 
 const router = express.Router();
 
@@ -196,7 +197,16 @@ router.get('/cook', authenticate, authorize(['cook']), async (req, res, next) =>
 // GET /api/orders/:id - order detail
 router.get('/:id', authenticate, async (req, res, next) => {
   try {
-    const result = await db.query('SELECT * FROM orders WHERE id = $1', [req.params.id]);
+    const result = await db.query(`SELECT o.*,
+              o.special_instructions AS notes,
+              cu.first_name AS cook_first_name, cu.last_name AS cook_last_name,
+              mu.first_name AS member_first_name, mu.last_name AS member_last_name
+       FROM orders o
+       JOIN cook_profiles cp ON cp.id = o.cook_id
+       JOIN users cu ON cu.id = cp.user_id
+       JOIN member_profiles mp ON mp.id = o.member_id
+       JOIN users mu ON mu.id = mp.user_id
+       WHERE o.id = $1`, [req.params.id]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Order not found' });
@@ -214,8 +224,8 @@ router.get('/:id', authenticate, async (req, res, next) => {
     }
 
     const itemsResult = await db.query(
-      `SELECT oi.*, mi.name FROM order_items oi
-       JOIN menu_items mi ON mi.id = oi.menu_item_id
+      `SELECT oi.quantity, oi.unit_price AS price, oi.subtotal, mi.name, mi.description
+       FROM order_items oi JOIN menu_items mi ON mi.id = oi.menu_item_id
        WHERE oi.order_id = $1`,
       [order.id],
     );
@@ -255,6 +265,9 @@ router.put('/:id/status', authenticate, authorize(['cook']), async (req, res, ne
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Order not found or not yours' });
     }
+
+    // Fire-and-forget WhatsApp notification
+    notifyOrderStatus(req.params.id, status).catch(() => {});
 
     return res.json({ order: result.rows[0] });
   } catch (error) {

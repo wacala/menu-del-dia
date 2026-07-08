@@ -19,6 +19,11 @@ export const menusAPI = {
   publish: (menuId) => apiClient.put(`/menus/${menuId}/publish`),
 };
 
+export const paymentsAPI = {
+  createIntent: (orderId) => apiClient.post('/payments/intent', { orderId }),
+  confirm: (orderId, paymentIntentId) => apiClient.post('/payments/confirm', { orderId, paymentIntentId }),
+};
+
 export const ordersAPI = {
   create: (data) => apiClient.post('/orders', data),
   getById: (id) => apiClient.get(`/orders/${id}`),
