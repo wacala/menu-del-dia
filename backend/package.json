@@ -12,6 +12,7 @@
     "lint:fix": "eslint \"src/**/*.js\" \"scripts/**/*.js\" --fix",
     "db:migrate": "node scripts/migrate.js",
     "db:migrate:email": "node scripts/add-email-verification.js",
+    "db:clear-users": "node scripts/clear-users.js",
     "db:backup": "node scripts/backup-db.js"
   },
   "keywords": [
