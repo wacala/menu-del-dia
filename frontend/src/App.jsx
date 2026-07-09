@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './context/authStore';
 import LoginPage from './pages/LoginPage';
@@ -15,22 +16,35 @@ import './index.css';
 
 function ProtectedRoute({ children }) {
   const token = useAuthStore((state) => state.token);
+  const isInitializing = useAuthStore((state) => state.isInitializing);
+  if (isInitializing) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   return token ? children : <Navigate to="/login" replace />;
 }
 
 function CookRoute({ children }) {
   const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
+  const isInitializing = useAuthStore((state) => state.isInitializing);
+  if (isInitializing) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   return token && user?.role === 'cook' ? children : <Navigate to="/dashboard" replace />;
 }
 
 function MemberRoute({ children }) {
   const token = useAuthStore((state) => state.token);
   const user = useAuthStore((state) => state.user);
+  const isInitializing = useAuthStore((state) => state.isInitializing);
+  if (isInitializing) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   return token && user?.role === 'member' ? children : <Navigate to="/dashboard" replace />;
 }
 
 export default function App() {
+  const fetchUser = useAuthStore((state) => state.fetchUser);
+  const token = useAuthStore((state) => state.token);
+
+  useEffect(() => {
+    if (token) fetchUser();
+  }, []);
+
   return (
     <Router>
       <Routes>

@@ -6,8 +6,8 @@ export const authAPI = {
 };
 
 export const usersAPI = {
-  getProfile: () => apiClient.get('/users/profile'),
-  updateProfile: (data) => apiClient.put('/users/profile', data),
+  getProfile: () => apiClient.get('/users/me'),
+  updateProfile: (data) => apiClient.put('/users/me', data),
   getCooks: () => apiClient.get('/users/cooks'),
 };
 
