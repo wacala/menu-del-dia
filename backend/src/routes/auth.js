@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -5,6 +6,7 @@ const { body, validationResult } = require('express-validator');
 
 const config = require('../config');
 const db = require('../config/database');
+const { sendVerificationEmail } = require('../services/email');
 
 const router = express.Router();
 
@@ -13,6 +15,8 @@ const generateToken = (userId, email, role) => jwt.sign(
   config.jwt.secret,
   { expiresIn: config.jwt.expiresIn },
 );
+
+const generateVerificationToken = () => crypto.randomBytes(32).toString('hex');
 
 router.post(
   '/register',
@@ -63,9 +67,30 @@ router.post(
         );
       }
 
-      const token = generateToken(user.id, user.email, user.role);
+      // Create email verification token (expires in 24h)
+      const verificationToken = generateVerificationToken();
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+      await db.query(
+        `INSERT INTO email_verifications (user_id, token, expires_at)
+         VALUES ($1, $2, $3)`,
+        [user.id, verificationToken, expiresAt],
+      );
 
-      return res.status(201).json({ message: 'User registered successfully', user, token });
+      // Send verification email (non-blocking — don't fail registration if email fails)
+      if (config.email.user) {
+        sendVerificationEmail(email, firstName, verificationToken).catch((err) => {
+          console.error('Failed to send verification email:', err.message);
+        });
+      }
+
+      const jwtToken = generateToken(user.id, user.email, user.role);
+
+      return res.status(201).json({
+        message: 'User registered successfully. Please check your email to verify your account.',
+        user,
+        token: jwtToken,
+        emailVerificationRequired: true,
+      });
     } catch (error) {
       return next(error);
     }
@@ -114,5 +139,79 @@ router.post(
     }
   },
 );
+
+// POST /api/auth/verify-email
+router.post('/verify-email', async (req, res, next) => {
+  try {
+    const { token } = req.body;
+    if (!token) return res.status(400).json({ message: 'Token is required' });
+
+    const result = await db.query(
+      `SELECT ev.*, u.email, u.first_name
+       FROM email_verifications ev
+       JOIN users u ON u.id = ev.user_id
+       WHERE ev.token = $1 AND ev.used = FALSE AND ev.expires_at > NOW()`,
+      [token],
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: 'Invalid or expired verification link' });
+    }
+
+    const { user_id: userId } = result.rows[0];
+
+    await db.query('UPDATE users SET email_verified = TRUE WHERE id = $1', [userId]);
+    await db.query('UPDATE email_verifications SET used = TRUE WHERE token = $1', [token]);
+
+    return res.json({ message: 'Email verified successfully. You can now log in.' });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// POST /api/auth/resend-verification
+router.post('/resend-verification', [
+  body('email').isEmail().normalizeEmail(),
+], async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+
+    const { email } = req.body;
+    const userResult = await db.query(
+      'SELECT id, first_name, email_verified FROM users WHERE email = $1',
+      [email],
+    );
+
+    // Always respond OK to avoid email enumeration
+    if (userResult.rows.length === 0 || userResult.rows[0].email_verified) {
+      return res.json({ message: 'If that email exists and is unverified, a new link has been sent.' });
+    }
+
+    const user = userResult.rows[0];
+
+    // Invalidate old tokens
+    await db.query('UPDATE email_verifications SET used = TRUE WHERE user_id = $1', [user.id]);
+
+    // Create new token
+    const verificationToken = generateVerificationToken();
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    await db.query(
+      `INSERT INTO email_verifications (user_id, token, expires_at)
+       VALUES ($1, $2, $3)`,
+      [user.id, verificationToken, expiresAt],
+    );
+
+    if (config.email.user) {
+      sendVerificationEmail(email, user.first_name, verificationToken).catch((err) => {
+        console.error('Failed to send verification email:', err.message);
+      });
+    }
+
+    return res.json({ message: 'If that email exists and is unverified, a new link has been sent.' });
+  } catch (error) {
+    return next(error);
+  }
+});
 
 module.exports = router;
