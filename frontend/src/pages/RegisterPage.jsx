@@ -6,10 +6,12 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    confirmPassword: '',
     firstName: '',
     lastName: '',
     role: 'member',
   });
+  const [passwordError, setPasswordError] = useState('');
   const navigate = useNavigate();
   const { register, isLoading, error } = useAuthStore();
 
@@ -18,12 +20,20 @@ export default function RegisterPage() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+    if (e.target.name === 'confirmPassword' || e.target.name === 'password') {
+      setPasswordError('');
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setPasswordError('Passwords do not match');
+      return;
+    }
     try {
-      await register(formData);
+      const { confirmPassword, ...registerData } = formData;
+      await register(registerData);
       navigate('/dashboard');
     } catch {
       // Error is handled by store
@@ -39,6 +49,12 @@ export default function RegisterPage() {
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             {error}
+          </div>
+        )}
+
+        {passwordError && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {passwordError}
           </div>
         )}
 
@@ -87,6 +103,19 @@ export default function RegisterPage() {
               type="password"
               name="password"
               value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Confirm Password</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
               onChange={handleChange}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
