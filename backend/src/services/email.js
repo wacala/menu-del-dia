@@ -6,9 +6,12 @@ const resend = new Resend(config.email.resendApiKey);
 async function sendVerificationEmail(toEmail, firstName, token) {
   const verifyUrl = `${config.clientUrl}/verify-email?token=${token}`;
 
+  // In development/testing, Resend only allows sending to the account owner email
+  const recipient = config.email.testEmail || toEmail;
+
   await resend.emails.send({
     from: 'Menú del Día <onboarding@resend.dev>',
-    to: toEmail,
+    to: recipient,
     subject: 'Verifica tu correo — Menú del Día',
     html: `
       <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">

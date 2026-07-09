@@ -40,6 +40,7 @@ const baseConfig = {
   },
   email: {
     resendApiKey: process.env.RESEND_API_KEY || '',
+    testEmail: process.env.EMAIL_TEST_RECIPIENT || '',
   },
 };
 
