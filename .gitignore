@@ -148,3 +148,7 @@ node_modules/
 # Database backups
 backups/
 backend/backups/
+
+# Secret / API key files
+cline-api-key
+secret_key

@@ -2,6 +2,22 @@ require('dotenv').config();
 
 const environment = process.env.NODE_ENV || 'development';
 
+// Railway provides a single DATABASE_URL; parse it if available
+function parseDatabaseUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return {
+      host: parsed.hostname,
+      port: Number(parsed.port || 5432),
+      user: parsed.username,
+      password: parsed.password,
+      database: parsed.pathname.replace(/^\//, ''),
+    };
+  } catch {
+    throw new Error(`Invalid DATABASE_URL format: ${url}`);
+  }
+}
+
 const baseConfig = {
   port: Number(process.env.PORT || 3001),
   clientUrl: process.env.CLIENT_URL || 'http://localhost:3000',
@@ -47,22 +63,31 @@ const configByEnv = {
   },
   production: {
     ...baseConfig,
-    database: {
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT || 5432),
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-    },
+    database: process.env.DATABASE_URL
+      ? parseDatabaseUrl(process.env.DATABASE_URL)
+      : {
+        host: process.env.DB_HOST,
+        port: Number(process.env.DB_PORT || 5432),
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_NAME,
+      },
   },
 };
 
 if (environment === 'production') {
-  const required = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_NAME', 'JWT_SECRET'];
-  const missing = required.filter((key) => !process.env[key]);
+  const hasDbUrl = !!process.env.DATABASE_URL;
+  const hasIndividualVars = (
+    process.env.DB_HOST && process.env.DB_USER
+    && process.env.DB_PASSWORD && process.env.DB_NAME
+  );
 
-  if (missing.length > 0) {
-    throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+  if (!hasDbUrl && !hasIndividualVars) {
+    throw new Error('Missing database configuration: set DATABASE_URL or DB_HOST, DB_USER, DB_PASSWORD, DB_NAME');
+  }
+
+  if (!process.env.JWT_SECRET) {
+    throw new Error('Missing required environment variable: JWT_SECRET');
   }
 }
 
