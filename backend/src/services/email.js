@@ -1,21 +1,13 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const config = require('../config');
 
-const transporter = nodemailer.createTransport({
-  host: config.email.host,
-  port: config.email.port,
-  secure: config.email.secure,
-  auth: {
-    user: config.email.user,
-    pass: config.email.pass,
-  },
-});
+const resend = new Resend(config.email.resendApiKey);
 
 async function sendVerificationEmail(toEmail, firstName, token) {
   const verifyUrl = `${config.clientUrl}/verify-email?token=${token}`;
 
-  await transporter.sendMail({
-    from: `"Menú del Día" <${config.email.user}>`,
+  await resend.emails.send({
+    from: 'Menú del Día <onboarding@resend.dev>',
     to: toEmail,
     subject: 'Verifica tu correo — Menú del Día',
     html: `

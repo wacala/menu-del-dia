@@ -77,7 +77,7 @@ router.post(
       );
 
       // Send verification email (non-blocking — don't fail registration if email fails)
-      if (config.email.user) {
+      if (config.email.resendApiKey) {
         sendVerificationEmail(email, firstName, verificationToken).catch((err) => {
           console.error('Failed to send verification email:', err.message);
         });
@@ -202,7 +202,7 @@ router.post('/resend-verification', [
       [user.id, verificationToken, expiresAt],
     );
 
-    if (config.email.user) {
+    if (config.email.resendApiKey) {
       sendVerificationEmail(email, user.first_name, verificationToken).catch((err) => {
         console.error('Failed to send verification email:', err.message);
       });
