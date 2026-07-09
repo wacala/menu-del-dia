@@ -122,7 +122,7 @@ export default function CookDashboardPage() {
           <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link
-              to="/cook/menus/create"
+              to="/cook/menus?create=true"
               className="btn-primary inline-block text-center"
             >
               + Create New Menu

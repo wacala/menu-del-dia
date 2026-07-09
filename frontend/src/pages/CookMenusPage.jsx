@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { menusAPI } from '../api';
 
 export default function CookMenusPage() {
@@ -18,9 +18,13 @@ export default function CookMenusPage() {
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     fetchMenus();
+    if (searchParams.get('create') === 'true') {
+      setShowForm(true);
+    }
   }, []);
 
   const fetchMenus = async () => {
