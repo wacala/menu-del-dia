@@ -5,11 +5,10 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-# Ensure dist is always rebuilt fresh
-RUN rm -rf dist
+ARG CACHEBUST=1
 ARG VITE_API_URL
 ENV VITE_API_URL=$VITE_API_URL
-RUN npm run build
+RUN rm -rf dist && npm run build
 
 FROM nginx:1.27-alpine
 COPY nginx.conf /etc/nginx/templates/default.conf.template
