@@ -43,7 +43,8 @@ export default function App() {
   const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
-    if (token) fetchUser();
+    const isVerifyPage = window.location.pathname === '/verify-email';
+    if (token && !isVerifyPage) fetchUser();
   }, []);
 
   return (
