@@ -3,6 +3,8 @@ import apiClient from './client';
 export const authAPI = {
   register: (userData) => apiClient.post('/auth/register', userData),
   login: (credentials) => apiClient.post('/auth/login', credentials),
+  verifyEmail: (token) => apiClient.post('/auth/verify-email', { token }),
+  resendVerification: (email) => apiClient.post('/auth/resend-verification', { email }),
 };
 
 export const usersAPI = {

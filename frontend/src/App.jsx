@@ -12,6 +12,7 @@ import CookDashboardPage from './pages/CookDashboardPage';
 import CookMenusPage from './pages/CookMenusPage';
 import CookOrdersPage from './pages/CookOrdersPage';
 import CookOrderDetailPage from './pages/CookOrderDetailPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 import './index.css';
 
 function ProtectedRoute({ children }) {
@@ -50,6 +51,7 @@ export default function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route
           path="/dashboard"
           element={
