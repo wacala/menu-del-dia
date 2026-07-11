@@ -12,6 +12,7 @@ import CookDashboardPage from './pages/CookDashboardPage';
 import CookMenusPage from './pages/CookMenusPage';
 import CookOrdersPage from './pages/CookOrdersPage';
 import CookOrderDetailPage from './pages/CookOrderDetailPage';
+import SplashPage from './pages/SplashPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import './index.css';
 
@@ -125,7 +126,7 @@ export default function App() {
             </CookRoute>
           }
         />
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<SplashPage />} />
       </Routes>
     </Router>
   );
