@@ -14,7 +14,7 @@ export default function RegisterPage() {
   const [passwordError, setPasswordError] = useState('');
   const [registered, setRegistered] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
-  const { register, isLoading, error } = useAuthStore();
+  const { register, isLoading, error, clearError } = useAuthStore();
 
   const handleChange = (e) => {
     setFormData({
@@ -171,7 +171,7 @@ export default function RegisterPage() {
 
         <p className="mt-4 text-center text-sm">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link to="/login" className="text-blue-600 hover:underline" onClick={clearError}>
             Login here
           </Link>
         </p>
