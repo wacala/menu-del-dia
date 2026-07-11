@@ -50,81 +50,66 @@ export default function CookOrdersPage() {
   const readyCount = orders.filter((o) => o.status === 'ready').length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">📋 Orders</h1>
-            <Link to="/cook/dashboard" className="text-blue-600 hover:underline">
-              Back to Dashboard
-            </Link>
-          </div>
+    <div className="min-h-screen bg-stone-50">
+      <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 Orders</h1>
+          <Link to="/cook/dashboard" className="btn-ghost text-sm">Back to Dashboard</Link>
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Alert Box */}
         {pendingCount > 0 && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-            <p className="text-yellow-800 font-medium">
-              ⏳ You have {pendingCount} new order{pendingCount > 1 ? 's' : ''} waiting for confirmation
-            </p>
+          <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+            <span className="text-xl">⏳</span>
+            <p className="text-amber-800 font-medium text-sm">You have {pendingCount} new order{pendingCount > 1 ? 's' : ''} waiting for confirmation</p>
           </div>
         )}
 
         {readyCount > 0 && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
-            <p className="text-green-800 font-medium">
-              ✨ {readyCount} order{readyCount > 1 ? 's' : ''} ready for pickup
-            </p>
+          <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
+            <span className="text-xl">✨</span>
+            <p className="text-emerald-800 font-medium text-sm">{readyCount} order{readyCount > 1 ? 's' : ''} ready for pickup</p>
           </div>
         )}
 
-        {/* Filters */}
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-4">Filter by Status</h2>
+          <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-3">Filter by Status</h2>
           <div className="flex gap-2 flex-wrap">
             {['all', 'pending', 'confirmed', 'ready', 'delivered', 'cancelled'].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilter(status)}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
+                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   filter === status
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                    ? 'bg-primary-500 text-white shadow-md shadow-primary-500/20'
+                    : 'bg-white text-stone-500 border border-stone-200 hover:border-stone-300 hover:text-stone-700'
                 }`}
               >
-                {statusEmojis[status] || ''}
-                {' '}
-                {status.charAt(0).toUpperCase() + status.slice(1)}
+                {statusEmojis[status] || ''} {status.charAt(0).toUpperCase() + status.slice(1)}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Refresh Button */}
         <div className="mb-6">
-          <button
-            onClick={fetchOrders}
-            className="text-sm text-blue-600 hover:underline"
-          >
-            🔄 Refresh Now
-          </button>
+          <button onClick={fetchOrders} className="btn-ghost text-sm">🔄 Refresh Now</button>
         </div>
 
-        {/* Orders List */}
         {loading && (
-          <p className="text-center text-gray-500">Loading orders...</p>
+          <div className="flex justify-center py-12">
+            <svg className="animate-spin h-8 w-8 text-primary-500" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          </div>
         )}
 
         {!loading && filteredOrders.length === 0 && (
-          <div className="card text-center py-12">
-            <p className="text-gray-500 text-lg">
-              {filter === 'all'
-                ? 'No orders yet'
-                : `No ${filter} orders`}
+          <div className="card-static text-center py-12">
+            <div className="text-5xl mb-4">📭</div>
+            <p className="text-stone-500 text-lg">
+              {filter === 'all' ? 'No orders yet' : `No ${filter} orders`}
             </p>
           </div>
         )}

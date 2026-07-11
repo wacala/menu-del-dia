@@ -44,58 +44,50 @@ export default function MemberOrdersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold">📦 My Orders</h1>
-            <Link to="/marketplace" className="text-blue-600 hover:underline">
-              Back to Shopping
-            </Link>
-          </div>
+    <div className="min-h-screen bg-stone-50">
+      <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📦 My Orders</h1>
+          <Link to="/marketplace" className="btn-ghost text-sm">Back to Shopping</Link>
         </div>
       </nav>
 
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        {/* Filters */}
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-4">Filter by Status</h2>
+          <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-3">Filter by Status</h2>
           <div className="flex gap-2 flex-wrap">
             {['all', 'pending', 'confirmed', 'ready', 'delivered', 'cancelled'].map((status) => (
               <button
                 key={status}
                 onClick={() => setFilter(status)}
-                className={`px-4 py-2 rounded-lg font-medium transition ${
+                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all duration-200 ${
                   filter === status
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                    ? 'bg-primary-500 text-white shadow-md shadow-primary-500/20'
+                    : 'bg-white text-stone-500 border border-stone-200 hover:border-stone-300 hover:text-stone-700'
                 }`}
               >
-                {statusEmojis[status] || ''}
-                {' '}
-                {status.charAt(0).toUpperCase() + status.slice(1)}
+                {statusEmojis[status] || ''} {status.charAt(0).toUpperCase() + status.slice(1)}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Orders List */}
         {loading && (
-          <p className="text-center text-gray-500">Loading your orders...</p>
+          <div className="flex justify-center py-12">
+            <svg className="animate-spin h-8 w-8 text-primary-500" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            </svg>
+          </div>
         )}
 
         {!loading && filteredOrders.length === 0 && (
-          <div className="card text-center py-12">
-            <p className="text-gray-500 text-lg mb-4">
-              {filter === 'all'
-                ? 'No orders yet. Start shopping!'
-                : `No ${filter} orders`}
+          <div className="card-static text-center py-12">
+            <div className="text-5xl mb-4">📭</div>
+            <p className="text-stone-500 text-lg mb-4">
+              {filter === 'all' ? 'No orders yet. Start shopping!' : `No ${filter} orders`}
             </p>
-            <Link to="/marketplace" className="btn-primary inline-block">
-              Browse Menus
-            </Link>
+            <Link to="/marketplace" className="btn-primary">Browse Menus</Link>
           </div>
         )}
 
@@ -104,97 +96,66 @@ export default function MemberOrdersPage() {
             <Link
               key={order.id}
               to={`/marketplace/orders/${order.id}`}
-              className="card hover:shadow-lg transition-shadow cursor-pointer block"
+              className="card block group"
             >
-              {/* Order Header */}
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-semibold">
-                    Order #{order.id}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    from {order.cook_first_name} {order.cook_last_name}
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <h3 className="text-lg font-bold text-stone-800 group-hover:text-primary-600 transition-colors">Order #{order.id}</h3>
+                  <p className="text-sm text-stone-500">from {order.cook_first_name} {order.cook_last_name}</p>
+                  <p className="text-xs text-stone-400 mt-1">
                     {new Date(order.created_at).toLocaleDateString()} at{' '}
-                    {new Date(order.created_at).toLocaleTimeString([], {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
+                    {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
-                <span
-                  className={`px-4 py-2 rounded-full text-sm font-medium ${
-                    statusColors[order.status] || ''
-                  }`}
-                >
+                <span className={`badge-${order.status}`}>
                   {statusEmojis[order.status]} {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                 </span>
               </div>
 
-              {/* Status Timeline */}
-              <div className="bg-gray-50 p-4 rounded mb-4">
-                <div className="flex items-center justify-between text-sm">
-                  <div className={order.status !== 'pending' ? 'text-green-600 font-medium' : 'text-gray-600'}>
-                    ✓ Ordered
-                  </div>
-                  <div className="flex-1 h-1 mx-2 bg-gray-300" />
-                  <div className={['confirmed', 'ready', 'delivered'].includes(order.status) ? 'text-green-600 font-medium' : 'text-gray-600'}>
-                    ✓ Confirmed
-                  </div>
-                  <div className="flex-1 h-1 mx-2 bg-gray-300" />
-                  <div className={['ready', 'delivered'].includes(order.status) ? 'text-green-600 font-medium' : 'text-gray-600'}>
-                    ✓ Ready
-                  </div>
-                  <div className="flex-1 h-1 mx-2 bg-gray-300" />
-                  <div className={order.status === 'delivered' ? 'text-green-600 font-medium' : 'text-gray-600'}>
-                    ✓ Delivered
-                  </div>
+              <div className="bg-stone-50 rounded-xl p-3 mb-4">
+                <div className="flex items-center justify-between text-xs">
+                  {['pending', 'confirmed', 'ready', 'delivered'].map((step, i) => {
+                    const statusIndex = ['pending', 'confirmed', 'ready', 'delivered'].indexOf(order.status);
+                    return (
+                      <div key={step} className="flex items-center flex-1">
+                        <div className={`flex flex-col items-center ${i <= statusIndex ? 'text-emerald-600' : 'text-stone-300'}`}>
+                          <span className="text-sm">{i <= statusIndex ? '●' : '○'}</span>
+                          <span className="font-medium mt-0.5">{step.charAt(0).toUpperCase() + step.slice(1)}</span>
+                        </div>
+                        {i < 3 && <div className={`flex-1 h-0.5 mx-1 ${i < statusIndex ? 'bg-emerald-400' : 'bg-stone-200'}`} />}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Items */}
               <div className="mb-4">
-                <h4 className="font-medium mb-2">Items Ordered:</h4>
+                <h4 className="font-semibold text-xs text-stone-400 uppercase tracking-wider mb-2">Items</h4>
                 {order.items && order.items.length > 0 ? (
                   <ul className="text-sm space-y-1">
                     {order.items.map((item, idx) => (
-                      <li key={idx} className="text-gray-700">
-                        • {item.name} x{item.quantity} @ ${item.price} each{' '}
-                        <span className="font-medium">
-                          = ${(item.quantity * parseFloat(item.price)).toFixed(2)}
-                        </span>
+                      <li key={idx} className="flex justify-between text-stone-600">
+                        <span>{item.name} ×{item.quantity}</span>
+                        <span className="font-semibold text-stone-800">${(item.quantity * parseFloat(item.price)).toFixed(2)}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-500">No items found</p>
+                  <p className="text-stone-400 text-sm">No items found</p>
                 )}
               </div>
 
-              {/* Order Details */}
-              <div className="grid grid-cols-2 gap-4 text-sm border-t pt-4">
-                <div>
-                  <span className="text-gray-600">Delivery Type:</span>
-                  <p className="font-medium">
-                    {order.delivery_type.charAt(0).toUpperCase()
-                      + order.delivery_type.slice(1)}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-gray-600">Total Amount:</span>
-                  <p className="text-lg font-bold text-blue-600">
-                    ${order.total_amount}
-                  </p>
-                </div>
+              <div className="flex justify-between items-center pt-3 border-t border-stone-100">
+                <span className="text-sm text-stone-500">
+                  {order.delivery_type === 'pickup' ? '🏪 Pickup' : '🚚 Delivery'}
+                </span>
+                <span className="text-lg font-extrabold text-primary-600">${order.total_amount}</span>
               </div>
 
-              {/* Status Alert */}
               {order.status === 'ready' && (
-                <div className="mt-4 bg-green-50 border border-green-200 rounded p-3">
-                  <p className="text-green-800 text-sm">
-                    ✨ Your order is ready for pickup!
-                  </p>
+                <div className="mt-4 bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center gap-2">
+                  <span>✨</span>
+                  <p className="text-emerald-700 text-sm font-medium">Your order is ready for pickup!</p>
                 </div>
               )}
             </Link>
