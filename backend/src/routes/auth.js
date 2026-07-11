@@ -83,12 +83,9 @@ router.post(
         });
       }
 
-      const jwtToken = generateToken(user.id, user.email, user.role);
-
+      // Don't issue token yet — user must verify email first
       return res.status(201).json({
         message: 'User registered successfully. Please check your email to verify your account.',
-        user,
-        token: jwtToken,
         emailVerificationRequired: true,
       });
     } catch (error) {
@@ -112,7 +109,7 @@ router.post(
 
       const { email, password } = req.body;
       const result = await db.query(
-        'SELECT id, email, password_hash, role FROM users WHERE email = $1',
+        'SELECT id, email, password_hash, role, email_verified FROM users WHERE email = $1',
         [email],
       );
 
@@ -125,6 +122,13 @@ router.post(
 
       if (!passwordValid) {
         return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      if (!user.email_verified) {
+        return res.status(403).json({
+          message: 'Please verify your email before logging in. Check your inbox.',
+          emailVerificationRequired: true,
+        });
       }
 
       const token = generateToken(user.id, user.email, user.role);
