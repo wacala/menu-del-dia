@@ -275,7 +275,7 @@ export default function App() {
         <Text style={styles.body}>We sent a verification link to:</Text>
         <Text style={[styles.body, { fontWeight: '800' }]}>{pendingVerification}</Text>
         <Text style={styles.muted}>Click the link in the email to activate your account before logging in.</Text>
-        <Pressable style={styles.secondary} onPress={() => setPendingVerification(null)}>
+        <Pressable style={styles.secondary} onPress={() => { setPendingVerification(null); setAuthMode('login'); }}>
           <Text style={styles.secondaryText}>Back to Login</Text>
         </Pressable>
         <StatusBar style="dark" />
