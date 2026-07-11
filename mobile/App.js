@@ -99,6 +99,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [pendingVerification, setPendingVerification] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -205,6 +206,10 @@ export default function App() {
             role: auth.role,
           };
       const data = await api(path, { method: 'POST', body: payload });
+      if (authMode === 'register') {
+        setPendingVerification(auth.email.trim());
+        return;
+      }
       await saveSession(data.token, data.user);
     } catch (e) {
       setError(e.message);
@@ -259,6 +264,22 @@ export default function App() {
       <View style={styles.center}>
         <ActivityIndicator color={colors.primary} />
       </View>
+    );
+  }
+
+  if (pendingVerification) {
+    return (
+      <ScrollView contentContainerStyle={styles.auth}>
+        <Text style={styles.title}>📧</Text>
+        <Text style={styles.sectionTitle}>Check your email</Text>
+        <Text style={styles.body}>We sent a verification link to:</Text>
+        <Text style={[styles.body, { fontWeight: '800' }]}>{pendingVerification}</Text>
+        <Text style={styles.muted}>Click the link in the email to activate your account before logging in.</Text>
+        <Pressable style={styles.secondary} onPress={() => setPendingVerification(null)}>
+          <Text style={styles.secondaryText}>Back to Login</Text>
+        </Pressable>
+        <StatusBar style="dark" />
+      </ScrollView>
     );
   }
 
