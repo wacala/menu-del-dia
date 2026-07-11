@@ -1,16 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../context/authStore';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const navigate = useNavigate();
   const { login, isLoading, error, clearError } = useAuthStore();
 
   useEffect(() => {
     clearError();
   }, [clearError]);
+
+  // Sync autofilled values from browser on mount
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      if (emailRef.current?.value && !email) setEmail(emailRef.current.value);
+      if (passwordRef.current?.value && !password) setPassword(passwordRef.current.value);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -50,6 +61,7 @@ export default function LoginPage() {
             <div className="relative">
               <input
                 type="email"
+                ref={emailRef}
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); clearError(); }}
                 required
@@ -67,6 +79,7 @@ export default function LoginPage() {
             <div className="relative">
               <input
                 type="password"
+                ref={passwordRef}
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); clearError(); }}
                 required
