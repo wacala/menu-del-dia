@@ -275,7 +275,7 @@ export default function App() {
         <Text style={styles.body}>We sent a verification link to:</Text>
         <Text style={[styles.body, { fontWeight: '800' }]}>{pendingVerification}</Text>
         <Text style={styles.muted}>Click the link in the email to activate your account before logging in.</Text>
-        <Pressable style={styles.secondary} onPress={() => { setPendingVerification(null); setAuthMode('login'); }}>
+        <Pressable style={styles.secondary} onPress={() => { setPendingVerification(null); setAuthMode('login'); setError(''); }}>
           <Text style={styles.secondaryText}>Back to Login</Text>
         </Pressable>
         <StatusBar style="dark" />
@@ -290,8 +290,8 @@ export default function App() {
         <Text style={styles.subtitle}>Community food ordering for cooks and members.</Text>
 
         <View style={styles.row}>
-          <Chip label="Login" active={authMode === 'login'} onPress={() => setAuthMode('login')} />
-          <Chip label="Register" active={authMode === 'register'} onPress={() => setAuthMode('register')} />
+          <Chip label="Login" active={authMode === 'login'} onPress={() => { setAuthMode('login'); setError(''); }} />
+          <Chip label="Register" active={authMode === 'register'} onPress={() => { setAuthMode('register'); setError(''); }} />
         </View>
 
         <Field placeholder="Email" value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((current) => ({ ...current, email }))} />
