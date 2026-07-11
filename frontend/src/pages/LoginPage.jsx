@@ -46,8 +46,8 @@ export default function LoginPage() {
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="relative pt-2 overflow-visible">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="relative">
               <input
                 type="email"
                 value={email}
@@ -63,7 +63,7 @@ export default function LoginPage() {
               </label>
             </div>
 
-            <div className="relative pt-2 overflow-visible">
+            <div className="relative">
               <input
                 type="password"
                 value={password}
