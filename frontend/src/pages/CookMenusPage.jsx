@@ -117,12 +117,12 @@ export default function CookMenusPage() {
             <form onSubmit={handleCreateMenu} className="space-y-5">
               <div className="relative">
                 <input type="text" name="title" value={formData.title} onChange={handleInputChange} required placeholder=" " className="input-field pt-6 pb-3 peer" />
-                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:text-[11px]">Menu Title *</label>
+                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-[9px] peer-[:not(:placeholder-shown)]:text-[11px]">Menu Title *</label>
               </div>
 
               <div className="relative">
                 <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder=" " rows="3" className="input-field pt-6 pb-3 peer resize-none" />
-                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:text-[11px]">Description</label>
+                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-[9px] peer-[:not(:placeholder-shown)]:text-[11px]">Description</label>
               </div>
 
               <div>
@@ -143,7 +143,7 @@ export default function CookMenusPage() {
 
               <div className="relative">
                 <input type="text" name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} required placeholder=" " className="input-field pt-6 pb-3 peer" />
-                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2.5 peer-[:not(:placeholder-shown)]:text-[11px]">Pickup Location *</label>
+                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-[9px] peer-[:not(:placeholder-shown)]:text-[11px]">Pickup Location *</label>
               </div>
 
               <div className="flex gap-6">
