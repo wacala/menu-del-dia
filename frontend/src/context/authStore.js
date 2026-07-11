@@ -40,12 +40,8 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await authAPI.register(userData);
-      localStorage.setItem('token', response.data.token);
-      set({
-        user: response.data.user,
-        token: response.data.token,
-        isLoading: false,
-      });
+      // Do not save token yet — user must verify email first
+      set({ isLoading: false });
       return response.data;
     } catch (err) {
       set({ error: err.response?.data?.message || 'Registration failed', isLoading: false });

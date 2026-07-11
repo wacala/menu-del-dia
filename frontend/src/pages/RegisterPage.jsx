@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../context/authStore';
 
 export default function RegisterPage() {
@@ -12,7 +12,8 @@ export default function RegisterPage() {
     role: 'member',
   });
   const [passwordError, setPasswordError] = useState('');
-  const navigate = useNavigate();
+  const [registered, setRegistered] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
   const { register, isLoading, error } = useAuthStore();
 
   const handleChange = (e) => {
@@ -34,11 +35,34 @@ export default function RegisterPage() {
     try {
       const { confirmPassword, ...registerData } = formData;
       await register(registerData);
-      navigate('/dashboard');
+      setRegisteredEmail(formData.email);
+      setRegistered(true);
     } catch {
       // Error is handled by store
     }
   };
+
+  if (registered) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md text-center">
+          <h1 className="text-3xl font-bold mb-6">Menú del Día</h1>
+          <div className="text-5xl mb-4">📧</div>
+          <h2 className="text-xl font-semibold mb-2">Check your email</h2>
+          <p className="text-gray-600 mb-2">
+            We sent a verification link to:
+          </p>
+          <p className="font-semibold text-gray-800 mb-6">{registeredEmail}</p>
+          <p className="text-gray-500 text-sm mb-6">
+            Click the link in the email to activate your account before logging in.
+          </p>
+          <Link to="/login" className="text-blue-600 hover:underline text-sm">
+            Back to Login
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
