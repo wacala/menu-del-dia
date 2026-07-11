@@ -54,11 +54,11 @@ export default function LoginPage() {
                 onChange={(e) => { setEmail(e.target.value); clearError(); }}
                 required
                 placeholder=" "
-                className="input-field pt-5 pb-2 peer"
+                className="input-field pt-6 pb-3 peer"
               />
-              <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
-                peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
-                peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">
+              <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
+                peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
+                peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px]">
                 Email
               </label>
             </div>
@@ -70,11 +70,11 @@ export default function LoginPage() {
                 onChange={(e) => { setPassword(e.target.value); clearError(); }}
                 required
                 placeholder=" "
-                className="input-field pt-5 pb-2 peer"
+                className="input-field pt-6 pb-3 peer"
               />
-              <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
-                peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
-                peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">
+              <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
+                peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
+                peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px]">
                 Password
               </label>
             </div>

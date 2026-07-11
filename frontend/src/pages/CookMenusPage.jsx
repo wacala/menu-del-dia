@@ -116,13 +116,13 @@ export default function CookMenusPage() {
             <h3 className="text-lg font-bold text-stone-800 mb-4">Create New Menu</h3>
             <form onSubmit={handleCreateMenu} className="space-y-4">
               <div className="relative">
-                <input type="text" name="title" value={formData.title} onChange={handleInputChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
-                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Menu Title *</label>
+                <input type="text" name="title" value={formData.title} onChange={handleInputChange} required placeholder=" " className="input-field pt-6 pb-3 peer" />
+                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px]">Menu Title *</label>
               </div>
 
               <div className="relative">
-                <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder=" " rows="3" className="input-field pt-5 pb-2 peer resize-none" />
-                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Description</label>
+                <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder=" " rows="3" className="input-field pt-6 pb-3 peer resize-none" />
+                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px]">Description</label>
               </div>
 
               <div>
@@ -142,8 +142,8 @@ export default function CookMenusPage() {
               </div>
 
               <div className="relative">
-                <input type="text" name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
-                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Pickup Location *</label>
+                <input type="text" name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} required placeholder=" " className="input-field pt-6 pb-3 peer" />
+                <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-1.5 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-1.5 peer-[:not(:placeholder-shown)]:text-[11px]">Pickup Location *</label>
               </div>
 
               <div className="flex gap-6">
