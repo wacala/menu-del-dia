@@ -15,13 +15,8 @@
 
 * {
   margin: 0;
-  padding: 0;
+  padding: 10px;
   box-sizing: border-box;
-}
-
-/* Spacious forms: give breathing room to floating labels */
-form .relative {
-  padding-top: 10px;
 }
 
 body {
