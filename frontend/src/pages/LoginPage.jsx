@@ -54,11 +54,12 @@ export default function LoginPage() {
                 onChange={(e) => { setEmail(e.target.value); clearError(); }}
                 required
                 placeholder=" "
+                autoComplete="email"
                 className="input-field pt-6 pb-3 peer"
               />
-              <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
-                peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
-                peer-[:not(:placeholder-shown)]:top-[9px] peer-[:not(:placeholder-shown)]:text-[11px]">
+              <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out
+                ${email ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'}
+                peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>
                 Email
               </label>
             </div>
@@ -70,11 +71,12 @@ export default function LoginPage() {
                 onChange={(e) => { setPassword(e.target.value); clearError(); }}
                 required
                 placeholder=" "
+                autoComplete="current-password"
                 className="input-field pt-6 pb-3 peer"
               />
-              <label className="absolute left-4 top-5 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
-                peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
-                peer-[:not(:placeholder-shown)]:top-[9px] peer-[:not(:placeholder-shown)]:text-[11px]">
+              <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out
+                ${password ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'}
+                peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>
                 Password
               </label>
             </div>
