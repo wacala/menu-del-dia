@@ -99,26 +99,26 @@ export default function RegisterPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-1.5">First Name</label>
-                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required className="input-field" placeholder="John" />
+              <div className="relative">
+                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
+                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">First Name</label>
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-1.5">Last Name</label>
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} className="input-field" placeholder="Doe" />
+              <div className="relative">
+                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder=" " className="input-field pt-5 pb-2 peer" />
+                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Last Name</label>
               </div>
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">Email</label>
-              <input type="email" name="email" value={formData.email} onChange={handleChange} required className="input-field" placeholder="you@email.com" />
+            <div className="relative">
+              <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
+              <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Email</label>
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">Password</label>
-              <input type="password" name="password" value={formData.password} onChange={handleChange} required className="input-field" placeholder="••••••••" />
+            <div className="relative">
+              <input type="password" name="password" value={formData.password} onChange={handleChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
+              <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Password</label>
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">Confirm Password</label>
-              <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required className="input-field" placeholder="••••••••" />
+            <div className="relative">
+              <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
+              <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Confirm Password</label>
             </div>
             <div>
               <label className="block text-sm font-semibold text-stone-700 mb-2">I want to</label>

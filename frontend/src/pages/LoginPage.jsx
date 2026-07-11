@@ -47,28 +47,36 @@ export default function LoginPage() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">Email</label>
+            <div className="relative">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => { setEmail(e.target.value); clearError(); }}
                 required
-                className="input-field"
-                placeholder="you@email.com"
+                placeholder=" "
+                className="input-field pt-5 pb-2 peer"
               />
+              <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
+                peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
+                peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">
+                Email
+              </label>
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">Password</label>
+            <div className="relative">
               <input
                 type="password"
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); clearError(); }}
                 required
-                className="input-field"
-                placeholder="••••••••"
+                placeholder=" "
+                className="input-field pt-5 pb-2 peer"
               />
+              <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out
+                peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold
+                peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">
+                Password
+              </label>
             </div>
 
             <button

@@ -75,14 +75,15 @@ export default function CookMenusPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Navigation */}
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <Link to="/cook/dashboard" className="text-blue-600 hover:underline mb-4 block">
-            ← Back to Dashboard
-          </Link>
-          <h1 className="text-2xl font-bold">📋 My Menus</h1>
+    <div className="min-h-screen bg-stone-50">
+      <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <Link to="/cook/dashboard" className="btn-ghost text-sm">← Back</Link>
+              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 My Menus</h1>
+            </div>
+          </div>
         </div>
       </nav>
 
@@ -110,108 +111,49 @@ export default function CookMenusPage() {
           </button>
         </div>
 
-        {/* Create Menu Form */}
         {showForm && (
-          <div className="card mb-8">
-            <h3 className="text-lg font-semibold mb-4">Create New Menu</h3>
+          <div className="card-static mb-8">
+            <h3 className="text-lg font-bold text-stone-800 mb-4">Create New Menu</h3>
             <form onSubmit={handleCreateMenu} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Menu Title *</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="e.g., Arroz con Pollo"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                />
+              <div className="relative">
+                <input type="text" name="title" value={formData.title} onChange={handleInputChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
+                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Menu Title *</label>
+              </div>
+
+              <div className="relative">
+                <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder=" " rows="3" className="input-field pt-5 pb-2 peer resize-none" />
+                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Description</label>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Description</label>
-                <textarea
-                  name="description"
-                  value={formData.description}
-                  onChange={handleInputChange}
-                  placeholder="Describe your menu..."
-                  rows="3"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                />
+                <label className="block text-sm font-semibold text-stone-700 mb-1.5">Menu Date *</label>
+                <input type="date" name="menuDate" value={formData.menuDate} onChange={handleInputChange} required className="input-field" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Menu Date *</label>
-                  <input
-                    type="date"
-                    name="menuDate"
-                    value={formData.menuDate}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
+                  <label className="block text-sm font-semibold text-stone-700 mb-1.5">Order Start *</label>
+                  <input type="datetime-local" name="orderStartTime" value={formData.orderStartTime} onChange={handleInputChange} required className="input-field" />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-stone-700 mb-1.5">Order End *</label>
+                  <input type="datetime-local" name="orderEndTime" value={formData.orderEndTime} onChange={handleInputChange} required className="input-field" />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Order Start Time *</label>
-                  <input
-                    type="datetime-local"
-                    name="orderStartTime"
-                    value={formData.orderStartTime}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Order End Time *</label>
-                  <input
-                    type="datetime-local"
-                    name="orderEndTime"
-                    value={formData.orderEndTime}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                </div>
+              <div className="relative">
+                <input type="text" name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} required placeholder=" " className="input-field pt-5 pb-2 peer" />
+                <label className="absolute left-4 top-4 text-sm text-stone-400 pointer-events-none transition-all duration-200 ease-out peer-focus:top-2 peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:text-[11px]">Pickup Location *</label>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-1">Pickup Location *</label>
-                <input
-                  type="text"
-                  name="pickupLocation"
-                  value={formData.pickupLocation}
-                  onChange={handleInputChange}
-                  required
-                  placeholder="e.g., Downtown Plaza"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                />
-              </div>
-
-              <div className="flex gap-4">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="pickupAvailable"
-                    checked={formData.pickupAvailable}
-                    onChange={handleInputChange}
-                    className="mr-2"
-                  />
-                  <span className="text-sm">Pickup Available</span>
+              <div className="flex gap-6">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" name="pickupAvailable" checked={formData.pickupAvailable} onChange={handleInputChange} className="w-4 h-4 rounded border-stone-300 text-primary-500 focus:ring-primary-500" />
+                  <span className="text-sm font-medium text-stone-700">Pickup Available</span>
                 </label>
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    name="deliveryAvailable"
-                    checked={formData.deliveryAvailable}
-                    onChange={handleInputChange}
-                    className="mr-2"
-                  />
-                  <span className="text-sm">Delivery Available</span>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" name="deliveryAvailable" checked={formData.deliveryAvailable} onChange={handleInputChange} className="w-4 h-4 rounded border-stone-300 text-primary-500 focus:ring-primary-500" />
+                  <span className="text-sm font-medium text-stone-700">Delivery Available</span>
                 </label>
               </div>
 
