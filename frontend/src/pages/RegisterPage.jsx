@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../context/authStore';
 
@@ -15,6 +15,10 @@ export default function RegisterPage() {
   const [registered, setRegistered] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
   const { register, isLoading, error, clearError } = useAuthStore();
+
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
 
   const handleChange = (e) => {
     setFormData({

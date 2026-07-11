@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../context/authStore';
 
@@ -7,6 +7,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { login, isLoading, error, clearError } = useAuthStore();
+
+  useEffect(() => {
+    clearError();
+  }, [clearError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,7 +70,7 @@ export default function LoginPage() {
 
         <p className="mt-4 text-center text-sm">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">
+          <Link to="/register" className="text-blue-600 hover:underline" onClick={clearError}>
             Register here
           </Link>
         </p>
