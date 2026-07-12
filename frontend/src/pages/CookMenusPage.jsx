@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { menusAPI } from '../api';
 
 export default function CookMenusPage() {
+  const { t } = useTranslation();
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);

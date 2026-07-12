@@ -6,6 +6,7 @@ import { menusAPI, ordersAPI, paymentsAPI } from '../api';
 import StripePaymentForm from '../components/StripePaymentForm';
 
 export default function MenuDetailPage() {
+  const { t } = useTranslation();
   const { menuId } = useParams();
   const navigate = useNavigate();
   const [menu, setMenu] = useState(null);

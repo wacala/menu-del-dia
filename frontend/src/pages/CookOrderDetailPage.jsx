@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ordersAPI } from '../api';
 
 export default function CookOrderDetailPage() {
+  const { t } = useTranslation();
   const { orderId } = useParams();
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);

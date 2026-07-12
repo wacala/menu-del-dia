@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 import { menusAPI, ordersAPI } from '../api';
 
 export default function CookDashboardPage() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState({
     activeMenus: 0,
     totalOrders: 0,
