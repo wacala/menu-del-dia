@@ -58,11 +58,11 @@ export default function MemberMarketplacePage() {
               <div className="w-9 h-9 rounded-xl bg-primary-500 flex items-center justify-center shadow-sm shadow-primary-500/20">
                 <span className="text-lg">🍽️</span>
               </div>
-              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">Marketplace</h1>
+              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">{t('marketplace.title')}</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Link to="/marketplace/orders" className="btn-ghost text-sm">📦 My Orders</Link>
-              <button onClick={handleLogout} className="btn-secondary text-sm py-2">Logout</button>
+              <Link to="/marketplace/orders" className="btn-ghost text-sm">📦 {t('marketplace.myOrders')}</Link>
+              <button onClick={handleLogout} className="btn-secondary text-sm py-2">{t('marketplace.logout')}</button>
             </div>
           </div>
         </div>

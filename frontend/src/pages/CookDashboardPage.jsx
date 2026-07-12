@@ -55,21 +55,21 @@ export default function CookDashboardPage() {
               <div className="w-9 h-9 rounded-xl bg-primary-500 flex items-center justify-center shadow-sm shadow-primary-500/20">
                 <span className="text-lg">🍳</span>
               </div>
-              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">Cook Dashboard</h1>
+              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">{t('cook.dashboard')}</h1>
             </div>
-            <button onClick={() => { logout(); window.location.href = '/login'; }} className="btn-secondary text-sm py-2">Logout</button>
+            <button onClick={() => { logout(); window.location.href = '/login'; }} className="btn-secondary text-sm py-2">{t('cook.logout')}</button>
           </div>
           <div className="mt-4 flex gap-1 bg-stone-100 rounded-xl p-1">
-            <Link to="/cook/dashboard" className="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-stone-800 shadow-sm transition">Overview</Link>
-            <Link to="/cook/menus" className="px-4 py-2 rounded-lg text-sm font-medium text-stone-500 hover:text-stone-700 transition">Menus</Link>
-            <Link to="/cook/orders" className="px-4 py-2 rounded-lg text-sm font-medium text-stone-500 hover:text-stone-700 transition">Orders</Link>
+            <Link to="/cook/dashboard" className="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-stone-800 shadow-sm transition">{t('cook.overview')}</Link>
+            <Link to="/cook/menus" className="px-4 py-2 rounded-lg text-sm font-medium text-stone-500 hover:text-stone-700 transition">{t('cook.menus')}</Link>
+            <Link to="/cook/orders" className="px-4 py-2 rounded-lg text-sm font-medium text-stone-500 hover:text-stone-700 transition">{t('cook.orders')}</Link>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <h2 className="text-lg font-bold text-stone-800 mb-6">Dashboard Overview</h2>
+        <h2 className="text-lg font-bold text-stone-800 mb-6">{t('cook.dashboardOverview')}</h2>
 
         {loading && (
           <div className="flex justify-center py-12">
