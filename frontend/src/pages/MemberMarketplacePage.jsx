@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 import { menusAPI } from '../api';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function MemberMarketplacePage() {
   const { t } = useTranslation();
@@ -63,6 +64,7 @@ export default function MemberMarketplacePage() {
             <div className="flex items-center gap-3">
               <Link to="/marketplace/orders" className="btn-ghost text-sm">📦 {t('marketplace.myOrders')}</Link>
               <button onClick={handleLogout} className="btn-secondary text-sm py-2">{t('marketplace.logout')}</button>
+              <LanguageSwitcher />
             </div>
           </div>
         </div>

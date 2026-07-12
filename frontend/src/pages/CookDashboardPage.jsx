@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 import { menusAPI, ordersAPI } from '../api';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function CookDashboardPage() {
   const { t } = useTranslation();
@@ -58,6 +59,7 @@ export default function CookDashboardPage() {
               <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">{t('cook.dashboard')}</h1>
             </div>
             <button onClick={() => { logout(); window.location.href = '/login'; }} className="btn-secondary text-sm py-2">{t('cook.logout')}</button>
+            <LanguageSwitcher />
           </div>
           <div className="mt-4 flex gap-1 bg-stone-100 rounded-xl p-1">
             <Link to="/cook/dashboard" className="px-4 py-2 rounded-lg text-sm font-semibold bg-white text-stone-800 shadow-sm transition">{t('cook.overview')}</Link>
