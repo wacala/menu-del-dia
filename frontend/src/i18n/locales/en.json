@@ -1,0 +1,17 @@
+{
+  "app": { "name": "Menú del Día", "tagline": "Community food, made simple" },
+  "splash": { "description": "Buy and sell homemade food in your community.", "login": "Sign in", "register": "Create account" },
+  "auth": {
+    "welcomeBack": "Welcome back", "signInToAccount": "Sign in to your account",
+    "createAccount": "Create account", "startToday": "Start ordering or selling today",
+    "joinCommunity": "Join the community", "email": "Email", "password": "Password",
+    "confirmPassword": "Confirm Password", "firstName": "First Name", "lastName": "Last Name",
+    "signIn": "Sign in", "signingIn": "Signing in...", "createAccountBtn": "Create account",
+    "creatingAccount": "Creating account...", "noAccount": "Don't have an account?",
+    "createOne": "Create one", "haveAccount": "Already have an account?",
+    "signInLink": "Sign in", "iWantTo": "I want to", "buyFood": "Buy food", "sellFood": "Sell food",
+    "checkEmail": "Check your email", "verificationSent": "We sent a verification link to:",
+    "verificationInstructions": "Click the link in the email to activate your account before logging in.",
+    "backToLogin": "Back to Login", "registrationFailed": "Registration failed", "loginFailed": "Login failed"
+  }
+}

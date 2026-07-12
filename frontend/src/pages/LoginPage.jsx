@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const emailRef = useRef(null);
@@ -41,14 +43,14 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500 shadow-lg shadow-primary-500/30 mb-4">
             <span className="text-3xl">🍽️</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-stone-800 tracking-tight">Menú del Día</h1>
-          <p className="text-stone-500 mt-1 text-sm">Community food, made simple</p>
+          <h1 className="text-3xl font-extrabold text-stone-800 tracking-tight">{t('app.name')}</h1>
+          <p className="text-stone-500 mt-1 text-sm">{t('app.tagline')}</p>
         </div>
 
         {/* Card */}
         <div className="card-static">
-          <h2 className="text-xl font-bold text-stone-800 mb-1">Welcome back</h2>
-          <p className="text-stone-400 text-sm mb-6">Sign in to your account</p>
+          <h2 className="text-xl font-bold text-stone-800 mb-1">{t('auth.welcomeBack')}</h2>
+          <p className="text-stone-400 text-sm mb-6">{t('auth.signInToAccount')}</p>
 
           {error && (
             <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm">
@@ -72,7 +74,7 @@ export default function LoginPage() {
               <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out
                 ${email ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'}
                 peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>
-                Email
+                {t('auth.email')}
               </label>
             </div>
 
@@ -90,7 +92,7 @@ export default function LoginPage() {
               <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out
                 ${password ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'}
                 peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>
-                Password
+                {t('auth.password')}
               </label>
             </div>
 
@@ -105,17 +107,17 @@ export default function LoginPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Signing in...
+                  {t('auth.signingIn')}
                 </span>
-              ) : 'Sign in'}
+              ) : t('auth.signIn')}
             </button>
           </form>
         </div>
 
         <p className="mt-6 text-center text-sm text-stone-500">
-          Don&apos;t have an account?{' '}
+          {t('auth.noAccount')}{' '}
           <Link to="/register" className="font-semibold text-primary-600 hover:text-primary-700 transition-colors" onClick={clearError}>
-            Create one
+            {t('auth.createOne')}
           </Link>
         </p>
       </div>
