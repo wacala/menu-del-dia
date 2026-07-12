@@ -82,7 +82,7 @@ export default function CookMenusPage() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <Link to="/cook/dashboard" className="btn-ghost text-sm">← Back</Link>
-              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 My Menus</h1>
+              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 {t('cook.myMenus')}</h1>
             </div>
           </div>
         </div>
@@ -114,47 +114,47 @@ export default function CookMenusPage() {
 
         {showForm && (
           <div className="card-static mb-8">
-            <h3 className="text-lg font-bold text-stone-800 mb-4">Create New Menu</h3>
+            <h3 className="text-lg font-bold text-stone-800 mb-4">{t('cook.createNewMenu')}</h3>
             <form onSubmit={handleCreateMenu} className="space-y-5">
               <div className="relative">
                 <input type="text" name="title" value={formData.title} onChange={handleInputChange} required placeholder=" " className="input-field pt-6 pb-3 peer" />
-                <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.title ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>Menu Title *</label>
+                <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.title ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>{t('cook.menuTitle')}</label>
               </div>
 
               <div className="relative">
                 <textarea name="description" value={formData.description} onChange={handleInputChange} placeholder=" " rows="3" className="input-field pt-6 pb-3 peer resize-none" />
-                <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.description ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>Description</label>
+                <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.description ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>{t('cook.description')}</label>
               </div>
 
               <div>
-                <label className="block text-sm font-semibold text-stone-700 mb-1.5">Menu Date *</label>
+                <label className="block text-sm font-semibold text-stone-700 mb-1.5">{t('cook.menuDate')}</label>
                 <input type="date" name="menuDate" value={formData.menuDate} onChange={handleInputChange} required className="input-field" />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-1.5">Order Start *</label>
+                  <label className="block text-sm font-semibold text-stone-700 mb-1.5">{t('cook.orderStart')}</label>
                   <input type="datetime-local" name="orderStartTime" value={formData.orderStartTime} onChange={handleInputChange} required className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-stone-700 mb-1.5">Order End *</label>
+                  <label className="block text-sm font-semibold text-stone-700 mb-1.5">{t('cook.orderEnd')}</label>
                   <input type="datetime-local" name="orderEndTime" value={formData.orderEndTime} onChange={handleInputChange} required className="input-field" />
                 </div>
               </div>
 
               <div className="relative">
                 <input type="text" name="pickupLocation" value={formData.pickupLocation} onChange={handleInputChange} required placeholder=" " className="input-field pt-6 pb-3 peer" />
-                <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.pickupLocation ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>Pickup Location *</label>
+                <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.pickupLocation ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>{t('cook.pickupLocation')}</label>
               </div>
 
               <div className="flex gap-6">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" name="pickupAvailable" checked={formData.pickupAvailable} onChange={handleInputChange} className="w-4 h-4 rounded border-stone-300 text-primary-500 focus:ring-primary-500" />
-                  <span className="text-sm font-medium text-stone-700">Pickup Available</span>
+                  <span className="text-sm font-medium text-stone-700">{t('cook.pickupAvailable')}</span>
                 </label>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" name="deliveryAvailable" checked={formData.deliveryAvailable} onChange={handleInputChange} className="w-4 h-4 rounded border-stone-300 text-primary-500 focus:ring-primary-500" />
-                  <span className="text-sm font-medium text-stone-700">Delivery Available</span>
+                  <span className="text-sm font-medium text-stone-700">{t('cook.deliveryAvailable')}</span>
                 </label>
               </div>
 
@@ -170,7 +170,7 @@ export default function CookMenusPage() {
 
         {!loading && menus.length === 0 && (
           <div className="card text-center">
-            <p className="text-gray-500 mb-4">No menus yet. Create your first menu!</p>
+            <p className="text-gray-500 mb-4">{t('cook.noMenusYet')}</p>
             <button
               onClick={() => setShowForm(true)}
               className="btn-primary"

@@ -240,12 +240,12 @@ export default function CookOrderDetailPage() {
           {/* Status Management Sidebar */}
           <div>
             <div className="card sticky top-4">
-              <h3 className="text-lg font-semibold mb-4">Actions</h3>
+              <h3 className="text-lg font-semibold mb-4">{t('cook.actions')}</h3>
 
               {/* Order Summary */}
               <div className="space-y-3 mb-6 pb-6 border-b">
                 <div>
-                  <span className="text-gray-600 text-sm">Order Total</span>
+                  <span className="text-gray-600 text-sm">{t('cook.orderTotal')}</span>
                   <p className="text-2xl font-bold text-blue-600">${order.total_amount}</p>
                 </div>
                 <div>
@@ -259,7 +259,7 @@ export default function CookOrderDetailPage() {
               {/* Status Transitions */}
               {nextSteps.length > 0 ? (
                 <div className="space-y-2">
-                  <p className="text-sm font-medium text-gray-700 mb-3">Update Order Status</p>
+                  <p className="text-sm font-medium text-gray-700 mb-3">{t('cook.updateStatus')}</p>
                   {nextSteps.map((status) => (
                     <button
                       key={status}
@@ -271,7 +271,7 @@ export default function CookOrderDetailPage() {
                           : 'btn-primary'
                       } disabled:opacity-50`}
                     >
-                      Mark as {status.charAt(0).toUpperCase() + status.slice(1)}
+                      {t('cook.markAs')} {status.charAt(0).toUpperCase() + status.slice(1)}
                     </button>
                   ))}
                 </div>
@@ -288,7 +288,7 @@ export default function CookOrderDetailPage() {
               {order.status === 'pending' && (
                 <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
                   <p className="text-yellow-800">
-                    👉 Confirm this order to start preparing it
+                    👉 {t('cook.confirmPrompt')}
                   </p>
                 </div>
               )}
@@ -296,7 +296,7 @@ export default function CookOrderDetailPage() {
               {order.status === 'confirmed' && (
                 <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-xs">
                   <p className="text-blue-800">
-                    👉 Mark as ready when the order is ready for pickup/delivery
+                    👉 {t('cook.markAs')} ready when the order is ready for pickup/delivery
                   </p>
                 </div>
               )}
@@ -304,7 +304,7 @@ export default function CookOrderDetailPage() {
               {order.status === 'ready' && (
                 <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded text-xs">
                   <p className="text-green-800">
-                    ✓ Order is ready! Customer can pickup now
+                    ✓ {t('cook.readyDonePrompt')}
                   </p>
                 </div>
               )}

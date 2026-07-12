@@ -72,12 +72,12 @@ export default function MemberMarketplacePage() {
         <div className="card-static mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">📅 Date</label>
+              <label className="block text-sm font-semibold text-stone-700 mb-1.5">📅 {t('marketplace.date')}</label>
               <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="input-field" />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">🔍 Search</label>
-              <input type="text" placeholder="Search menus, cooks, or items..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="input-field" />
+              <label className="block text-sm font-semibold text-stone-700 mb-1.5">🔍 {t('marketplace.search')}</label>
+              <input type="text" placeholder="{t('marketplace.searchPlaceholder')}" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="input-field" />
             </div>
           </div>
         </div>
@@ -115,7 +115,7 @@ export default function MemberMarketplacePage() {
               <div className="mb-4">
                 <div className="flex items-start justify-between mb-2">
                   <h3 className="text-lg font-bold text-stone-800 group-hover:text-primary-600 transition-colors">{menu.title}</h3>
-                  {menu.status === 'published' && <span className="badge-published text-[10px]">Active</span>}
+                  {menu.status === 'published' && <span className="badge-published text-[10px]">{t('marketplace.active')}</span>}
                 </div>
                 <p className="text-stone-500 text-sm line-clamp-2 mb-3">{menu.description}</p>
                 <div className="flex items-center gap-2">
@@ -130,7 +130,7 @@ export default function MemberMarketplacePage() {
               </div>
 
               <div className="bg-stone-50 rounded-xl p-3 mb-4 flex-1">
-                <h4 className="font-semibold text-xs text-stone-400 uppercase tracking-wider mb-2">Menu items</h4>
+                <h4 className="font-semibold text-xs text-stone-400 uppercase tracking-wider mb-2">{t('marketplace.menuItems')}</h4>
                 {menu.items && menu.items.length > 0 ? (
                   <ul className="space-y-1.5">
                     {menu.items.slice(0, 3).map((item, idx) => (
@@ -141,7 +141,7 @@ export default function MemberMarketplacePage() {
                           {item.quantity_available > 0 ? (
                             <span className="text-[10px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full font-medium">{item.quantity_available}</span>
                           ) : (
-                            <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full font-medium">sold</span>
+                            <span className="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full font-medium">{t('marketplace.sold')}</span>
                           )}
                         </span>
                       </li>
@@ -149,13 +149,13 @@ export default function MemberMarketplacePage() {
                     {menu.items.length > 3 && <li className="text-xs text-stone-400 pt-1">+{menu.items.length - 3} more items</li>}
                   </ul>
                 ) : (
-                  <p className="text-stone-400 text-sm">No items listed</p>
+                  <p className="text-stone-400 text-sm">{t('marketplace.noItems')}</p>
                 )}
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-stone-100">
-                <p className="text-xs text-stone-400">🕐 Until {new Date(menu.order_end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                <Link to={`/marketplace/menu/${menu.id}`} className="btn-primary text-sm py-2 px-4">View & Order →</Link>
+                <p className="text-xs text-stone-400">🕐 {t('marketplace.until')} {new Date(menu.order_end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                <Link to={`/marketplace/menu/${menu.id}`} className="btn-primary text-sm py-2 px-4">{t('marketplace.viewAndOrder')}</Link>
               </div>
             </div>
           ))}

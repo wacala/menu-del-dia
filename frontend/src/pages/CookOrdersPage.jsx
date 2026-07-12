@@ -54,8 +54,8 @@ export default function CookOrdersPage() {
     <div className="min-h-screen bg-stone-50">
       <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 Orders</h1>
-          <Link to="/cook/dashboard" className="btn-ghost text-sm">Back to Dashboard</Link>
+          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 {t('cook.ordersTitle')}</h1>
+          <Link to="/cook/dashboard" className="btn-ghost text-sm">{t('cook.backToDashboard')}</Link>
         </div>
       </nav>
 
@@ -94,7 +94,7 @@ export default function CookOrdersPage() {
         </div>
 
         <div className="mb-6">
-          <button onClick={fetchOrders} className="btn-ghost text-sm">🔄 Refresh Now</button>
+          <button onClick={fetchOrders} className="btn-ghost text-sm">🔄 {t('cook.refreshNow')}</button>
         </div>
 
         {loading && (
@@ -110,7 +110,7 @@ export default function CookOrdersPage() {
           <div className="card-static text-center py-12">
             <div className="text-5xl mb-4">📭</div>
             <p className="text-stone-500 text-lg">
-              {filter === 'all' ? 'No orders yet' : `No ${filter} orders`}
+              {filter === 'all' ? t('cook.noOrdersYet') : t('orders.noFilterOrders', { filter })}
             </p>
           </div>
         )}
@@ -150,7 +150,7 @@ export default function CookOrdersPage() {
 
               {/* Items Summary */}
               <div className="mb-4">
-                <h4 className="font-medium mb-2 text-sm">Items to Prepare:</h4>
+                <h4 className="font-medium mb-2 text-sm">{t('cook.itemsToPrepare')}</h4>
                 {order.items && order.items.length > 0 ? (
                   <div className="space-y-1">
                     {order.items.map((item, idx) => (
@@ -170,14 +170,14 @@ export default function CookOrdersPage() {
               {/* Order Details */}
               <div className="grid grid-cols-2 gap-4 text-sm border-t pt-4 mb-4">
                 <div>
-                  <span className="text-gray-600">Delivery Type:</span>
+                  <span className="text-gray-600">{t('cook.deliveryTypeLabel')}</span>
                   <p className="font-medium">
                     {order.delivery_type.charAt(0).toUpperCase()
                       + order.delivery_type.slice(1)}
                   </p>
                 </div>
                 <div>
-                  <span className="text-gray-600">Total Amount:</span>
+                  <span className="text-gray-600">{t('cook.totalAmount')}</span>
                   <p className="text-lg font-bold text-blue-600">
                     ${order.total_amount}
                   </p>
@@ -187,7 +187,7 @@ export default function CookOrdersPage() {
               {/* Special Requests */}
               {order.notes && (
                 <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
-                  <p className="text-yellow-800 text-sm font-medium">Special Requests:</p>
+                  <p className="text-yellow-800 text-sm font-medium">{t('cook.specialRequests')}</p>
                   <p className="text-yellow-900 text-sm mt-1">{order.notes}</p>
                 </div>
               )}
@@ -196,7 +196,7 @@ export default function CookOrdersPage() {
               {order.status === 'pending' && (
                 <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
                   <p className="text-yellow-800 text-sm">
-                    👉 Tap to view and confirm this order
+                    👉 {t('cook.tapToConfirm')}
                   </p>
                 </div>
               )}
@@ -204,7 +204,7 @@ export default function CookOrdersPage() {
               {order.status === 'confirmed' && (
                 <div className="bg-blue-50 border border-blue-200 rounded p-3">
                   <p className="text-blue-800 text-sm">
-                    🍳 Order confirmed. Start preparing!
+                    🍳 {t('cook.orderConfirmed')}
                   </p>
                 </div>
               )}
@@ -212,7 +212,7 @@ export default function CookOrdersPage() {
               {order.status === 'ready' && (
                 <div className="bg-green-50 border border-green-200 rounded p-3">
                   <p className="text-green-800 text-sm">
-                    ✨ Ready for pickup/delivery
+                    ✨ {t('cook.readyForPickupCook')}
                   </p>
                 </div>
               )}

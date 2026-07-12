@@ -1,4 +1,5 @@
-import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ordersAPI } from '../api';
 
@@ -48,14 +49,14 @@ export default function MemberOrdersPage() {
     <div className="min-h-screen bg-stone-50">
       <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📦 My Orders</h1>
-          <Link to="/marketplace" className="btn-ghost text-sm">Back to Shopping</Link>
+          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📦 {t('orders.title')}</h1>
+          <Link to="/marketplace" className="btn-ghost text-sm">{t('orders.backToShopping')}</Link>
         </div>
       </nav>
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-3">Filter by Status</h2>
+          <h2 className="text-sm font-semibold text-stone-400 uppercase tracking-wider mb-3">{t('orders.filterByStatus')}</h2>
           <div className="flex gap-2 flex-wrap">
             {['all', 'pending', 'confirmed', 'ready', 'delivered', 'cancelled'].map((status) => (
               <button
@@ -86,9 +87,9 @@ export default function MemberOrdersPage() {
           <div className="card-static text-center py-12">
             <div className="text-5xl mb-4">📭</div>
             <p className="text-stone-500 text-lg mb-4">
-              {filter === 'all' ? 'No orders yet. Start shopping!' : `No ${filter} orders`}
+              {filter === 'all' ? t('orders.noOrders') : t('orders.noFilterOrders', { filter: t(`orders.${filter}`) })}
             </p>
-            <Link to="/marketplace" className="btn-primary">Browse Menus</Link>
+            <Link to="/marketplace" className="btn-primary">{t('marketplace.browseMenus')}</Link>
           </div>
         )}
 
@@ -102,7 +103,7 @@ export default function MemberOrdersPage() {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="text-lg font-bold text-stone-800 group-hover:text-primary-600 transition-colors">Order #{order.id}</h3>
-                  <p className="text-sm text-stone-500">from {order.cook_first_name} {order.cook_last_name}</p>
+                  <p className="text-sm text-stone-500">{t('orders.orderFrom')} {order.cook_first_name} {order.cook_last_name}</p>
                   <p className="text-xs text-stone-400 mt-1">
                     {new Date(order.created_at).toLocaleDateString()} at{' '}
                     {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -131,7 +132,7 @@ export default function MemberOrdersPage() {
               </div>
 
               <div className="mb-4">
-                <h4 className="font-semibold text-xs text-stone-400 uppercase tracking-wider mb-2">Items</h4>
+                <h4 className="font-semibold text-xs text-stone-400 uppercase tracking-wider mb-2">{t('orders.items')}</h4>
                 {order.items && order.items.length > 0 ? (
                   <ul className="text-sm space-y-1">
                     {order.items.map((item, idx) => (
@@ -142,7 +143,7 @@ export default function MemberOrdersPage() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-stone-400 text-sm">No items found</p>
+                  <p className="text-stone-400 text-sm">{t('orders.noItemsFound')}</p>
                 )}
               </div>
 

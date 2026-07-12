@@ -83,33 +83,33 @@ export default function CookDashboardPage() {
         {!loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div className="card-static border-l-4 border-l-primary-500 bg-gradient-to-br from-primary-50/50 to-white">
-              <p className="text-sm font-medium text-stone-500">Active Menus</p>
+              <p className="text-sm font-medium text-stone-500">{t('cook.activeMenus')}</p>
               <p className="text-3xl font-extrabold text-primary-600 mt-1">{stats.activeMenus}</p>
-              <Link to="/cook/menus" className="text-xs font-semibold text-primary-500 hover:text-primary-700 mt-3 inline-block">Manage →</Link>
+              <Link to="/cook/menus" className="text-xs font-semibold text-primary-500 hover:text-primary-700 mt-3 inline-block">{t('cook.manage')}</Link>
             </div>
             <div className="card-static border-l-4 border-l-emerald-500 bg-gradient-to-br from-emerald-50/50 to-white">
-              <p className="text-sm font-medium text-stone-500">Total Orders</p>
+              <p className="text-sm font-medium text-stone-500">{t('cook.totalOrders')}</p>
               <p className="text-3xl font-extrabold text-emerald-600 mt-1">{stats.totalOrders}</p>
-              <Link to="/cook/orders" className="text-xs font-semibold text-emerald-500 hover:text-emerald-700 mt-3 inline-block">View →</Link>
+              <Link to="/cook/orders" className="text-xs font-semibold text-emerald-500 hover:text-emerald-700 mt-3 inline-block">{t('cook.view')}</Link>
             </div>
             <div className="card-static border-l-4 border-l-amber-500 bg-gradient-to-br from-amber-50/50 to-white">
-              <p className="text-sm font-medium text-stone-500">Pending</p>
+              <p className="text-sm font-medium text-stone-500">{t('cook.pendingOrders')}</p>
               <p className="text-3xl font-extrabold text-amber-600 mt-1">{stats.pendingOrders}</p>
-              <p className="text-xs text-amber-500 mt-3">Need attention</p>
+              <p className="text-xs text-amber-500 mt-3">{t('cook.needAttention')}</p>
             </div>
             <div className="card-static border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-50/50 to-white">
-              <p className="text-sm font-medium text-stone-500">Revenue</p>
+              <p className="text-sm font-medium text-stone-500">{t('cook.revenue')}</p>
               <p className="text-3xl font-extrabold text-purple-600 mt-1">${stats.revenue}</p>
-              <p className="text-xs text-purple-400 mt-3">All time</p>
+              <p className="text-xs text-purple-400 mt-3">{t('cook.allTime')}</p>
             </div>
           </div>
         )}
 
         <div className="card-static">
-          <h3 className="text-lg font-bold text-stone-800 mb-4">Quick Actions</h3>
+          <h3 className="text-lg font-bold text-stone-800 mb-4">{t('cook.quickActions')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Link to="/cook/menus?create=true" className="btn-primary text-center">+ Create New Menu</Link>
-            <Link to="/cook/orders" className="btn-secondary text-center font-semibold">View All Orders</Link>
+            <Link to="/cook/menus?create=true" className="btn-primary text-center">{t('cook.createMenu')}</Link>
+            <Link to="/cook/orders" className="btn-secondary text-center font-semibold">{t('cook.viewAllOrders')}</Link>
           </div>
         </div>
       </main>
