@@ -543,10 +543,6 @@ export default function App() {
       <Pressable style={styles.secondary} onPress={logout}>
         <Text style={styles.secondaryText}>{t('profile.logout')}</Text>
       </Pressable>
-      <View style={[styles.row, { justifyContent: 'center', marginTop: 24 }]}>
-        <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
-        <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
-      </View>
     </View>
   );
 
@@ -671,6 +667,10 @@ export default function App() {
               <Chip icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => setScreen('profile')} />
             </>
           )}
+        </View>
+        <View style={[styles.row, { justifyContent: 'flex-end', marginTop: 8 }]}>
+          <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
+          <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
         </View>
       </View>
 
