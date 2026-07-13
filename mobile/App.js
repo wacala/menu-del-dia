@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   View,
+  Linking,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -152,6 +153,38 @@ export default function App() {
       if (savedLang) { currentLang = savedLang; setLang(savedLang); }
       setReady(true);
     })();
+  }, []);
+
+  // Deep link handler for email verification
+  useEffect(() => {
+    const handleDeepLink = (event) => {
+      const { url } = event;
+      if (!url) return;
+      const match = url.match(/[?&]token=([^&]+)/);
+      if (match) {
+        verifyEmailToken(match[1]);
+      }
+    };
+
+    const verifyEmailToken = async (token) => {
+      try {
+        await api('/auth/verify-email', { method: 'POST', body: { token } });
+        setError('');
+        setMessage('Email verified! You can now log in.');
+        setScreen('auth');
+      } catch (err) {
+        setError(err.message || 'Verification failed. The link may have expired.');
+      }
+    };
+
+    // Handle cold start
+    Linking.getInitialURL().then((url) => {
+      if (url) handleDeepLink({ url });
+    });
+
+    // Handle warm start
+    const sub = Linking.addEventListener('url', handleDeepLink);
+    return () => sub.remove();
   }, []);
 
   const changeLang = async (l) => {
