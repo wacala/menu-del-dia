@@ -12,6 +12,7 @@ import {
   View,
   Linking,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const STORAGE_KEY = 'menu-del-dia-session';
@@ -99,9 +100,10 @@ async function api(path, { method = 'GET', token, body } = {}) {
   return data;
 }
 
-function Chip({ label, active, onPress }) {
+function Chip({ label, active, onPress, icon }) {
   return (
     <Pressable onPress={onPress} style={[styles.chip, active && styles.chipActive]}>
+      {icon && <Ionicons name={icon} size={16} color={active ? colors.primary : colors.muted} style={{ marginRight: 4 }} />}
       <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
     </Pressable>
   );
@@ -658,15 +660,15 @@ export default function App() {
         <View style={styles.row}>
           {user?.role === 'cook' ? (
             <>
-              <Chip label="📊" active={screen === 'cookDashboard'} onPress={() => setScreen('cookDashboard')} />
-              <Chip label="📋" active={screen === 'cookOrders'} onPress={() => setScreen('cookOrders')} />
-              <Chip label="👤" active={screen === 'profile'} onPress={() => setScreen('profile')} />
+              <Chip icon="grid" label={t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => setScreen('cookDashboard')} />
+              <Chip icon="list" label={t('cook.orders')} active={screen === 'cookOrders'} onPress={() => setScreen('cookOrders')} />
+              <Chip icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => setScreen('profile')} />
             </>
           ) : (
             <>
-              <Chip label="🛒" active={screen === 'market'} onPress={() => setScreen('market')} />
-              <Chip label="📦" active={screen === 'orders'} onPress={() => setScreen('orders')} />
-              <Chip label="👤" active={screen === 'profile'} onPress={() => setScreen('profile')} />
+              <Chip icon="cart" label={t('market.title')} active={screen === 'market'} onPress={() => setScreen('market')} />
+              <Chip icon="receipt" label={t('orders.title')} active={screen === 'orders'} onPress={() => setScreen('orders')} />
+              <Chip icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => setScreen('profile')} />
             </>
           )}
         </View>
