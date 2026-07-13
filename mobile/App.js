@@ -459,8 +459,14 @@ export default function App() {
         {authMode === 'register' && (
           <>
             <Field placeholder={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
-            <Field placeholder={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} />
-            <Field placeholder={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} />
+            <View style={styles.row}>
+              <View style={{ flex: 1 }}>
+                <Field placeholder={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Field placeholder={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} />
+              </View>
+            </View>
             <View style={styles.row}>
               <Chip label={t('auth.member')} active={auth.role === 'member'} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))} />
               <Chip label={t('auth.cook')} active={auth.role === 'cook'} onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))} />

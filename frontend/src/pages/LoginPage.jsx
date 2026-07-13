@@ -17,12 +17,19 @@ export default function LoginPage() {
   }, [clearError]);
 
   // Sync autofilled values from browser on mount
+  const handleAutofill = (setter) => (e) => {
+    if (e.animationName === 'onAutoFillStart' && e.target.value) {
+      setter(e.target.value);
+    }
+  };
+
   useEffect(() => {
-    const frame = requestAnimationFrame(() => {
+    // Fallback: poll once after mount for browsers that don't fire animation
+    const timer = setTimeout(() => {
       if (emailRef.current?.value && !email) setEmail(emailRef.current.value);
       if (passwordRef.current?.value && !password) setPassword(passwordRef.current.value);
-    });
-    return () => cancelAnimationFrame(frame);
+    }, 200);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSubmit = async (e) => {
@@ -69,6 +76,7 @@ export default function LoginPage() {
                 required
                 placeholder=" "
                 autoComplete="email"
+                onAnimationStart={handleAutofill(setEmail)}
                 className="input-field pt-6 pb-3 peer"
               />
               <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out
@@ -87,6 +95,7 @@ export default function LoginPage() {
                 required
                 placeholder=" "
                 autoComplete="current-password"
+                onAnimationStart={handleAutofill(setPassword)}
                 className="input-field pt-6 pb-3 peer"
               />
               <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out

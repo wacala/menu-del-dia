@@ -24,6 +24,13 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* Detect browser autofill */
+@keyframes onAutoFillStart { from {} to {} }
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
+  -webkit-box-shadow: 0 0 0 30px #fafaf9 inset !important;
+}
+
 #root {
   min-height: 100vh;
 }
