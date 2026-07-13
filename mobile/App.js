@@ -21,14 +21,51 @@ const API_URL = process.env.EXPO_PUBLIC_API_URL || Platform.select({
 });
 
 const colors = {
-  bg: '#f6f8fb',
+  bg: '#fafaf9',
   card: '#ffffff',
-  text: '#102033',
-  muted: '#66788a',
-  primary: '#0f766e',
-  border: '#d9e2ec',
-  danger: '#b42318',
-  success: '#0a7d4f',
+  text: '#292524',
+  muted: '#78716c',
+  primary: '#f97316',
+  primaryDark: '#ea580c',
+  primaryLight: '#fff7ed',
+  border: '#e7e5e4',
+  danger: '#dc2626',
+  success: '#16a34a',
+  amber: '#d97706',
+  emerald: '#059669',
+  purple: '#7c3aed',
+};
+
+// ── i18n ────────────────────────────────────────────────────
+const LANG_KEY = 'menu-del-dia-lang';
+let currentLang = 'es-MX';
+
+const t = (key) => {
+  const tr = translations[currentLang] || translations['es-MX'];
+  return key.split('.').reduce((o, k) => o?.[k], tr) || key;
+};
+
+const translations = {
+  'es-MX': {
+    app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
+    splash: { description: 'Compra y vende comida casera en tu comunidad.', login: 'Iniciar sesión', register: 'Crear cuenta' },
+    auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver al inicio', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres' },
+    market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
+    menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
+    orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
+    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero' },
+    cook: { dashboard: 'Panel', orders: 'Pedidos', menus: 'Menús', profile: 'Perfil', noOrders: 'Sin pedidos aún', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:' }
+  },
+  en: {
+    app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
+    splash: { description: 'Buy and sell homemade food in your community.', login: 'Sign in', register: 'Create account' },
+    auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters' },
+    market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
+    menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
+    orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
+    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook' },
+    cook: { dashboard: 'Dashboard', orders: 'Orders', menus: 'Menus', profile: 'Profile', noOrders: 'No orders yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:' }
+  }
 };
 
 const money = (value) => `$${Number(value || 0).toFixed(2)}`;
@@ -77,8 +114,9 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
-  const [screen, setScreen] = useState('market');
+  const [screen, setScreen] = useState('splash');
   const [authMode, setAuthMode] = useState('login');
+  const [lang, setLang] = useState('es-MX');
   const [auth, setAuth] = useState({
     email: '',
     password: '',
@@ -108,10 +146,19 @@ export default function App() {
         const session = JSON.parse(stored);
         setToken(session.token);
         setUser(session.user);
+        if (session.token) setScreen('market');
       }
+      const savedLang = await AsyncStorage.getItem(LANG_KEY);
+      if (savedLang) { currentLang = savedLang; setLang(savedLang); }
       setReady(true);
     })();
   }, []);
+
+  const changeLang = async (l) => {
+    currentLang = l;
+    setLang(l);
+    await AsyncStorage.setItem(LANG_KEY, l);
+  };
 
   const saveSession = async (nextToken, nextUser) => {
     setToken(nextToken);
@@ -284,35 +331,68 @@ export default function App() {
   }
 
   if (!token) {
+    // Splash
+    if (screen === 'splash') {
+      return (
+        <ScrollView contentContainerStyle={styles.auth}>
+          <Text style={styles.icon}>🍽️</Text>
+          <Text style={styles.title}>{t('app.name')}</Text>
+          <Text style={styles.subtitle}>{t('app.tagline')}</Text>
+          <Text style={styles.body}>{t('splash.description')}</Text>
+          <Pressable style={styles.primary} onPress={() => setScreen('auth')}>
+            <Text style={styles.primaryText}>{t('splash.login')}</Text>
+          </Pressable>
+          <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); }}>
+            <Text style={styles.secondaryText}>{t('splash.register')}</Text>
+          </Pressable>
+          <View style={[styles.row, { justifyContent: 'center', marginTop: 24 }]}>
+            <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
+            <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
+          </View>
+          <StatusBar style="dark" />
+        </ScrollView>
+      );
+    }
+
+    // Auth form
     return (
       <ScrollView contentContainerStyle={styles.auth}>
-        <Text style={styles.title}>Menú del Día</Text>
-        <Text style={styles.subtitle}>Community food ordering for cooks and members.</Text>
+        <Text style={styles.icon}>🍽️</Text>
+        <Text style={styles.title}>{t('app.name')}</Text>
 
         <View style={styles.row}>
-          <Chip label="Login" active={authMode === 'login'} onPress={() => { setAuthMode('login'); setError(''); }} />
-          <Chip label="Register" active={authMode === 'register'} onPress={() => { setAuthMode('register'); setError(''); }} />
+          <Chip label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); setError(''); }} />
+          <Chip label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); setError(''); }} />
         </View>
 
-        <Field placeholder="Email" value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((current) => ({ ...current, email }))} />
-        <Field placeholder="Password" value={auth.password} secureTextEntry onChangeText={(password) => setAuth((current) => ({ ...current, password }))} />
+        <Field placeholder={t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
+        <Field placeholder={t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
 
         {authMode === 'register' && (
           <>
-            <Field placeholder="Confirm password" value={auth.confirmPassword} secureTextEntry onChangeText={(confirmPassword) => setAuth((current) => ({ ...current, confirmPassword }))} />
-            <Field placeholder="First name" value={auth.firstName} onChangeText={(firstName) => setAuth((current) => ({ ...current, firstName }))} />
-            <Field placeholder="Last name" value={auth.lastName} onChangeText={(lastName) => setAuth((current) => ({ ...current, lastName }))} />
+            <Field placeholder={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
+            <Field placeholder={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} />
+            <Field placeholder={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} />
             <View style={styles.row}>
-              <Chip label="Member" active={auth.role === 'member'} onPress={() => setAuth((current) => ({ ...current, role: 'member' }))} />
-              <Chip label="Cook" active={auth.role === 'cook'} onPress={() => setAuth((current) => ({ ...current, role: 'cook' }))} />
+              <Chip label={t('auth.member')} active={auth.role === 'member'} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))} />
+              <Chip label={t('auth.cook')} active={auth.role === 'cook'} onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))} />
             </View>
           </>
         )}
 
         {!!error && <Text style={styles.error}>{error}</Text>}
         <Pressable style={styles.primary} onPress={submitAuth}>
-          <Text style={styles.primaryText}>{authMode === 'login' ? 'Sign in' : 'Create account'}</Text>
+          <Text style={styles.primaryText}>{authMode === 'login' ? t('auth.signIn') : t('auth.createAccount')}</Text>
         </Pressable>
+
+        <Pressable onPress={() => setScreen('splash')}>
+          <Text style={styles.link}>← {t('app.name')}</Text>
+        </Pressable>
+
+        <View style={[styles.row, { justifyContent: 'center', marginTop: 16 }]}>
+          <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
+          <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
+        </View>
         <StatusBar style="dark" />
       </ScrollView>
     );
@@ -321,8 +401,8 @@ export default function App() {
   const marketView = (
     <View style={styles.section}>
       <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>Today&apos;s menus</Text>
-        <Pressable onPress={loadMenus}><Text style={styles.link}>Refresh</Text></Pressable>
+        <Text style={styles.sectionTitle}>{t('market.title')}</Text>
+        <Pressable onPress={loadMenus}><Text style={styles.link}>↻</Text></Pressable>
       </View>
       {loading ? (
         <ActivityIndicator color={colors.primary} />
@@ -330,13 +410,13 @@ export default function App() {
         <FlatList
           data={publishedMenus}
           keyExtractor={(item) => String(item.id)}
-          ListEmptyComponent={<Text style={styles.helper}>No published menus yet.</Text>}
+          ListEmptyComponent={<Text style={styles.helper}>{t('market.noMenus')}</Text>}
           renderItem={({ item }) => (
             <Pressable style={styles.card} onPress={() => openMenu(item.id)}>
               <Text style={styles.cardTitle}>{item.title}</Text>
               <Text style={styles.muted}>{item.cook_first_name} {item.cook_last_name}</Text>
-              <Text style={styles.body}>{item.description || 'Fresh community food.'}</Text>
-              <Text style={styles.link}>View menu</Text>
+              <Text style={styles.body} numberOfLines={2}>{item.description || ''}</Text>
+              <Text style={styles.link}>{t('market.viewMenu')}</Text>
             </Pressable>
           )}
         />
@@ -347,20 +427,19 @@ export default function App() {
   const ordersView = (
     <View style={styles.section}>
       <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>My orders</Text>
-        <Pressable onPress={loadOrders}><Text style={styles.link}>Refresh</Text></Pressable>
+        <Text style={styles.sectionTitle}>{t('orders.title')}</Text>
+        <Pressable onPress={loadOrders}><Text style={styles.link}>↻</Text></Pressable>
       </View>
       {loading ? (
         <ActivityIndicator color={colors.primary} />
       ) : orders.length === 0 ? (
-        <Text style={styles.helper}>You have not placed any orders yet.</Text>
+        <Text style={styles.helper}>{t('orders.noOrders')}</Text>
       ) : (
         orders.map((order) => (
           <View key={order.id} style={styles.card}>
             <Text style={styles.cardTitle}>{order.order_number}</Text>
             <Text style={styles.muted}>{order.menu_title}</Text>
-            <Text style={styles.body}>Status: {order.status}</Text>
-            <Text style={styles.body}>{money(order.total_amount)}</Text>
+            <Text style={styles.body}>{t('orders.total')} {money(order.total_amount)}</Text>
           </View>
         ))
       )}
@@ -371,18 +450,22 @@ export default function App() {
     <View style={styles.section}>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{user?.email}</Text>
-        <Text style={styles.body}>Role: {user?.role}</Text>
+        <Text style={styles.body}>{t('profile.role')}: {user?.role === 'cook' ? t('profile.cook') : t('profile.member')}</Text>
       </View>
       <Pressable style={styles.secondary} onPress={logout}>
-        <Text style={styles.secondaryText}>Log out</Text>
+        <Text style={styles.secondaryText}>{t('profile.logout')}</Text>
       </Pressable>
+      <View style={[styles.row, { justifyContent: 'center', marginTop: 24 }]}>
+        <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
+        <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
+      </View>
     </View>
   );
 
   const menuView = (
     <ScrollView contentContainerStyle={styles.section}>
       <Pressable onPress={() => setScreen('market')}>
-        <Text style={styles.link}>← Back</Text>
+        <Text style={styles.link}>{t('menu.back')}</Text>
       </Pressable>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{menu?.title}</Text>
@@ -393,46 +476,25 @@ export default function App() {
           <Text style={styles.cardTitle}>{item.name}</Text>
           <Text style={styles.muted}>{money(item.price)} · {item.quantity_available} left</Text>
           <View style={styles.qtyRow}>
-            <Chip
-              label="-"
-              onPress={() => setDraft((current) => ({
-                ...current,
-                quantities: { ...current.quantities, [item.id]: Math.max(0, Number(current.quantities[item.id] || 1) - 1) },
-              }))}
-            />
+            <Chip label="−" onPress={() => setDraft((c) => ({ ...c, quantities: { ...c.quantities, [item.id]: Math.max(0, Number(c.quantities[item.id] || 1) - 1) } }))} />
             <Text style={styles.qtyValue}>{draft.quantities[item.id] || 0}</Text>
-            <Chip
-              label="+"
-              onPress={() => setDraft((current) => ({
-                ...current,
-                quantities: { ...current.quantities, [item.id]: Number(current.quantities[item.id] || 0) + 1 },
-              }))}
-            />
+            <Chip label="+" onPress={() => setDraft((c) => ({ ...c, quantities: { ...c.quantities, [item.id]: Number(c.quantities[item.id] || 0) + 1 } }))} />
           </View>
         </View>
       ))}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Order options</Text>
+        <Text style={styles.cardTitle}>{t('menu.deliveryType')}</Text>
         <View style={styles.row}>
-          <Chip label="Pickup" active={draft.deliveryType === 'pickup'} onPress={() => setDraft((current) => ({ ...current, deliveryType: 'pickup' }))} />
-          <Chip label="Delivery" active={draft.deliveryType === 'delivery'} onPress={() => setDraft((current) => ({ ...current, deliveryType: 'delivery' }))} />
+          <Chip label={t('menu.pickup')} active={draft.deliveryType === 'pickup'} onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))} />
+          <Chip label={t('menu.delivery')} active={draft.deliveryType === 'delivery'} onPress={() => setDraft((c) => ({ ...c, deliveryType: 'delivery' }))} />
         </View>
         {draft.deliveryType === 'delivery' && (
-          <Field
-            placeholder="Delivery address"
-            value={draft.deliveryAddress}
-            onChangeText={(deliveryAddress) => setDraft((current) => ({ ...current, deliveryAddress }))}
-          />
+          <Field placeholder="Address" value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} />
         )}
-        <Field
-          placeholder="Special instructions"
-          value={draft.specialInstructions}
-          multiline
-          onChangeText={(specialInstructions) => setDraft((current) => ({ ...current, specialInstructions }))}
-        />
+        <Field placeholder={t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} />
         {!!error && <Text style={styles.error}>{error}</Text>}
         <Pressable style={styles.primary} onPress={placeOrder}>
-          <Text style={styles.primaryText}>Place order</Text>
+          <Text style={styles.primaryText}>{t('menu.placeOrder')}</Text>
         </Pressable>
       </View>
     </ScrollView>
@@ -442,11 +504,11 @@ export default function App() {
     <View style={styles.app}>
       <StatusBar style="dark" />
       <View style={styles.top}>
-        <Text style={styles.brand}>Menú del Día</Text>
+        <Text style={styles.brand}>{t('app.name')}</Text>
         <View style={styles.row}>
-          <Chip label="Market" active={screen === 'market'} onPress={() => setScreen('market')} />
-          {user?.role === 'member' && <Chip label="Orders" active={screen === 'orders'} onPress={() => setScreen('orders')} />}
-          <Chip label="Profile" active={screen === 'profile'} onPress={() => setScreen('profile')} />
+          <Chip label="🛒" active={screen === 'market'} onPress={() => setScreen('market')} />
+          {user?.role === 'member' && <Chip label="📦" active={screen === 'orders'} onPress={() => setScreen('orders')} />}
+          <Chip label="👤" active={screen === 'profile'} onPress={() => setScreen('profile')} />
         </View>
       </View>
 
@@ -478,10 +540,11 @@ const styles = StyleSheet.create({
   body: { color: colors.text },
   muted: { color: colors.muted, fontWeight: '600' },
   helper: { textAlign: 'center', color: colors.muted },
-  link: { color: colors.primary, fontWeight: '700' },
+  icon: { fontSize: 48, textAlign: 'center', marginBottom: 12 },
+  link: { color: colors.primary, fontWeight: '700', marginTop: 4 },
   input: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, color: colors.text },
   chip: { borderWidth: 1, borderColor: colors.border, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.card },
-  chipActive: { backgroundColor: '#d9f5f1', borderColor: colors.primary },
+  chipActive: { backgroundColor: colors.primaryLight, borderColor: colors.primary },
   chipText: { color: colors.muted, fontWeight: '700' },
   chipTextActive: { color: colors.primary },
   primary: { backgroundColor: colors.primary, borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
@@ -492,4 +555,8 @@ const styles = StyleSheet.create({
   success: { color: colors.success, fontWeight: '700', paddingHorizontal: 16 },
   qtyRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   qtyValue: { minWidth: 24, textAlign: 'center', fontWeight: '800', color: colors.text },
+  langBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
+  langBtnActive: { backgroundColor: colors.primaryLight },
+  langText: { fontSize: 12, color: colors.muted, fontWeight: '600' },
+  langTextActive: { color: colors.primary },
 });
