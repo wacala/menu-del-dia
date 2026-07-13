@@ -139,6 +139,13 @@ export default function App() {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [pendingVerification, setPendingVerification] = useState(null);
+  const [cookOrders, setCookOrders] = useState([]);
+  const [cookStats, setCookStats] = useState({ activeMenus: 0, totalOrders: 0, pendingOrders: 0, revenue: '0' });
+  const [showMenuForm, setShowMenuForm] = useState(false);
+  const [menuForm, setMenuForm] = useState({
+    title: '', description: '', menuDate: new Date().toISOString().split('T')[0],
+    orderStartTime: '', orderEndTime: '', pickupAvailable: true, deliveryAvailable: false, pickupLocation: '',
+  });
 
   useEffect(() => {
     (async () => {
@@ -147,7 +154,7 @@ export default function App() {
         const session = JSON.parse(stored);
         setToken(session.token);
         setUser(session.user);
-        if (session.token) setScreen('market');
+        if (session.token) setScreen(session.user?.role === 'cook' ? 'cookDashboard' : 'market');
       }
       const savedLang = await AsyncStorage.getItem(LANG_KEY);
       if (savedLang) { currentLang = savedLang; setLang(savedLang); }
@@ -236,8 +243,54 @@ export default function App() {
     }
   };
 
+  const loadCookOrders = async () => {
+    setLoading(true); setError('');
+    try {
+      const data = await api('/orders/cook', { token });
+      setCookOrders(data.orders || []);
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
+  const loadCookStats = async () => {
+    try {
+      const [menusRes, ordersRes] = await Promise.all([
+        api('/menus', { token }),
+        api('/orders/cook', { token }),
+      ]);
+      const allMenus = menusRes.menus || [];
+      const allOrders = ordersRes.orders || [];
+      setCookOrders(allOrders);
+      setCookStats({
+        activeMenus: allMenus.filter(m => m.status === 'published').length,
+        totalOrders: allOrders.length,
+        pendingOrders: allOrders.filter(o => o.status === 'pending').length,
+        revenue: allOrders.reduce((s, o) => s + parseFloat(o.total_amount || 0), 0).toFixed(2),
+      });
+    } catch (e) { setError(e.message); }
+  };
+
+  const createMenu = async () => {
+    setLoading(true); setError('');
+    try {
+      await api('/menus', { method: 'POST', token, body: menuForm });
+      setShowMenuForm(false);
+      setMenuForm({ title: '', description: '', menuDate: new Date().toISOString().split('T')[0], orderStartTime: '', orderEndTime: '', pickupAvailable: true, deliveryAvailable: false, pickupLocation: '' });
+      loadCookStats();
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
+  const updateOrderStatus = async (orderId, status) => {
+    try {
+      await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status } });
+      loadCookOrders();
+    } catch (e) { setError(e.message); }
+  };
+
   useEffect(() => {
     if (!ready || !token) return;
+    if (user?.role === 'cook') { loadCookStats(); return; }
     loadMenus();
     loadOrders();
   }, [ready, token]);
@@ -533,15 +586,89 @@ export default function App() {
     </ScrollView>
   );
 
+  // ── Cook views ──────────────────────────────────────────────
+  const cookDashboardView = (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle}>{t('cook.dashboard')}</Text>
+      <View style={styles.row}>
+        <View style={[styles.statCard, { borderLeftColor: colors.primary }]}>
+          <Text style={styles.statValue}>{cookStats.activeMenus}</Text>
+          <Text style={styles.statLabel}>{t('cook.activeMenus')}</Text>
+        </View>
+        <View style={[styles.statCard, { borderLeftColor: colors.emerald }]}>
+          <Text style={styles.statValue}>{cookStats.totalOrders}</Text>
+          <Text style={styles.statLabel}>{t('cook.totalOrders')}</Text>
+        </View>
+      </View>
+      <View style={styles.row}>
+        <View style={[styles.statCard, { borderLeftColor: colors.amber }]}>
+          <Text style={styles.statValue}>{cookStats.pendingOrders}</Text>
+          <Text style={styles.statLabel}>{t('cook.pendingOrders')}</Text>
+        </View>
+        <View style={[styles.statCard, { borderLeftColor: colors.purple }]}>
+          <Text style={styles.statValue}>${cookStats.revenue}</Text>
+          <Text style={styles.statLabel}>{t('cook.revenue')}</Text>
+        </View>
+      </View>
+      <Pressable style={styles.primary} onPress={loadCookStats}>
+        <Text style={styles.primaryText}>↻ {t('cook.refreshNow')}</Text>
+      </Pressable>
+    </View>
+  );
+
+  const cookOrdersView = (
+    <ScrollView contentContainerStyle={styles.section}>
+      <Text style={styles.sectionTitle}>{t('cook.ordersTitle')}</Text>
+      {cookOrders.length === 0 ? (
+        <Text style={styles.helper}>{t('cook.noOrders')}</Text>
+      ) : (
+        cookOrders.map((order) => (
+          <View key={order.id} style={styles.card}>
+            <Text style={styles.cardTitle}>#{order.id} — {order.member_name || order.member_email}</Text>
+            <Text style={styles.muted}>{t('cook.totalAmount')} {money(order.total_amount)}</Text>
+            {(order.items || []).map((item, idx) => (
+              <Text key={idx} style={styles.body}>• {item.name} ×{item.quantity}</Text>
+            ))}
+            {order.status === 'pending' && (
+              <View style={styles.row}>
+                <Pressable style={[styles.primary, { flex: 1 }]} onPress={() => updateOrderStatus(order.id, 'confirmed')}>
+                  <Text style={styles.primaryText}>✓ Confirmar</Text>
+                </Pressable>
+              </View>
+            )}
+            {order.status === 'confirmed' && (
+              <Pressable style={[styles.primary, { backgroundColor: colors.emerald }]} onPress={() => updateOrderStatus(order.id, 'ready')}>
+                <Text style={styles.primaryText}>🟢 {t('cook.readyForPickupCook')}</Text>
+              </Pressable>
+            )}
+            {order.status !== 'pending' && order.status !== 'confirmed' && (
+              <Text style={[styles.chipText, { color: colors.muted }]}>{order.status}</Text>
+            )}
+          </View>
+        ))
+      )}
+    </ScrollView>
+  );
+
   return (
     <View style={styles.app}>
       <StatusBar style="dark" />
       <View style={styles.top}>
         <Text style={styles.brand}>{t('app.name')}</Text>
         <View style={styles.row}>
-          <Chip label="🛒" active={screen === 'market'} onPress={() => setScreen('market')} />
-          {user?.role === 'member' && <Chip label="📦" active={screen === 'orders'} onPress={() => setScreen('orders')} />}
-          <Chip label="👤" active={screen === 'profile'} onPress={() => setScreen('profile')} />
+          {user?.role === 'cook' ? (
+            <>
+              <Chip label="📊" active={screen === 'cookDashboard'} onPress={() => setScreen('cookDashboard')} />
+              <Chip label="📋" active={screen === 'cookOrders'} onPress={() => setScreen('cookOrders')} />
+              <Chip label="👤" active={screen === 'profile'} onPress={() => setScreen('profile')} />
+            </>
+          ) : (
+            <>
+              <Chip label="🛒" active={screen === 'market'} onPress={() => setScreen('market')} />
+              <Chip label="📦" active={screen === 'orders'} onPress={() => setScreen('orders')} />
+              <Chip label="👤" active={screen === 'profile'} onPress={() => setScreen('profile')} />
+            </>
+          )}
         </View>
       </View>
 
@@ -552,6 +679,8 @@ export default function App() {
       {screen === 'orders' && ordersView}
       {screen === 'profile' && profileView}
       {screen === 'menu' && menuView}
+      {screen === 'cookDashboard' && cookDashboardView}
+      {screen === 'cookOrders' && cookOrdersView}
     </View>
   );
 }
@@ -592,4 +721,7 @@ const styles = StyleSheet.create({
   langBtnActive: { backgroundColor: colors.primaryLight },
   langText: { fontSize: 12, color: colors.muted, fontWeight: '600' },
   langTextActive: { color: colors.primary },
+  statCard: { flex: 1, backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, borderLeftWidth: 4, padding: 12, gap: 4 },
+  statValue: { fontSize: 24, fontWeight: '800', color: colors.text },
+  statLabel: { fontSize: 12, color: colors.muted, fontWeight: '600' },
 });
