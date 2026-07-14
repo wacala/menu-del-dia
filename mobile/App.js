@@ -503,6 +503,7 @@ export default function App() {
         {drawerOpen && (
           <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}><View /></Pressable>
         )}
+        {drawerOpen && (
         <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
           <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
             <Text style={styles.sectionTitle}>{t('app.name')}</Text>
@@ -516,6 +517,7 @@ export default function App() {
             </Pressable>
           </View>
         </Animated.View>
+        )}
 
         <ScrollView contentContainerStyle={styles.auth}>
           <Text style={styles.icon}>🍽️</Text>
