@@ -1,7 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import {
   ActivityIndicator,
+  Animated,
   FlatList,
   Platform,
   Pressable,
@@ -116,6 +117,15 @@ function getResponsiveBorder(width) {
   return 1;                          // 50%  — móviles
 }
 
+function DrawerItem({ icon, label, active, onPress }) {
+  return (
+    <Pressable onPress={onPress} style={[styles.drawerItem, active && styles.drawerItemActive]}>
+      <Ionicons name={icon} size={20} color={active ? colors.primary : colors.muted} />
+      <Text style={[styles.drawerItemText, active && styles.drawerItemTextActive]}>{label}</Text>
+    </Pressable>
+  );
+}
+
 function Field(props) {
   const { width } = useWindowDimensions();
   return <TextInput placeholderTextColor={colors.muted} style={[styles.input, { borderWidth: getResponsiveBorder(width) }]} {...props} />;
@@ -152,6 +162,16 @@ export default function App() {
   const [cookOrders, setCookOrders] = useState([]);
   const [cookStats, setCookStats] = useState({ activeMenus: 0, totalOrders: 0, pendingOrders: 0, revenue: '0' });
   const [showMenuForm, setShowMenuForm] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const slideAnim = useRef(new Animated.Value(-280)).current;
+
+  useEffect(() => {
+    Animated.timing(slideAnim, {
+      toValue: drawerOpen ? 0 : -280,
+      duration: 250,
+      useNativeDriver: true,
+    }).start();
+  }, [drawerOpen]);
   const [menuForm, setMenuForm] = useState({
     title: '', description: '', menuDate: new Date().toISOString().split('T')[0],
     orderStartTime: '', orderEndTime: '', pickupAvailable: true, deliveryAvailable: false, pickupLocation: '',
@@ -685,27 +705,53 @@ export default function App() {
     <View style={styles.app}>
       <StatusBar style="dark" />
       <View style={styles.top}>
-        <Text style={styles.brand}>{t('app.name')}</Text>
-        <View style={styles.row}>
-          {user?.role === 'cook' ? (
-            <>
-              <Chip icon="grid" label={t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => setScreen('cookDashboard')} />
-              <Chip icon="list" label={t('cook.orders')} active={screen === 'cookOrders'} onPress={() => setScreen('cookOrders')} />
-              <Chip icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => setScreen('profile')} />
-            </>
-          ) : (
-            <>
-              <Chip icon="cart" label={t('market.title')} active={screen === 'market'} onPress={() => setScreen('market')} />
-              <Chip icon="receipt" label={t('orders.title')} active={screen === 'orders'} onPress={() => setScreen('orders')} />
-              <Chip icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => setScreen('profile')} />
-            </>
-          )}
-        </View>
-        <View style={[styles.row, { justifyContent: 'flex-end', marginTop: 8 }]}>
-          <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
-          <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
+            <Ionicons name="menu" size={24} color={colors.text} />
+          </Pressable>
+          <Text style={styles.brand}>{t('app.name')}</Text>
+          <View style={styles.row}>
+            <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽</Text></Pressable>
+            <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸</Text></Pressable>
+          </View>
         </View>
       </View>
+
+      {/* ── Drawer ──────────────────────────────────────── */}
+      {drawerOpen && (
+        <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}>
+          <View />
+        </Pressable>
+      )}
+      <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
+        <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+          <View style={styles.avatar}>
+            <Ionicons name="person" size={28} color={colors.primary} />
+          </View>
+          <Text style={[styles.cardTitle, { marginTop: 8 }]}>{user?.first_name || user?.email}</Text>
+          <Text style={[styles.body, { color: colors.muted, marginBottom: 16 }]}>{user?.email}</Text>
+        </View>
+
+        {user?.role === 'cook' ? (
+          <>
+            <DrawerItem icon="grid" label={t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); setDrawerOpen(false); }} />
+            <DrawerItem icon="list" label={t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); setDrawerOpen(false); }} />
+          </>
+        ) : (
+          <>
+            <DrawerItem icon="cart" label={t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); setDrawerOpen(false); }} />
+            <DrawerItem icon="receipt" label={t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); setDrawerOpen(false); }} />
+          </>
+        )}
+        <DrawerItem icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); setDrawerOpen(false); }} />
+
+        <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
+          <Pressable style={styles.drawerLogout} onPress={logout}>
+            <Ionicons name="log-out-outline" size={18} color={colors.danger} />
+            <Text style={{ color: colors.danger, fontWeight: '600', marginLeft: 12 }}>{t('profile.logout')}</Text>
+          </Pressable>
+        </View>
+      </Animated.View>
 
       {!!message && <Text style={styles.success}>{message}</Text>}
       {!!error && <Text style={styles.error}>{error}</Text>}
@@ -762,4 +808,11 @@ const styles = StyleSheet.create({
   avatar: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center' },
   roleBadge: { backgroundColor: colors.primaryLight, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 },
   roleBadgeText: { color: colors.primary, fontSize: 12, fontWeight: '700' },
+  drawer: { position: 'absolute', top: 0, left: 0, bottom: 0, width: 280, backgroundColor: colors.card, zIndex: 100 },
+  drawerOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)', zIndex: 99 },
+  drawerItem: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 14, gap: 12 },
+  drawerItemActive: { backgroundColor: colors.primaryLight },
+  drawerItemText: { fontSize: 15, color: colors.text, fontWeight: '600' },
+  drawerItemTextActive: { color: colors.primary },
+  drawerLogout: { flexDirection: 'row', alignItems: 'center' },
 });
