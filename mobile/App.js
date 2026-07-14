@@ -465,7 +465,7 @@ export default function App() {
           <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); }}>
             <Text style={styles.secondaryText}>{t('splash.register')}</Text>
           </Pressable>
-          <View style={{ marginTop: 24 }}>
+          <View style={{ marginTop: 24, alignItems: 'center' }}>
             <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
               <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
             </Pressable>
