@@ -501,9 +501,19 @@ export default function App() {
                 <Field placeholder={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} />
               </View>
             </View>
-            <View style={styles.row}>
-              <Chip label={t('auth.member')} active={auth.role === 'member'} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))} />
-              <Chip label={t('auth.cook')} active={auth.role === 'cook'} onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))} />
+            <View style={styles.segmentedControl}>
+              <Pressable
+                style={[styles.segment, auth.role === 'member' && styles.segmentActive]}
+                onPress={() => setAuth((c) => ({ ...c, role: 'member' }))}>
+                <Ionicons name="cart" size={16} color={auth.role === 'member' ? colors.primary : colors.muted} />
+                <Text style={[styles.segmentText, auth.role === 'member' && styles.segmentTextActive]}>{t('auth.member')}</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.segment, auth.role === 'cook' && styles.segmentActive]}
+                onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))}>
+                <Ionicons name="restaurant" size={16} color={auth.role === 'cook' ? colors.primary : colors.muted} />
+                <Text style={[styles.segmentText, auth.role === 'cook' && styles.segmentTextActive]}>{t('auth.cook')}</Text>
+              </Pressable>
             </View>
           </>
         )}
@@ -828,4 +838,9 @@ const styles = StyleSheet.create({
   drawerItemText: { fontSize: 15, color: colors.text, fontWeight: '600' },
   drawerItemTextActive: { color: colors.primary },
   drawerLogout: { flexDirection: 'row', alignItems: 'center' },
+  segmentedControl: { flexDirection: 'row', backgroundColor: colors.border, borderRadius: 14, padding: 4 },
+  segment: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, paddingVertical: 10, borderRadius: 11 },
+  segmentActive: { backgroundColor: colors.card },
+  segmentText: { fontSize: 14, color: colors.muted, fontWeight: '600' },
+  segmentTextActive: { color: colors.text },
 });
