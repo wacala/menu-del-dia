@@ -163,6 +163,7 @@ export default function App() {
   const [cookStats, setCookStats] = useState({ activeMenus: 0, totalOrders: 0, pendingOrders: 0, revenue: '0' });
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [showLangMenu, setShowLangMenu] = useState(false);
   const slideAnim = useRef(new Animated.Value(-280)).current;
 
   useEffect(() => {
@@ -462,9 +463,10 @@ export default function App() {
           <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); }}>
             <Text style={styles.secondaryText}>{t('splash.register')}</Text>
           </Pressable>
-          <View style={[styles.row, { justifyContent: 'center', marginTop: 24 }]}>
-            <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
-            <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
+          <View style={{ marginTop: 24 }}>
+            <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
+              <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
+            </Pressable>
           </View>
           <StatusBar style="dark" />
         </ScrollView>
@@ -513,8 +515,9 @@ export default function App() {
         </Pressable>
 
         <View style={[styles.row, { justifyContent: 'center', marginTop: 16 }]}>
-          <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽 ES</Text></Pressable>
-          <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸 EN</Text></Pressable>
+          <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
+            <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
+          </Pressable>
         </View>
         <StatusBar style="dark" />
       </ScrollView>
@@ -710,9 +713,15 @@ export default function App() {
             <Ionicons name="menu" size={24} color={colors.text} />
           </Pressable>
           <Text style={styles.brand}>{t('app.name')}</Text>
-          <View style={styles.row}>
-            <Pressable onPress={() => changeLang('es-MX')} style={[styles.langBtn, lang === 'es-MX' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'es-MX' && styles.langTextActive]}>🇲🇽</Text></Pressable>
-            <Pressable onPress={() => changeLang('en')} style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}><Text style={[styles.langText, lang === 'en' && styles.langTextActive]}>🇺🇸</Text></Pressable>
+          <View>
+            <Pressable onPress={() => setShowLangMenu(!showLangMenu)} style={styles.langBtn}>
+              <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
+            </Pressable>
+            {showLangMenu && (
+              <Pressable onPress={() => { changeLang(lang === 'es-MX' ? 'en' : 'es-MX'); setShowLangMenu(false); }} style={styles.langDrop}>
+                <Text style={styles.langText}>{lang === 'es-MX' ? '🇺🇸' : '🇲🇽'}</Text>
+              </Pressable>
+            )}
           </View>
         </View>
       </View>
@@ -800,8 +809,9 @@ const styles = StyleSheet.create({
   qtyValue: { minWidth: 24, textAlign: 'center', fontWeight: '800', color: colors.text },
   langBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 },
   langBtnActive: { backgroundColor: colors.primaryLight },
-  langText: { fontSize: 12, color: colors.muted, fontWeight: '600' },
+  langText: { fontSize: 18, color: colors.muted, fontWeight: '600' },
   langTextActive: { color: colors.primary },
+  langDrop: { position: 'absolute', top: 40, right: 0, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, zIndex: 200 },
   statCard: { flex: 1, backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, borderLeftWidth: 4, padding: 12, gap: 4 },
   statValue: { fontSize: 24, fontWeight: '800', color: colors.text },
   statLabel: { fontSize: 12, color: colors.muted, fontWeight: '600' },

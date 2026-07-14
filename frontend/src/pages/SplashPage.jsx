@@ -2,11 +2,6 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { UtensilsCrossed } from 'lucide-react';
 
-const languages = [
-  { code: 'es-MX', label: '🇲🇽 ES' },
-  { code: 'en', label: '🇺🇸 EN' },
-];
-
 export default function SplashPage() {
   const { t, i18n } = useTranslation();
 
@@ -39,20 +34,13 @@ export default function SplashPage() {
         </div>
 
         {/* Language Switcher */}
-        <div className="mt-8 flex justify-center gap-2">
-          {languages.map(({ code, label }) => (
-            <button
-              key={code}
-              onClick={() => i18n.changeLanguage(code)}
-              className={`text-xs px-3 py-1 rounded-lg font-medium transition ${
-                i18n.language === code
-                  ? 'bg-primary-100 text-primary-700'
-                  : 'text-stone-400 hover:text-stone-600'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="mt-8 flex justify-center">
+          <button
+            onClick={() => i18n.changeLanguage(i18n.language === 'es-MX' ? 'en' : 'es-MX')}
+            className="text-lg px-3 py-1 rounded-lg hover:bg-stone-100 transition"
+          >
+            {i18n.language === 'es-MX' ? '🇲🇽' : '🇺🇸'}
+          </button>
         </div>
       </div>
     </div>
