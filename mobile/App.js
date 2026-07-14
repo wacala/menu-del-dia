@@ -56,7 +56,7 @@ const translations = {
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
-    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero' },
+    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración' },
     cook: { dashboard: 'Panel', orders: 'Pedidos', menus: 'Menús', profile: 'Perfil', noOrders: 'Sin pedidos aún', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:' }
   },
   en: {
@@ -66,7 +66,7 @@ const translations = {
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
     menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
-    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook' },
+    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings' },
     cook: { dashboard: 'Dashboard', orders: 'Orders', menus: 'Menus', profile: 'Profile', noOrders: 'No orders yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:' }
   }
 };
@@ -550,15 +550,33 @@ export default function App() {
   );
 
   const profileView = (
-    <View style={styles.section}>
+    <ScrollView contentContainerStyle={styles.section}>
+      {/* User info */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>{user?.email}</Text>
-        <Text style={styles.body}>{t('profile.role')}: {user?.role === 'cook' ? t('profile.cook') : t('profile.member')}</Text>
+        <View style={[styles.avatar, { alignSelf: 'center', marginBottom: 12 }]}>
+          <Ionicons name="person" size={32} color={colors.primary} />
+        </View>
+        <Text style={[styles.cardTitle, { textAlign: 'center' }]}>{user?.first_name || user?.email}</Text>
+        <Text style={[styles.body, { textAlign: 'center', color: colors.muted }]}>{user?.email}</Text>
+        <View style={[styles.row, { justifyContent: 'center', marginTop: 8 }]}>
+          <View style={styles.roleBadge}>
+            <Text style={styles.roleBadgeText}>{user?.role === 'cook' ? t('profile.cook') : t('profile.member')}</Text>
+          </View>
+        </View>
       </View>
-      <Pressable style={styles.secondary} onPress={logout}>
-        <Text style={styles.secondaryText}>{t('profile.logout')}</Text>
+
+      {/* Settings */}
+      <Text style={[styles.sectionTitle, { marginTop: 8 }]}>{t('profile.settings')}</Text>
+      <Pressable style={styles.card} onPress={logout}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Ionicons name="log-out-outline" size={20} color={colors.danger} />
+            <Text style={[styles.body, { color: colors.danger, fontWeight: '600' }]}>{t('profile.logout')}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={colors.muted} />
+        </View>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 
   const menuView = (
@@ -741,4 +759,7 @@ const styles = StyleSheet.create({
   statCard: { flex: 1, backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, borderLeftWidth: 4, padding: 12, gap: 4 },
   statValue: { fontSize: 24, fontWeight: '800', color: colors.text },
   statLabel: { fontSize: 12, color: colors.muted, fontWeight: '600' },
+  avatar: { width: 64, height: 64, borderRadius: 32, backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center' },
+  roleBadge: { backgroundColor: colors.primaryLight, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 999 },
+  roleBadgeText: { color: colors.primary, fontSize: 12, fontWeight: '700' },
 });
