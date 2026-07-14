@@ -479,83 +479,73 @@ export default function App() {
 
     // Auth form
     return (
-      <ScrollView contentContainerStyle={styles.auth}>
-        <Text style={styles.icon}>🍽️</Text>
-        <Text style={styles.title}>{t('app.name')}</Text>
-
-        <View
-          style={styles.authPillContainer}
-          onLayout={(e) => { authPillWidth.current = (e.nativeEvent.layout.width - 8) / 2; }}>
-          <Animated.View style={[styles.authPill, {
-            width: authPillWidth.current || 140,
-            transform: [{ translateX: authPillAnim }],
-          }]} />
-          <Pressable
-            style={styles.authPillBtn}
-            onPress={() => {
-              setAuthMode('login'); setError('');
-              Animated.timing(authPillAnim, { toValue: 0, duration: 200, useNativeDriver: true }).start();
-            }}>
-            <Text style={[styles.authPillText, authMode === 'login' && styles.authPillTextActive]}>{t('auth.login')}</Text>
-          </Pressable>
-          <Pressable
-            style={styles.authPillBtn}
-            onPress={() => {
-              setAuthMode('register'); setError('');
-              Animated.timing(authPillAnim, { toValue: authPillWidth.current || 140, duration: 200, useNativeDriver: true }).start();
-            }}>
-            <Text style={[styles.authPillText, authMode === 'register' && styles.authPillTextActive]}>{t('auth.register')}</Text>
-          </Pressable>
-        </View>
-
-        <Field placeholder={t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
-        <Field placeholder={t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
-
-        {authMode === 'register' && (
-          <>
-            <Field placeholder={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
-            <Field placeholder="@username" value={auth.username} autoCapitalize="none" onChangeText={(v) => setAuth((c) => ({ ...c, username: v }))} />
-            <View style={styles.row}>
-              <View style={{ flex: 1 }}>
-                <Field placeholder={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Field placeholder={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} />
-              </View>
-            </View>
-            <View style={styles.segmentedControl}>
-              <Pressable
-                style={[styles.segment, auth.role === 'member' && styles.segmentActive]}
-                onPress={() => setAuth((c) => ({ ...c, role: 'member' }))}>
-                <Ionicons name="cart" size={16} color={auth.role === 'member' ? colors.primary : colors.muted} />
-                <Text style={[styles.segmentText, auth.role === 'member' && styles.segmentTextActive]}>{t('auth.member')}</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.segment, auth.role === 'cook' && styles.segmentActive]}
-                onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))}>
-                <Ionicons name="restaurant" size={16} color={auth.role === 'cook' ? colors.primary : colors.muted} />
-                <Text style={[styles.segmentText, auth.role === 'cook' && styles.segmentTextActive]}>{t('auth.cook')}</Text>
-              </Pressable>
-            </View>
-          </>
-        )}
-
-        {!!error && <Text style={styles.error}>{error}</Text>}
-        <Pressable style={styles.primary} onPress={submitAuth}>
-          <Text style={styles.primaryText}>{authMode === 'login' ? t('auth.signIn') : t('auth.createAccount')}</Text>
-        </Pressable>
-
-        <Pressable onPress={() => setScreen('splash')}>
-          <Text style={styles.link}>← {t('app.name')}</Text>
-        </Pressable>
-
-        <View style={[styles.row, { justifyContent: 'center', marginTop: 16 }]}>
-          <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
-            <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
-          </Pressable>
-        </View>
+      <View style={styles.app}>
         <StatusBar style="dark" />
-      </ScrollView>
+        {/* Top bar with hamburger */}
+        <View style={styles.top}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
+              <Ionicons name="menu" size={24} color={colors.text} />
+            </Pressable>
+            <Text style={styles.brand}>{t('app.name')}</Text>
+            <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
+              <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
+            </Pressable>
+          </View>
+        </View>
+
+        {/* Drawer overlay */}
+        {drawerOpen && (
+          <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}><View /></Pressable>
+        )}
+        <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
+          <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+            <Text style={styles.sectionTitle}>{t('app.name')}</Text>
+          </View>
+          <DrawerItem icon="log-in" label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); setDrawerOpen(false); setError(''); }} />
+          <DrawerItem icon="person-add" label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); setDrawerOpen(false); setError(''); }} />
+          <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
+            <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); setDrawerOpen(false); }}>
+              <Ionicons name="arrow-back" size={18} color={colors.muted} />
+              <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{t('splash.description')}</Text>
+            </Pressable>
+          </View>
+        </Animated.View>
+
+        <ScrollView contentContainerStyle={styles.auth}>
+          <Text style={styles.icon}>🍽️</Text>
+          <Text style={styles.sectionTitle}>{authMode === 'login' ? t('auth.login') : t('auth.register')}</Text>
+
+          <Field placeholder={t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
+          <Field placeholder={t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
+
+          {authMode === 'register' && (
+            <>
+              <Field placeholder={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
+              <Field placeholder="@username" value={auth.username} autoCapitalize="none" onChangeText={(v) => setAuth((c) => ({ ...c, username: v }))} />
+              <View style={styles.row}>
+                <View style={{ flex: 1 }}><Field placeholder={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} /></View>
+                <View style={{ flex: 1 }}><Field placeholder={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} /></View>
+              </View>
+              <View style={styles.segmentedControl}>
+                <Pressable style={[styles.segment, auth.role === 'member' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))}>
+                  <Ionicons name="cart" size={16} color={auth.role === 'member' ? colors.primary : colors.muted} />
+                  <Text style={[styles.segmentText, auth.role === 'member' && styles.segmentTextActive]}>{t('auth.member')}</Text>
+                </Pressable>
+                <Pressable style={[styles.segment, auth.role === 'cook' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))}>
+                  <Ionicons name="restaurant" size={16} color={auth.role === 'cook' ? colors.primary : colors.muted} />
+                  <Text style={[styles.segmentText, auth.role === 'cook' && styles.segmentTextActive]}>{t('auth.cook')}</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
+
+          {!!error && <Text style={styles.error}>{error}</Text>}
+          <Pressable style={styles.primary} onPress={submitAuth}>
+            <Text style={styles.primaryText}>{authMode === 'login' ? t('auth.signIn') : t('auth.createAccount')}</Text>
+          </Pressable>
+        </ScrollView>
+      </View>
     );
   }
 
