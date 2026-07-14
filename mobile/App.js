@@ -166,6 +166,8 @@ export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const slideAnim = useRef(new Animated.Value(-280)).current;
+  const authPillAnim = useRef(new Animated.Value(0)).current;
+  const authPillWidth = useRef(0);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -481,9 +483,29 @@ export default function App() {
         <Text style={styles.icon}>🍽️</Text>
         <Text style={styles.title}>{t('app.name')}</Text>
 
-        <View style={styles.row}>
-          <Chip label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); setError(''); }} />
-          <Chip label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); setError(''); }} />
+        <View
+          style={styles.authPillContainer}
+          onLayout={(e) => { authPillWidth.current = (e.nativeEvent.layout.width - 8) / 2; }}>
+          <Animated.View style={[styles.authPill, {
+            width: authPillWidth.current || 140,
+            transform: [{ translateX: authPillAnim }],
+          }]} />
+          <Pressable
+            style={styles.authPillBtn}
+            onPress={() => {
+              setAuthMode('login'); setError('');
+              Animated.timing(authPillAnim, { toValue: 0, duration: 200, useNativeDriver: true }).start();
+            }}>
+            <Text style={[styles.authPillText, authMode === 'login' && styles.authPillTextActive]}>{t('auth.login')}</Text>
+          </Pressable>
+          <Pressable
+            style={styles.authPillBtn}
+            onPress={() => {
+              setAuthMode('register'); setError('');
+              Animated.timing(authPillAnim, { toValue: authPillWidth.current || 140, duration: 200, useNativeDriver: true }).start();
+            }}>
+            <Text style={[styles.authPillText, authMode === 'register' && styles.authPillTextActive]}>{t('auth.register')}</Text>
+          </Pressable>
         </View>
 
         <Field placeholder={t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
@@ -843,4 +865,9 @@ const styles = StyleSheet.create({
   segmentActive: { backgroundColor: colors.card },
   segmentText: { fontSize: 14, color: colors.muted, fontWeight: '600' },
   segmentTextActive: { color: colors.text },
+  authPillContainer: { flexDirection: 'row', backgroundColor: colors.border, borderRadius: 14, padding: 4, position: 'relative' },
+  authPill: { position: 'absolute', top: 4, left: 4, height: 36, backgroundColor: colors.card, borderRadius: 11, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 },
+  authPillBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 10, zIndex: 10 },
+  authPillText: { fontSize: 14, color: colors.muted, fontWeight: '600' },
+  authPillTextActive: { color: colors.text },
 });
