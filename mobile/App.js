@@ -213,6 +213,8 @@ export default function App() {
         setError('');
         setMessage('Email verified! You can now log in.');
         setScreen('auth');
+        setAuthMode('login');
+        setDrawerOpen(false);
       } catch (err) {
         setError(err.message || 'Verification failed. The link may have expired.');
       }
@@ -461,10 +463,10 @@ export default function App() {
           <Text style={styles.title}>{t('app.name')}</Text>
           <Text style={styles.subtitle}>{t('app.tagline')}</Text>
           <Text style={styles.body}>{t('splash.description')}</Text>
-          <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); }}>
+          <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); setDrawerOpen(false); }}>
             <Text style={styles.primaryText}>{t('splash.login')}</Text>
           </Pressable>
-          <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); }}>
+          <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); setDrawerOpen(false); }}>
             <Text style={styles.secondaryText}>{t('splash.register')}</Text>
           </Pressable>
           <View style={{ marginTop: 24, alignItems: 'center' }}>
