@@ -1,3 +1,4 @@
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ordersAPI } from '../api';
@@ -45,17 +46,17 @@ export default function MemberOrderDetailPage() {
   };
 
   const statusEmojis = {
-    pending: '⏳',
-    confirmed: '✅',
+    pending: '<Hourglass className="w-4 h-4 " />',
+    confirmed: '<Check className="w-4 h-4 " />',
     ready: '🟢',
-    delivered: '🎉',
-    cancelled: '❌',
+    delivered: '<PartyPopper className="w-4 h-4 " />',
+    cancelled: '<X className="w-4 h-4 " />',
   };
 
   const statusMessages = {
     pending: 'Your order has been placed. Waiting for cook confirmation.',
     confirmed: 'Cook has confirmed your order! It\'s being prepared.',
-    ready: '🎉 Your order is ready for pickup!',
+    ready: '<PartyPopper className="w-4 h-4 " /> Your order is ready for pickup!',
     delivered: 'Order delivered! Thank you for your purchase.',
     cancelled: 'This order has been cancelled.',
   };
@@ -149,7 +150,7 @@ export default function MemberOrderDetailPage() {
 
               {order.status === 'cancelled' ? (
                 <div className="bg-red-50 border-2 border-red-200 rounded p-6 text-center">
-                  <p className="text-3xl mb-2">❌</p>
+                  <p className="text-3xl mb-2"><X className="w-4 h-4 " /></p>
                   <p className="text-red-800 font-medium">This order has been cancelled</p>
                 </div>
               ) : (
@@ -276,7 +277,7 @@ export default function MemberOrderDetailPage() {
               {order.status === 'ready' && (
                 <div className="bg-green-50 border-2 border-green-200 rounded p-3 text-center">
                   <p className="text-green-800 font-medium text-sm">
-                    Ready for pickup! 🎉
+                    Ready for pickup! <PartyPopper className="w-4 h-4 " />
                   </p>
                 </div>
               )}
@@ -284,7 +285,7 @@ export default function MemberOrderDetailPage() {
               {order.status === 'pending' && (
                 <div className="bg-yellow-50 border-2 border-yellow-200 rounded p-3 text-center">
                   <p className="text-yellow-800 font-medium text-sm">
-                    Waiting for confirmation ⏳
+                    Waiting for confirmation <Hourglass className="w-4 h-4 " />
                   </p>
                 </div>
               )}

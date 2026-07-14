@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { UtensilsCrossed } from 'lucide-react';
 
 const languages = [
   { code: 'es-MX', label: '🇲🇽 ES' },
@@ -14,7 +15,7 @@ export default function SplashPage() {
       <div className="w-full max-w-sm text-center">
         {/* Logo */}
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary-500 shadow-lg shadow-primary-500/30 mb-6">
-          <span className="text-4xl">🍽️</span>
+          <UtensilsCrossed className="w-10 h-10 text-white" />
         </div>
 
         {/* Title */}

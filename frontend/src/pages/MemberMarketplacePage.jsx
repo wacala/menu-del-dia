@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 import { menusAPI } from '../api';
@@ -57,12 +58,12 @@ export default function MemberMarketplacePage() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-primary-500 flex items-center justify-center shadow-sm shadow-primary-500/20">
-                <span className="text-lg">🍽️</span>
+                <span className="text-lg"><UtensilsCrossed className="w-8 h-8 text-white" /></span>
               </div>
               <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">{t('marketplace.title')}</h1>
             </div>
             <div className="flex items-center gap-3">
-              <Link to="/marketplace/orders" className="btn-ghost text-sm">📦 {t('marketplace.myOrders')}</Link>
+              <Link to="/marketplace/orders" className="btn-ghost text-sm"><Package className="w-4 h-4 " /> {t('marketplace.myOrders')}</Link>
               <button onClick={handleLogout} className="btn-secondary text-sm py-2">{t('marketplace.logout')}</button>
               <LanguageSwitcher />
             </div>
@@ -74,11 +75,11 @@ export default function MemberMarketplacePage() {
         <div className="card-static mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">📅 {t('marketplace.date')}</label>
+              <label className="block text-sm font-semibold text-stone-700 mb-1.5"><Calendar className="w-4 h-4 " /> {t('marketplace.date')}</label>
               <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} className="input-field" />
             </div>
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-stone-700 mb-1.5">🔍 {t('marketplace.search')}</label>
+              <label className="block text-sm font-semibold text-stone-700 mb-1.5"><Search className="w-4 h-4 " /> {t('marketplace.search')}</label>
               <input type="text" placeholder="{t('marketplace.searchPlaceholder')}" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="input-field" />
             </div>
           </div>
@@ -101,7 +102,7 @@ export default function MemberMarketplacePage() {
 
         {!loading && filteredMenus.length === 0 && (
           <div className="card-static text-center py-12">
-            <div className="text-5xl mb-4">{menus.length === 0 ? '🍽️' : '🔍'}</div>
+            <div className="text-5xl mb-4">{menus.length === 0 ? '<UtensilsCrossed className="w-8 h-8 text-white" />' : '<Search className="w-4 h-4 " />'}</div>
             <p className="text-stone-500 text-lg mb-2">
               {menus.length === 0 ? 'No menus available for this date' : 'No menus match your search'}
             </p>
@@ -126,7 +127,7 @@ export default function MemberMarketplacePage() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-stone-700">{menu.cook_first_name} {menu.cook_last_name}</p>
-                    {menu.cook_rating && <p className="text-xs text-amber-500">⭐ {menu.cook_rating}</p>}
+                    {menu.cook_rating && <p className="text-xs text-amber-500"><Star className="w-4 h-4 " /> {menu.cook_rating}</p>}
                   </div>
                 </div>
               </div>
@@ -156,7 +157,7 @@ export default function MemberMarketplacePage() {
               </div>
 
               <div className="flex items-center justify-between pt-3 border-t border-stone-100">
-                <p className="text-xs text-stone-400">🕐 {t('marketplace.until')} {new Date(menu.order_end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                <p className="text-xs text-stone-400"><Clock className="w-3 h-3 " /> {t('marketplace.until')} {new Date(menu.order_end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 <Link to={`/marketplace/menu/${menu.id}`} className="btn-primary text-sm py-2 px-4">{t('marketplace.viewAndOrder')}</Link>
               </div>
             </div>

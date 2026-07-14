@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { CookingPot } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 import { menusAPI, ordersAPI } from '../api';
@@ -54,7 +55,7 @@ export default function CookDashboardPage() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-primary-500 flex items-center justify-center shadow-sm shadow-primary-500/20">
-                <span className="text-lg">🍳</span>
+                <span className="text-lg"><CookingPot className="w-5 h-5 text-white" /></span>
               </div>
               <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">{t('cook.dashboard')}</h1>
             </div>

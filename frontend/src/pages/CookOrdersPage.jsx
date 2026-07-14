@@ -1,3 +1,4 @@
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ordersAPI } from '../api';
@@ -40,11 +41,11 @@ export default function CookOrdersPage() {
   };
 
   const statusEmojis = {
-    pending: '⏳',
-    confirmed: '✅',
+    pending: '<Hourglass className="w-4 h-4 " />',
+    confirmed: '<Check className="w-4 h-4 " />',
     ready: '🟢',
-    delivered: '🎉',
-    cancelled: '❌',
+    delivered: '<PartyPopper className="w-4 h-4 " />',
+    cancelled: '<X className="w-4 h-4 " />',
   };
 
   const pendingCount = orders.filter((o) => o.status === 'pending').length;
@@ -54,7 +55,7 @@ export default function CookOrdersPage() {
     <div className="min-h-screen bg-stone-50">
       <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 {t('cook.ordersTitle')}</h1>
+          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight"><ClipboardList className="w-4 h-4 " /> {t('cook.ordersTitle')}</h1>
           <Link to="/cook/dashboard" className="btn-ghost text-sm">{t('cook.backToDashboard')}</Link>
         </div>
       </nav>
@@ -62,14 +63,14 @@ export default function CookOrdersPage() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         {pendingCount > 0 && (
           <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
-            <span className="text-xl">⏳</span>
+            <span className="text-xl"><Hourglass className="w-4 h-4 " /></span>
             <p className="text-amber-800 font-medium text-sm">You have {pendingCount} new order{pendingCount > 1 ? 's' : ''} waiting for confirmation</p>
           </div>
         )}
 
         {readyCount > 0 && (
           <div className="flex items-center gap-3 bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-6">
-            <span className="text-xl">✨</span>
+            <span className="text-xl"><Sparkles className="w-4 h-4 " /></span>
             <p className="text-emerald-800 font-medium text-sm">{readyCount} order{readyCount > 1 ? 's' : ''} ready for pickup</p>
           </div>
         )}
@@ -94,7 +95,7 @@ export default function CookOrdersPage() {
         </div>
 
         <div className="mb-6">
-          <button onClick={fetchOrders} className="btn-ghost text-sm">🔄 {t('cook.refreshNow')}</button>
+          <button onClick={fetchOrders} className="btn-ghost text-sm"><RefreshCw className="w-3 h-3 " /> {t('cook.refreshNow')}</button>
         </div>
 
         {loading && (
@@ -108,7 +109,7 @@ export default function CookOrdersPage() {
 
         {!loading && filteredOrders.length === 0 && (
           <div className="card-static text-center py-12">
-            <div className="text-5xl mb-4">📭</div>
+            <div className="text-5xl mb-4"><Inbox className="w-8 h-8 text-stone-300" /></div>
             <p className="text-stone-500 text-lg">
               {filter === 'all' ? t('cook.noOrdersYet') : t('orders.noFilterOrders', { filter })}
             </p>
@@ -204,7 +205,7 @@ export default function CookOrdersPage() {
               {order.status === 'confirmed' && (
                 <div className="bg-blue-50 border border-blue-200 rounded p-3">
                   <p className="text-blue-800 text-sm">
-                    🍳 {t('cook.orderConfirmed')}
+                    <CookingPot className="w-5 h-5 text-white" /> {t('cook.orderConfirmed')}
                   </p>
                 </div>
               )}
@@ -212,7 +213,7 @@ export default function CookOrdersPage() {
               {order.status === 'ready' && (
                 <div className="bg-green-50 border border-green-200 rounded p-3">
                   <p className="text-green-800 text-sm">
-                    ✨ {t('cook.readyForPickupCook')}
+                    <Sparkles className="w-4 h-4 " /> {t('cook.readyForPickupCook')}
                   </p>
                 </div>
               )}

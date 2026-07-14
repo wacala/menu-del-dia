@@ -1,3 +1,4 @@
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper } from 'lucide-react';
 import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ordersAPI } from '../api';
@@ -56,11 +57,11 @@ export default function CookOrderDetailPage() {
   };
 
   const statusEmojis = {
-    pending: '⏳',
-    confirmed: '✅',
+    pending: '<Hourglass className="w-4 h-4 " />',
+    confirmed: '<Check className="w-4 h-4 " />',
     ready: '🟢',
-    delivered: '🎉',
-    cancelled: '❌',
+    delivered: '<PartyPopper className="w-4 h-4 " />',
+    cancelled: '<X className="w-4 h-4 " />',
   };
 
   const statusTransitions = {

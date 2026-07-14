@@ -1,3 +1,4 @@
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star, Banknote, CreditCard, ShoppingCart, Mail } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { authAPI } from '../api';
@@ -33,14 +34,14 @@ export default function VerifyEmailPage() {
 
         {status === 'verifying' && (
           <>
-            <div className="text-4xl mb-4">⏳</div>
+            <div className="text-4xl mb-4"><Hourglass className="w-4 h-4 " /></div>
             <p className="text-gray-600">Verifying your email...</p>
           </>
         )}
 
         {status === 'success' && (
           <>
-            <div className="text-4xl mb-4">✅</div>
+            <div className="text-4xl mb-4"><Check className="w-4 h-4 " /></div>
             <h2 className="text-xl font-semibold text-green-700 mb-2">Email verified!</h2>
             <p className="text-gray-600 mb-6">{message}</p>
             <Link to="/login" className="btn-primary inline-block">
@@ -51,7 +52,7 @@ export default function VerifyEmailPage() {
 
         {status === 'error' && (
           <>
-            <div className="text-4xl mb-4">❌</div>
+            <div className="text-4xl mb-4"><X className="w-4 h-4 " /></div>
             <h2 className="text-xl font-semibold text-red-700 mb-2">Verification failed</h2>
             <p className="text-gray-600 mb-6">{message}</p>
             <Link to="/login" className="text-blue-600 hover:underline">

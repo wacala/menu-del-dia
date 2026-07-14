@@ -1,3 +1,4 @@
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star, Banknote, CreditCard } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
@@ -154,7 +155,7 @@ export default function MenuDetailPage() {
       <main className="max-w-4xl mx-auto px-4 py-8">
         {error && (
           <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm">
-            <span>⚠️</span><span>{error}</span>
+            <span><AlertTriangle className="w-4 h-4 " /></span><span>{error}</span>
           </div>
         )}
 
@@ -169,15 +170,15 @@ export default function MenuDetailPage() {
 
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="bg-stone-50 rounded-xl p-3">
-                  <span className="text-stone-400 text-xs">👨‍🍳 Cook</span>
+                  <span className="text-stone-400 text-xs">👨‍<CookingPot className="w-5 h-5 text-white" /> Cook</span>
                   <p className="font-semibold text-stone-700">{menu.cook_first_name} {menu.cook_last_name}</p>
                 </div>
                 <div className="bg-stone-50 rounded-xl p-3">
-                  <span className="text-stone-400 text-xs">⭐ Rating</span>
+                  <span className="text-stone-400 text-xs"><Star className="w-4 h-4 " /> Rating</span>
                   <p className="font-semibold text-stone-700">{menu.cook_rating || 'No rating'}</p>
                 </div>
                 <div className="bg-stone-50 rounded-xl p-3">
-                  <span className="text-stone-400 text-xs">📅 Date</span>
+                  <span className="text-stone-400 text-xs"><Calendar className="w-4 h-4 " /> Date</span>
                   <p className="font-semibold text-stone-700">{new Date(menu.menu_date).toLocaleDateString()}</p>
                 </div>
                 <div className="bg-stone-50 rounded-xl p-3">
@@ -254,8 +255,8 @@ export default function MenuDetailPage() {
                 <div>
                   <label className="block text-sm font-semibold text-stone-700 mb-1.5">Payment</label>
                   <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} className="input-field">
-                    <option value="cash">💵 Cash</option>
-                    <option value="stripe">💳 Card (Stripe)</option>
+                    <option value="cash"><Banknote className="w-4 h-4 " /> Cash</option>
+                    <option value="stripe"><CreditCard className="w-4 h-4 " /> Card (Stripe)</option>
                   </select>
                 </div>
                 <div>

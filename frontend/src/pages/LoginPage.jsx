@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 
@@ -48,7 +49,7 @@ export default function LoginPage() {
         {/* Logo & Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500 shadow-lg shadow-primary-500/30 mb-4">
-            <span className="text-3xl">🍽️</span>
+            <span className="text-3xl"><UtensilsCrossed className="w-8 h-8 text-white" /></span>
           </div>
           <h1 className="text-3xl font-extrabold text-stone-800 tracking-tight">{t('app.name')}</h1>
           <p className="text-stone-500 mt-1 text-sm">{t('app.tagline')}</p>
@@ -61,7 +62,7 @@ export default function LoginPage() {
 
           {error && (
             <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm">
-              <span>⚠️</span>
+              <span><AlertTriangle className="w-4 h-4 " /></span>
               <span>{error}</span>
             </div>
           )}

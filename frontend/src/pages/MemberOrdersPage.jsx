@@ -1,3 +1,4 @@
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -38,18 +39,18 @@ export default function MemberOrdersPage() {
   };
 
   const statusEmojis = {
-    pending: '⏳',
-    confirmed: '✅',
+    pending: '<Hourglass className="w-4 h-4 " />',
+    confirmed: '<Check className="w-4 h-4 " />',
     ready: '🟢',
-    delivered: '🎉',
-    cancelled: '❌',
+    delivered: '<PartyPopper className="w-4 h-4 " />',
+    cancelled: '<X className="w-4 h-4 " />',
   };
 
   return (
     <div className="min-h-screen bg-stone-50">
       <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📦 {t('orders.title')}</h1>
+          <h1 className="text-xl font-extrabold text-stone-800 tracking-tight"><Package className="w-4 h-4 " /> {t('orders.title')}</h1>
           <Link to="/marketplace" className="btn-ghost text-sm">{t('orders.backToShopping')}</Link>
         </div>
       </nav>
@@ -85,7 +86,7 @@ export default function MemberOrdersPage() {
 
         {!loading && filteredOrders.length === 0 && (
           <div className="card-static text-center py-12">
-            <div className="text-5xl mb-4">📭</div>
+            <div className="text-5xl mb-4"><Inbox className="w-8 h-8 text-stone-300" /></div>
             <p className="text-stone-500 text-lg mb-4">
               {filter === 'all' ? t('orders.noOrders') : t('orders.noFilterOrders', { filter: t(`orders.${filter}`) })}
             </p>
@@ -156,7 +157,7 @@ export default function MemberOrdersPage() {
 
               {order.status === 'ready' && (
                 <div className="mt-4 bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex items-center gap-2">
-                  <span>✨</span>
+                  <span><Sparkles className="w-4 h-4 " /></span>
                   <p className="text-emerald-700 text-sm font-medium">Your order is ready for pickup!</p>
                 </div>
               )}

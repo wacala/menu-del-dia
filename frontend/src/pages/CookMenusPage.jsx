@@ -1,3 +1,4 @@
+import { CookingPot, ClipboardList, Calendar, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { menusAPI } from '../api';
@@ -82,7 +83,7 @@ export default function CookMenusPage() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <Link to="/cook/dashboard" className="btn-ghost text-sm">← Back</Link>
-              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight">📋 {t('cook.myMenus')}</h1>
+              <h1 className="text-xl font-extrabold text-stone-800 tracking-tight"><ClipboardList className="w-4 h-4 " /> {t('cook.myMenus')}</h1>
             </div>
           </div>
         </div>
@@ -200,8 +201,8 @@ export default function CookMenusPage() {
               </div>
 
               <div className="text-sm text-gray-600 mb-3">
-                <p>📅 {new Date(menu.menu_date).toLocaleDateString()}</p>
-                <p>🕐 Orders: {new Date(menu.order_start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(menu.order_end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                <p><Calendar className="w-4 h-4 " /> {new Date(menu.menu_date).toLocaleDateString()}</p>
+                <p><Clock className="w-3 h-3 " /> Orders: {new Date(menu.order_start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(menu.order_end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                 <p>📍 {menu.pickup_location}</p>
               </div>
 

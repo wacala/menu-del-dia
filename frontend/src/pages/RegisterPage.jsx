@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star, Banknote, CreditCard, ShoppingCart, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
 
@@ -54,12 +55,12 @@ export default function RegisterPage() {
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500 shadow-lg shadow-primary-500/30 mb-4">
-              <span className="text-3xl">🍽️</span>
+              <span className="text-3xl"><UtensilsCrossed className="w-8 h-8 text-white" /></span>
             </div>
             <h1 className="text-3xl font-extrabold text-stone-800 tracking-tight">{t('app.name')}</h1>
           </div>
           <div className="card-static text-center">
-            <div className="text-6xl mb-4">📧</div>
+            <div className="text-6xl mb-4"><Mail className="w-4 h-4 " /></div>
             <h2 className="text-xl font-bold text-stone-800 mb-2">{t('auth.checkEmail')}</h2>
             <p className="text-stone-500 text-sm mb-2">{t('auth.verificationSent')}</p>
             <p className="font-semibold text-stone-800 mb-6 bg-stone-50 py-2 px-4 rounded-xl inline-block">{registeredEmail}</p>
@@ -78,7 +79,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary-500 shadow-lg shadow-primary-500/30 mb-4">
-            <span className="text-3xl">🍽️</span>
+            <span className="text-3xl"><UtensilsCrossed className="w-8 h-8 text-white" /></span>
           </div>
           <h1 className="text-3xl font-extrabold text-stone-800 tracking-tight">{t('app.name')}</h1>
           <p className="text-stone-500 mt-1 text-sm">{t('auth.joinCommunity')}</p>
@@ -90,12 +91,12 @@ export default function RegisterPage() {
 
           {error && (
             <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm">
-              <span>⚠️</span><span>{error}</span>
+              <span><AlertTriangle className="w-4 h-4 " /></span><span>{error}</span>
             </div>
           )}
           {passwordError && (
             <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-5 text-sm">
-              <span>⚠️</span><span>{passwordError}</span>
+              <span><AlertTriangle className="w-4 h-4 " /></span><span>{passwordError}</span>
             </div>
           )}
 
@@ -127,11 +128,11 @@ export default function RegisterPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button type="button" onClick={() => setFormData({ ...formData, role: 'member' })}
                   className={`p-3 rounded-xl border-2 text-sm font-semibold transition-all duration-200 ${formData.role === 'member' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300'}`}>
-                  🛒 {t('auth.buyFood')}
+                  <ShoppingCart className="w-4 h-4 " /> {t('auth.buyFood')}
                 </button>
                 <button type="button" onClick={() => setFormData({ ...formData, role: 'cook' })}
                   className={`p-3 rounded-xl border-2 text-sm font-semibold transition-all duration-200 ${formData.role === 'cook' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300'}`}>
-                  🍳 {t('auth.sellFood')}
+                  <CookingPot className="w-5 h-5 text-white" /> {t('auth.sellFood')}
                 </button>
               </div>
             </div>
