@@ -130,14 +130,22 @@ export default function RegisterPage() {
             </div>
             <div>
               <label className="block text-sm font-semibold text-stone-700 mb-2">{t('auth.iWantTo')}</label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="flex bg-stone-100 rounded-xl p-1">
                 <button type="button" onClick={() => setFormData({ ...formData, role: 'member' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-semibold transition-all duration-200 ${formData.role === 'member' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300'}`}>
-                  <ShoppingCart className="w-4 h-4 " /> {t('auth.buyFood')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                    formData.role === 'member'
+                      ? 'bg-white text-stone-800 shadow-sm'
+                      : 'text-stone-400 hover:text-stone-600'
+                  }`}>
+                  <ShoppingCart className="w-4 h-4" /> {t('auth.buyFood')}
                 </button>
                 <button type="button" onClick={() => setFormData({ ...formData, role: 'cook' })}
-                  className={`p-3 rounded-xl border-2 text-sm font-semibold transition-all duration-200 ${formData.role === 'cook' ? 'border-primary-500 bg-primary-50 text-primary-700' : 'border-stone-200 bg-white text-stone-500 hover:border-stone-300'}`}>
-                  <CookingPot className="w-5 h-5 text-white" /> {t('auth.sellFood')}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                    formData.role === 'cook'
+                      ? 'bg-white text-stone-800 shadow-sm'
+                      : 'text-stone-400 hover:text-stone-600'
+                  }`}>
+                  <CookingPot className="w-4 h-4" /> {t('auth.sellFood')}
                 </button>
               </div>
             </div>
