@@ -354,6 +354,7 @@ export default function App() {
         return;
       }
       await saveSession(data.token, data.user);
+      setScreen(data.user.role === 'cook' ? 'cookDashboard' : 'market');
     } catch (e) {
       setError(e.message);
     } finally {
