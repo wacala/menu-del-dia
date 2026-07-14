@@ -53,7 +53,7 @@ const translations = {
   'es-MX': {
     app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
     splash: { description: 'Compra y vende comida casera en tu comunidad.', login: 'Iniciar sesión', register: 'Crear cuenta' },
-    auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver al inicio', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres' },
+    auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver al inicio', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
@@ -63,7 +63,7 @@ const translations = {
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
     splash: { description: 'Buy and sell homemade food in your community.', login: 'Sign in', register: 'Create account' },
-    auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters' },
+    auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
     menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
@@ -144,6 +144,7 @@ export default function App() {
     confirmPassword: '',
     firstName: '',
     lastName: '',
+    username: '',
     role: 'member',
   });
   const [menus, setMenus] = useState([]);
@@ -367,6 +368,7 @@ export default function App() {
             password: auth.password,
             firstName: auth.firstName.trim(),
             lastName: auth.lastName.trim(),
+            username: auth.username.trim(),
             role: auth.role,
           };
       const data = await api(path, { method: 'POST', body: payload });
@@ -490,6 +492,7 @@ export default function App() {
         {authMode === 'register' && (
           <>
             <Field placeholder={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
+            <Field placeholder="@username" value={auth.username} autoCapitalize="none" onChangeText={(v) => setAuth((c) => ({ ...c, username: v }))} />
             <View style={styles.row}>
               <View style={{ flex: 1 }}>
                 <Field placeholder={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} />
@@ -579,7 +582,7 @@ export default function App() {
         <View style={[styles.avatar, { alignSelf: 'center', marginBottom: 12 }]}>
           <Ionicons name="person" size={32} color={colors.primary} />
         </View>
-        <Text style={[styles.cardTitle, { textAlign: 'center' }]}>{user?.first_name || user?.email}</Text>
+        <Text style={[styles.cardTitle, { textAlign: 'center' }]}>@{user?.username || user?.first_name || user?.email}</Text>
         <Text style={[styles.body, { textAlign: 'center', color: colors.muted }]}>{user?.email}</Text>
         <View style={[styles.row, { justifyContent: 'center', marginTop: 8 }]}>
           <View style={styles.roleBadge}>
@@ -737,7 +740,7 @@ export default function App() {
           <View style={styles.avatar}>
             <Ionicons name="person" size={28} color={colors.primary} />
           </View>
-          <Text style={[styles.cardTitle, { marginTop: 8 }]}>{user?.first_name || user?.email}</Text>
+          <Text style={[styles.cardTitle, { marginTop: 8 }]}>@{user?.username || user?.first_name || user?.email}</Text>
           <Text style={[styles.body, { color: colors.muted, marginBottom: 16 }]}>{user?.email}</Text>
         </View>
 

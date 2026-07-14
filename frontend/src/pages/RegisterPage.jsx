@@ -7,6 +7,7 @@ import { useAuthStore } from '../context/authStore';
 export default function RegisterPage() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -110,6 +111,10 @@ export default function RegisterPage() {
                 <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} placeholder=" " autoComplete="family-name" className="input-field pt-6 pb-3 peer" />
                 <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.lastName ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>{t('auth.lastName')}</label>
               </div>
+            </div>
+            <div className="relative">
+              <input type="text" name="username" value={formData.username} onChange={handleChange} required placeholder=" " autoComplete="username" className="input-field pt-6 pb-3 peer" />
+              <label className={`absolute left-4 text-sm pointer-events-none transition-all duration-200 ease-out ${formData.username ? 'top-[9px] text-[11px]' : 'top-5 text-stone-400'} peer-focus:top-[9px] peer-focus:text-[11px] peer-focus:text-primary-500 peer-focus:font-semibold`}>@username</label>
             </div>
             <div className="relative">
               <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder=" " autoComplete="email" className="input-field pt-6 pb-3 peer" />

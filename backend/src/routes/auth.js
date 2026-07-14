@@ -24,6 +24,8 @@ router.post(
     body('email').isEmail().normalizeEmail(),
     body('password').isLength({ min: 6 }),
     body('firstName').trim().notEmpty(),
+    body('username').trim().isLength({ min: 3 }).matches(/^[a-zA-Z0-9_]+$/)
+      .withMessage('Username must be alphanumeric, min 3 chars'),
     body('role').isIn(['cook', 'member']),
   ],
   async (req, res, next) => {
@@ -34,20 +36,23 @@ router.post(
       }
 
       const {
-        email, password, firstName, lastName, role,
+        email, password, firstName, lastName, username, role,
       } = req.body;
 
-      const existingUser = await db.query('SELECT id FROM users WHERE email = $1', [email]);
+      const existingUser = await db.query(
+        'SELECT id FROM users WHERE email = $1 OR username = $2',
+        [email, username],
+      );
       if (existingUser.rows.length > 0) {
-        return res.status(409).json({ message: 'Email already registered' });
+        return res.status(409).json({ message: 'Email or username already registered' });
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
       const result = await db.query(
-        `INSERT INTO users (email, password_hash, first_name, last_name, role)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id, email, role`,
-        [email, passwordHash, firstName, lastName || '', role],
+        `INSERT INTO users (email, password_hash, first_name, last_name, username, role)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING id, email, username, role`,
+        [email, passwordHash, firstName, lastName || '', username, role],
       );
 
       const user = result.rows[0];
@@ -109,7 +114,7 @@ router.post(
 
       const { email, password } = req.body;
       const result = await db.query(
-        'SELECT id, email, password_hash, role, email_verified FROM users WHERE email = $1',
+        'SELECT id, email, username, password_hash, role, email_verified FROM users WHERE email = $1',
         [email],
       );
 
@@ -135,7 +140,12 @@ router.post(
 
       return res.json({
         message: 'Login successful',
-        user: { id: user.id, email: user.email, role: user.role },
+        user: {
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          role: user.role,
+        },
         token,
       });
     } catch (error) {
