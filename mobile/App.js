@@ -165,6 +165,9 @@ export default function App() {
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  useEffect(() => {
+    setDrawerOpen(false);
+  }, [screen]);
   const slideAnim = useRef(new Animated.Value(-280)).current;
   const authPillAnim = useRef(new Animated.Value(0)).current;
   const authPillWidth = useRef(0);
