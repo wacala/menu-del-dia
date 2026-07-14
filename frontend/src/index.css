@@ -69,7 +69,7 @@ input:-webkit-autofill {
   }
 
   .input-field {
-    @apply w-full px-4 py-3 bg-stone-50 border-[10px] border-stone-200 rounded-xl
+    @apply w-full px-4 py-3 bg-stone-50 border-[5px] md:border-[6.5px] lg:border-[10px] border-stone-200 rounded-xl
            text-stone-800 placeholder:text-stone-400
            focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400
            focus:bg-white
