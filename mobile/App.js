@@ -459,7 +459,7 @@ export default function App() {
           <Text style={styles.title}>{t('app.name')}</Text>
           <Text style={styles.subtitle}>{t('app.tagline')}</Text>
           <Text style={styles.body}>{t('splash.description')}</Text>
-          <Pressable style={styles.primary} onPress={() => setScreen('auth')}>
+          <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); }}>
             <Text style={styles.primaryText}>{t('splash.login')}</Text>
           </Pressable>
           <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); }}>
