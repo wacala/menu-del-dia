@@ -11,6 +11,7 @@ import {
   TextInput,
   View,
   Linking,
+  useWindowDimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -109,8 +110,15 @@ function Chip({ label, active, onPress, icon }) {
   );
 }
 
+function getResponsiveBorder(width) {
+  if (width >= 1024) return 2;      // 100% — tablets grandes
+  if (width >= 768) return 1.5;     // 65%  — tablets
+  return 1;                          // 50%  — móviles
+}
+
 function Field(props) {
-  return <TextInput placeholderTextColor={colors.muted} style={styles.input} {...props} />;
+  const { width } = useWindowDimensions();
+  return <TextInput placeholderTextColor={colors.muted} style={[styles.input, { borderWidth: getResponsiveBorder(width) }]} {...props} />;
 }
 
 export default function App() {
@@ -712,7 +720,7 @@ const styles = StyleSheet.create({
   helper: { textAlign: 'center', color: colors.muted },
   icon: { fontSize: 48, textAlign: 'center', marginBottom: 12 },
   link: { color: colors.primary, fontWeight: '700', marginTop: 4 },
-  input: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, color: colors.text },
+  input: { borderColor: colors.border, backgroundColor: colors.card, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, color: colors.text },
   chip: { borderWidth: 1, borderColor: colors.border, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.card },
   chipActive: { backgroundColor: colors.primaryLight, borderColor: colors.primary },
   chipText: { color: colors.muted, fontWeight: '700' },
