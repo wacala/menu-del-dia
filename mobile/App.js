@@ -128,8 +128,48 @@ function DrawerItem({ icon, label, active, onPress }) {
 }
 
 function Field(props) {
-  const { width } = useWindowDimensions();
-  return <TextInput placeholderTextColor={colors.muted} style={[styles.input, { borderWidth: getResponsiveBorder(width) }]} {...props} />;
+  return <TextInput placeholderTextColor={colors.muted} style={styles.input} {...props} />;
+}
+
+function FloatingField({ label, value, onChangeText, secureTextEntry, autoCapitalize, ...props }) {
+  const [focused, setFocused] = useState(false);
+  const anim = useRef(new Animated.Value(value ? 1 : 0)).current;
+
+  useEffect(() => {
+    Animated.timing(anim, {
+      toValue: value || focused ? 1 : 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  }, [value, focused]);
+
+  const labelTop = anim.interpolate({ inputRange: [0, 1], outputRange: [16, 6] });
+  const labelSize = anim.interpolate({ inputRange: [0, 1], outputRange: [14, 11] });
+  const labelColor = anim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [colors.muted, colors.primary],
+  });
+
+  return (
+    <View style={styles.floatField}>
+      <Animated.Text
+        style={[styles.floatLabel, { top: labelTop, fontSize: labelSize, color: labelColor }]}
+        pointerEvents="none">
+        {label}
+      </Animated.Text>
+      <TextInput
+        style={styles.floatInput}
+        value={value}
+        onChangeText={onChangeText}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        secureTextEntry={secureTextEntry}
+        autoCapitalize={autoCapitalize}
+        placeholderTextColor="transparent"
+        {...props}
+      />
+    </View>
+  );
 }
 
 export default function App() {
@@ -541,16 +581,16 @@ export default function App() {
           <Text style={styles.icon}>🍽️</Text>
           <Text style={styles.sectionTitle}>{authMode === 'login' ? t('auth.login') : t('auth.register')}</Text>
 
-          <Field placeholder={t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
-          <Field placeholder={t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
+          <FloatingField label={t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
+          <FloatingField label={t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
 
           {authMode === 'register' && (
             <>
-              <Field placeholder={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
-              <Field placeholder="@username" value={auth.username} autoCapitalize="none" onChangeText={(v) => setAuth((c) => ({ ...c, username: v }))} />
+              <FloatingField label={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
+              <FloatingField label="@username" value={auth.username} autoCapitalize="none" onChangeText={(v) => setAuth((c) => ({ ...c, username: v }))} />
               <View style={styles.row}>
-                <View style={{ flex: 1 }}><Field placeholder={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} /></View>
-                <View style={{ flex: 1 }}><Field placeholder={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} /></View>
+                <View style={{ flex: 1 }}><FloatingField label={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} /></View>
+                <View style={{ flex: 1 }}><FloatingField label={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} /></View>
               </View>
               <View style={styles.segmentedControl}>
                 <Pressable style={[styles.segment, auth.role === 'member' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))}>
@@ -679,9 +719,9 @@ export default function App() {
           <Chip label={t('menu.delivery')} active={draft.deliveryType === 'delivery'} onPress={() => setDraft((c) => ({ ...c, deliveryType: 'delivery' }))} />
         </View>
         {draft.deliveryType === 'delivery' && (
-          <Field placeholder="Address" value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} />
+          <FloatingField label="Address" value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} />
         )}
-        <Field placeholder={t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} />
+        <FloatingField label={t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} />
         {!!error && <Text style={styles.error}>{error}</Text>}
         <Pressable style={styles.primary} onPress={placeOrder}>
           <Text style={styles.primaryText}>{t('menu.placeOrder')}</Text>
@@ -846,7 +886,10 @@ const styles = StyleSheet.create({
   helper: { textAlign: 'center', color: colors.muted },
   icon: { fontSize: 48, textAlign: 'center', marginBottom: 12 },
   link: { color: colors.primary, fontWeight: '700', marginTop: 4 },
-  input: { borderColor: colors.border, backgroundColor: colors.card, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, color: colors.text },
+  input: { borderColor: colors.border, backgroundColor: colors.card, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, color: colors.text, borderWidth: 1 },
+  floatField: { paddingTop: 6 },
+  floatLabel: { position: 'absolute', left: 16, zIndex: 10, fontWeight: '600' },
+  floatInput: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.card, borderRadius: 14, paddingHorizontal: 14, paddingTop: 18, paddingBottom: 8, color: colors.text, fontSize: 15 },
   chip: { borderWidth: 1, borderColor: colors.border, borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8, backgroundColor: colors.card },
   chipActive: { backgroundColor: colors.primaryLight, borderColor: colors.primary },
   chipText: { color: colors.muted, fontWeight: '700' },
