@@ -44,10 +44,9 @@ const colors = {
 
 // ── i18n ────────────────────────────────────────────────────
 const LANG_KEY = 'menu-del-dia-lang';
-let currentLang = 'es-MX';
 
-const t = (key) => {
-  const tr = translations[currentLang] || translations['es-MX'];
+const t = (key, lng) => {
+  const tr = translations[lng || 'es-MX'] || translations['es-MX'];
   return key.split('.').reduce((o, k) => o?.[k], tr) || key;
 };
 
@@ -216,8 +215,11 @@ export default function App() {
   };
   const slideAnim = useRef(new Animated.Value(-280)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const currentLangRef = useRef('es-MX');
   const authPillAnim = useRef(new Animated.Value(0)).current;
   const authPillWidth = useRef(0);
+
+  const _t = (key) => t(key, currentLangRef.current);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -242,10 +244,10 @@ export default function App() {
       }
       const savedLang = await AsyncStorage.getItem(LANG_KEY);
       if (savedLang && (savedLang === 'en' || savedLang === 'es-MX')) {
-        currentLang = savedLang;
+        currentLangRef.current = savedLang;
         setLang(savedLang);
       } else {
-        currentLang = 'es-MX';
+        currentLangRef.current = 'es-MX';
         setLang('es-MX');
         await AsyncStorage.setItem(LANG_KEY, 'es-MX');
       }
@@ -288,20 +290,13 @@ export default function App() {
   }, []);
 
   const changeLang = async (l) => {
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: 250,
-      useNativeDriver: false,
-    }).start(() => {
-      currentLang = l;
-      setLang(l);
-      AsyncStorage.setItem(LANG_KEY, l);
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 250,
-        useNativeDriver: false,
-      }).start();
-    });
+    currentLangRef.current = l;
+    setLang(l);
+    AsyncStorage.setItem(LANG_KEY, l);
+    Animated.sequence([
+      Animated.timing(fadeAnim, { toValue: 0, duration: 250, useNativeDriver: false }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 250, useNativeDriver: false }),
+    ]).start();
   };
 
   const saveSession = async (nextToken, nextUser) => {
@@ -526,7 +521,7 @@ export default function App() {
     // Splash
     if (screen === 'splash') {
       return (
-        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }} pointerEvents="box-none">
         <ScrollView contentContainerStyle={styles.auth}>
           <Text style={styles.icon}>🍽️</Text>
           <Text style={styles.title}>{t('app.name')}</Text>
@@ -553,7 +548,7 @@ export default function App() {
     return (
       <View style={styles.app}>
         <StatusBar style="dark" />
-        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }} pointerEvents="box-none">
         {/* Top bar with hamburger */}
         <View style={styles.top}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -818,7 +813,7 @@ export default function App() {
   return (
     <View style={styles.app}>
       <StatusBar style="dark" />
-      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+      <Animated.View style={{ flex: 1, opacity: fadeAnim }} pointerEvents="box-none">
       <View style={styles.top}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
