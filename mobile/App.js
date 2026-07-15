@@ -509,7 +509,9 @@ export default function App() {
         {drawerOpen && (
           <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}><View /></Pressable>
         )}
-        <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
+        <Animated.View
+          style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}
+          pointerEvents={drawerOpen ? 'auto' : 'none'}>
           <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
             <Text style={styles.sectionTitle}>{t('app.name')}</Text>
           </View>
