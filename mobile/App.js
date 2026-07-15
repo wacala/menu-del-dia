@@ -517,14 +517,14 @@ export default function App() {
         <Animated.View style={{ flex: 1, opacity: fadeAnim }} pointerEvents="box-none">
         <ScrollView contentContainerStyle={styles.auth}>
           <Text style={styles.icon}>🍽️</Text>
-          <Text style={styles.title}>{t('app.name')}</Text>
-          <Text style={styles.subtitle}>{t('app.tagline')}</Text>
-          <Text style={styles.body}>{t('splash.description')}</Text>
+          <Text style={styles.title}>{_t('app.name')}</Text>
+          <Text style={styles.subtitle}>{_t('app.tagline')}</Text>
+          <Text style={styles.body}>{_t('splash.description')}</Text>
           <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); closeDrawer(); }}>
-            <Text style={styles.primaryText}>{t('splash.login')}</Text>
+            <Text style={styles.primaryText}>{_t('splash.login')}</Text>
           </Pressable>
           <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); closeDrawer(); }}>
-            <Text style={styles.secondaryText}>{t('splash.register')}</Text>
+            <Text style={styles.secondaryText}>{_t('splash.register')}</Text>
           </Pressable>
           <View style={{ marginTop: 24, alignItems: 'center' }}>
             <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
@@ -548,7 +548,7 @@ export default function App() {
             <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
               <Ionicons name="menu" size={24} color={colors.text} />
             </Pressable>
-            <Text style={styles.brand}>{t('app.name')}</Text>
+            <Text style={styles.brand}>{_t('app.name')}</Text>
             <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
               <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
             </Pressable>
@@ -561,14 +561,14 @@ export default function App() {
             <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
               <Pressable onPress={(e) => e.stopPropagation()} style={{ flex: 1 }}>
                 <View style={{ paddingHorizontal: 16, paddingTop: 56 }}>
-                  <Text style={styles.sectionTitle}>{t('app.name')}</Text>
+                  <Text style={styles.sectionTitle}>{_t('app.name')}</Text>
                 </View>
-                <DrawerItem icon="log-in" label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); setError(''); }} />
-                <DrawerItem icon="person-add" label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); setError(''); }} />
+                <DrawerItem icon="log-in" label={_t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); setError(''); }} />
+                <DrawerItem icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); setError(''); }} />
                 <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
                   <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); }}>
                     <Ionicons name="arrow-back" size={18} color={colors.muted} />
-                    <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{t('splash.description')}</Text>
+                    <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{_t('splash.description')}</Text>
                   </Pressable>
                 </View>
               </Pressable>
@@ -586,27 +586,27 @@ export default function App() {
           keyboardDismissMode="interactive"
           showsVerticalScrollIndicator={false}>
           <Text style={styles.icon}>🍽️</Text>
-          <Text style={styles.sectionTitle}>{authMode === 'login' ? t('auth.login') : t('auth.register')}</Text>
+          <Text style={styles.sectionTitle}>{authMode === 'login' ? _t('auth.login') : _t('auth.register')}</Text>
 
-          <FloatingField label={t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
-          <FloatingField label={t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
+          <FloatingField label={_t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => setAuth((c) => ({ ...c, email }))} />
+          <FloatingField label={_t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
 
           {authMode === 'register' && (
             <>
-              <FloatingField label={t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
+              <FloatingField label={_t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
               <FloatingField label="@username" value={auth.username} autoCapitalize="none" onChangeText={(v) => setAuth((c) => ({ ...c, username: v }))} />
               <View style={styles.row}>
-                <View style={{ flex: 1 }}><FloatingField label={t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} /></View>
-                <View style={{ flex: 1 }}><FloatingField label={t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} /></View>
+                <View style={{ flex: 1 }}><FloatingField label={_t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} /></View>
+                <View style={{ flex: 1 }}><FloatingField label={_t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} /></View>
               </View>
               <View style={styles.segmentedControl}>
                 <Pressable style={[styles.segment, auth.role === 'member' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))}>
                   <Ionicons name="cart" size={16} color={auth.role === 'member' ? colors.primary : colors.muted} />
-                  <Text style={[styles.segmentText, auth.role === 'member' && styles.segmentTextActive]}>{t('auth.member')}</Text>
+                  <Text style={[styles.segmentText, auth.role === 'member' && styles.segmentTextActive]}>{_t('auth.member')}</Text>
                 </Pressable>
                 <Pressable style={[styles.segment, auth.role === 'cook' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))}>
                   <Ionicons name="restaurant" size={16} color={auth.role === 'cook' ? colors.primary : colors.muted} />
-                  <Text style={[styles.segmentText, auth.role === 'cook' && styles.segmentTextActive]}>{t('auth.cook')}</Text>
+                  <Text style={[styles.segmentText, auth.role === 'cook' && styles.segmentTextActive]}>{_t('auth.cook')}</Text>
                 </Pressable>
               </View>
             </>
@@ -614,7 +614,7 @@ export default function App() {
 
           {!!error && <Text style={styles.error}>{error}</Text>}
           <Pressable style={styles.primary} onPress={submitAuth}>
-            <Text style={styles.primaryText}>{authMode === 'login' ? t('auth.signIn') : t('auth.createAccount')}</Text>
+            <Text style={styles.primaryText}>{authMode === 'login' ? _t('auth.signIn') : _t('auth.createAccount')}</Text>
           </Pressable>
         </ScrollView>
         </KeyboardAvoidingView>
@@ -626,7 +626,7 @@ export default function App() {
   const marketView = (
     <View style={styles.section}>
       <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>{t('market.title')}</Text>
+        <Text style={styles.sectionTitle}>{_t('market.title')}</Text>
         <Pressable onPress={loadMenus}><Text style={styles.link}>↻</Text></Pressable>
       </View>
       {loading ? (
@@ -635,13 +635,13 @@ export default function App() {
         <FlatList
           data={publishedMenus}
           keyExtractor={(item) => String(item.id)}
-          ListEmptyComponent={<Text style={styles.helper}>{t('market.noMenus')}</Text>}
+          ListEmptyComponent={<Text style={styles.helper}>{_t('market.noMenus')}</Text>}
           renderItem={({ item }) => (
             <Pressable style={styles.card} onPress={() => openMenu(item.id)}>
               <Text style={styles.cardTitle}>{item.title}</Text>
               <Text style={styles.muted}>{item.cook_first_name} {item.cook_last_name}</Text>
               <Text style={styles.body} numberOfLines={2}>{item.description || ''}</Text>
-              <Text style={styles.link}>{t('market.viewMenu')}</Text>
+              <Text style={styles.link}>{_t('market.viewMenu')}</Text>
             </Pressable>
           )}
         />
@@ -652,19 +652,19 @@ export default function App() {
   const ordersView = (
     <View style={styles.section}>
       <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>{t('orders.title')}</Text>
+        <Text style={styles.sectionTitle}>{_t('orders.title')}</Text>
         <Pressable onPress={loadOrders}><Text style={styles.link}>↻</Text></Pressable>
       </View>
       {loading ? (
         <ActivityIndicator color={colors.primary} />
       ) : orders.length === 0 ? (
-        <Text style={styles.helper}>{t('orders.noOrders')}</Text>
+        <Text style={styles.helper}>{_t('orders.noOrders')}</Text>
       ) : (
         orders.map((order) => (
           <View key={order.id} style={styles.card}>
             <Text style={styles.cardTitle}>{order.order_number}</Text>
             <Text style={styles.muted}>{order.menu_title}</Text>
-            <Text style={styles.body}>{t('orders.total')} {money(order.total_amount)}</Text>
+            <Text style={styles.body}>{_t('orders.total')} {money(order.total_amount)}</Text>
           </View>
         ))
       )}
@@ -682,18 +682,18 @@ export default function App() {
         <Text style={[styles.body, { textAlign: 'center', color: colors.muted }]}>{user?.email}</Text>
         <View style={[styles.row, { justifyContent: 'center', marginTop: 8 }]}>
           <View style={styles.roleBadge}>
-            <Text style={styles.roleBadgeText}>{user?.role === 'cook' ? t('profile.cook') : t('profile.member')}</Text>
+            <Text style={styles.roleBadgeText}>{user?.role === 'cook' ? _t('profile.cook') : _t('profile.member')}</Text>
           </View>
         </View>
       </View>
 
       {/* Settings */}
-      <Text style={[styles.sectionTitle, { marginTop: 8 }]}>{t('profile.settings')}</Text>
+      <Text style={[styles.sectionTitle, { marginTop: 8 }]}>{_t('profile.settings')}</Text>
       <Pressable style={styles.card} onPress={logout}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
             <Ionicons name="log-out-outline" size={20} color={colors.danger} />
-            <Text style={[styles.body, { color: colors.danger, fontWeight: '600' }]}>{t('profile.logout')}</Text>
+            <Text style={[styles.body, { color: colors.danger, fontWeight: '600' }]}>{_t('profile.logout')}</Text>
           </View>
           <Ionicons name="chevron-forward" size={18} color={colors.muted} />
         </View>
@@ -704,7 +704,7 @@ export default function App() {
   const menuView = (
     <ScrollView contentContainerStyle={styles.section}>
       <Pressable onPress={() => setScreen('market')}>
-        <Text style={styles.link}>{t('menu.back')}</Text>
+        <Text style={styles.link}>{_t('menu.back')}</Text>
       </Pressable>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{menu?.title}</Text>
@@ -722,18 +722,18 @@ export default function App() {
         </View>
       ))}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>{t('menu.deliveryType')}</Text>
+        <Text style={styles.cardTitle}>{_t('menu.deliveryType')}</Text>
         <View style={styles.row}>
-          <Chip label={t('menu.pickup')} active={draft.deliveryType === 'pickup'} onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))} />
-          <Chip label={t('menu.delivery')} active={draft.deliveryType === 'delivery'} onPress={() => setDraft((c) => ({ ...c, deliveryType: 'delivery' }))} />
+          <Chip label={_t('menu.pickup')} active={draft.deliveryType === 'pickup'} onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))} />
+          <Chip label={_t('menu.delivery')} active={draft.deliveryType === 'delivery'} onPress={() => setDraft((c) => ({ ...c, deliveryType: 'delivery' }))} />
         </View>
         {draft.deliveryType === 'delivery' && (
           <FloatingField label="Address" value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} />
         )}
-        <FloatingField label={t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} />
+        <FloatingField label={_t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} />
         {!!error && <Text style={styles.error}>{error}</Text>}
         <Pressable style={styles.primary} onPress={placeOrder}>
-          <Text style={styles.primaryText}>{t('menu.placeOrder')}</Text>
+          <Text style={styles.primaryText}>{_t('menu.placeOrder')}</Text>
         </Pressable>
       </View>
     </ScrollView>
@@ -742,43 +742,43 @@ export default function App() {
   // ── Cook views ──────────────────────────────────────────────
   const cookDashboardView = (
     <View style={styles.section}>
-      <Text style={styles.sectionTitle}>{t('cook.dashboard')}</Text>
+      <Text style={styles.sectionTitle}>{_t('cook.dashboard')}</Text>
       <View style={styles.row}>
         <View style={[styles.statCard, { borderLeftColor: colors.primary }]}>
           <Text style={styles.statValue}>{cookStats.activeMenus}</Text>
-          <Text style={styles.statLabel}>{t('cook.activeMenus')}</Text>
+          <Text style={styles.statLabel}>{_t('cook.activeMenus')}</Text>
         </View>
         <View style={[styles.statCard, { borderLeftColor: colors.emerald }]}>
           <Text style={styles.statValue}>{cookStats.totalOrders}</Text>
-          <Text style={styles.statLabel}>{t('cook.totalOrders')}</Text>
+          <Text style={styles.statLabel}>{_t('cook.totalOrders')}</Text>
         </View>
       </View>
       <View style={styles.row}>
         <View style={[styles.statCard, { borderLeftColor: colors.amber }]}>
           <Text style={styles.statValue}>{cookStats.pendingOrders}</Text>
-          <Text style={styles.statLabel}>{t('cook.pendingOrders')}</Text>
+          <Text style={styles.statLabel}>{_t('cook.pendingOrders')}</Text>
         </View>
         <View style={[styles.statCard, { borderLeftColor: colors.purple }]}>
           <Text style={styles.statValue}>${cookStats.revenue}</Text>
-          <Text style={styles.statLabel}>{t('cook.revenue')}</Text>
+          <Text style={styles.statLabel}>{_t('cook.revenue')}</Text>
         </View>
       </View>
       <Pressable style={styles.primary} onPress={loadCookStats}>
-        <Text style={styles.primaryText}>↻ {t('cook.refreshNow')}</Text>
+        <Text style={styles.primaryText}>↻ {_t('cook.refreshNow')}</Text>
       </Pressable>
     </View>
   );
 
   const cookOrdersView = (
     <ScrollView contentContainerStyle={styles.section}>
-      <Text style={styles.sectionTitle}>{t('cook.ordersTitle')}</Text>
+      <Text style={styles.sectionTitle}>{_t('cook.ordersTitle')}</Text>
       {cookOrders.length === 0 ? (
-        <Text style={styles.helper}>{t('cook.noOrders')}</Text>
+        <Text style={styles.helper}>{_t('cook.noOrders')}</Text>
       ) : (
         cookOrders.map((order) => (
           <View key={order.id} style={styles.card}>
             <Text style={styles.cardTitle}>#{order.id} — {order.member_name || order.member_email}</Text>
-            <Text style={styles.muted}>{t('cook.totalAmount')} {money(order.total_amount)}</Text>
+            <Text style={styles.muted}>{_t('cook.totalAmount')} {money(order.total_amount)}</Text>
             {(order.items || []).map((item, idx) => (
               <Text key={idx} style={styles.body}>• {item.name} ×{item.quantity}</Text>
             ))}
@@ -791,7 +791,7 @@ export default function App() {
             )}
             {order.status === 'confirmed' && (
               <Pressable style={[styles.primary, { backgroundColor: colors.emerald }]} onPress={() => updateOrderStatus(order.id, 'ready')}>
-                <Text style={styles.primaryText}>🟢 {t('cook.readyForPickupCook')}</Text>
+                <Text style={styles.primaryText}>🟢 {_t('cook.readyForPickupCook')}</Text>
               </Pressable>
             )}
             {order.status !== 'pending' && order.status !== 'confirmed' && (
@@ -812,7 +812,7 @@ export default function App() {
           <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
             <Ionicons name="menu" size={24} color={colors.text} />
           </Pressable>
-          <Text style={styles.brand}>{t('app.name')}</Text>
+          <Text style={styles.brand}>{_t('app.name')}</Text>
           <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
             <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
           </Pressable>
@@ -836,21 +836,21 @@ export default function App() {
 
         {user?.role === 'cook' ? (
           <>
-            <DrawerItem icon="grid" label={t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); closeDrawer(); }} />
-            <DrawerItem icon="list" label={t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); closeDrawer(); }} />
+            <DrawerItem icon="grid" label={_t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); closeDrawer(); }} />
+            <DrawerItem icon="list" label={_t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); closeDrawer(); }} />
           </>
         ) : (
           <>
-            <DrawerItem icon="cart" label={t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); closeDrawer(); }} />
-            <DrawerItem icon="receipt" label={t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); closeDrawer(); }} />
+            <DrawerItem icon="cart" label={_t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); closeDrawer(); }} />
+            <DrawerItem icon="receipt" label={_t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); closeDrawer(); }} />
           </>
         )}
-        <DrawerItem icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
+        <DrawerItem icon="person" label={_t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
 
         <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
           <Pressable style={styles.drawerLogout} onPress={logout}>
             <Ionicons name="log-out-outline" size={18} color={colors.danger} />
-            <Text style={{ color: colors.danger, fontWeight: '600', marginLeft: 12 }}>{t('profile.logout')}</Text>
+            <Text style={{ color: colors.danger, fontWeight: '600', marginLeft: 12 }}>{_t('profile.logout')}</Text>
           </Pressable>
         </View>
       </Animated.View>
