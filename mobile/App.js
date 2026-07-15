@@ -240,13 +240,19 @@ export default function App() {
   }, []);
 
   const changeLang = async (l) => {
-    // Fade out
-    Animated.timing(fadeAnim, { toValue: 0, duration: 120, useNativeDriver: true }).start(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start(() => {
       currentLang = l;
       setLang(l);
       AsyncStorage.setItem(LANG_KEY, l);
-      // Fade in
-      Animated.timing(fadeAnim, { toValue: 1, duration: 180, useNativeDriver: true }).start();
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
     });
   };
 
