@@ -166,9 +166,13 @@ export default function App() {
   const [showMenuForm, setShowMenuForm] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
-  useEffect(() => {
-    setDrawerOpen(false);
-  }, [screen]);
+  const closeDrawer = () => {
+    Animated.timing(slideAnim, {
+      toValue: -280,
+      duration: 200,
+      useNativeDriver: true,
+    }).start(() => setDrawerOpen(false));
+  };
   const slideAnim = useRef(new Animated.Value(-280)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const authPillAnim = useRef(new Animated.Value(0)).current;
@@ -473,10 +477,10 @@ export default function App() {
           <Text style={styles.title}>{t('app.name')}</Text>
           <Text style={styles.subtitle}>{t('app.tagline')}</Text>
           <Text style={styles.body}>{t('splash.description')}</Text>
-          <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); setDrawerOpen(false); }}>
+          <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); closeDrawer(); }}>
             <Text style={styles.primaryText}>{t('splash.login')}</Text>
           </Pressable>
-          <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); setDrawerOpen(false); }}>
+          <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); closeDrawer(); }}>
             <Text style={styles.secondaryText}>{t('splash.register')}</Text>
           </Pressable>
           <View style={{ marginTop: 24, alignItems: 'center' }}>
@@ -506,18 +510,18 @@ export default function App() {
           </View>
         </View>
 
-        {/* Drawer as Modal */}
-        <Modal visible={drawerOpen} transparent animationType="none" onRequestClose={() => setDrawerOpen(false)}>
-          <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}>
+        {/* Drawer overlay */}
+        {drawerOpen && (
+          <Pressable style={styles.drawerOverlay} onPress={closeDrawer}>
             <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
-              <Pressable onPress={(e) => e.stopPropagation()}>
-                <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+              <Pressable onPress={(e) => e.stopPropagation()} style={{ flex: 1 }}>
+                <View style={{ paddingHorizontal: 16, paddingTop: 56 }}>
                   <Text style={styles.sectionTitle}>{t('app.name')}</Text>
                 </View>
-                <DrawerItem icon="log-in" label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); setDrawerOpen(false); setError(''); }} />
-                <DrawerItem icon="person-add" label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); setDrawerOpen(false); setError(''); }} />
+                <DrawerItem icon="log-in" label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); setError(''); }} />
+                <DrawerItem icon="person-add" label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); setError(''); }} />
                 <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
-                  <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); setDrawerOpen(false); }}>
+                  <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); }}>
                     <Ionicons name="arrow-back" size={18} color={colors.muted} />
                     <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{t('splash.description')}</Text>
                   </Pressable>
@@ -525,7 +529,7 @@ export default function App() {
               </Pressable>
             </Animated.View>
           </Pressable>
-        </Modal>
+        )}
 
         <ScrollView contentContainerStyle={styles.auth}>
           <Text style={styles.icon}>🍽️</Text>
@@ -769,7 +773,7 @@ export default function App() {
 
       {/* ── Drawer ──────────────────────────────────────── */}
       {drawerOpen && (
-        <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}>
+        <Pressable style={styles.drawerOverlay} onPress={closeDrawer}>
           <View />
         </Pressable>
       )}
@@ -784,16 +788,16 @@ export default function App() {
 
         {user?.role === 'cook' ? (
           <>
-            <DrawerItem icon="grid" label={t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); setDrawerOpen(false); }} />
-            <DrawerItem icon="list" label={t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); setDrawerOpen(false); }} />
+            <DrawerItem icon="grid" label={t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); closeDrawer(); }} />
+            <DrawerItem icon="list" label={t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); closeDrawer(); }} />
           </>
         ) : (
           <>
-            <DrawerItem icon="cart" label={t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); setDrawerOpen(false); }} />
-            <DrawerItem icon="receipt" label={t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); setDrawerOpen(false); }} />
+            <DrawerItem icon="cart" label={t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); closeDrawer(); }} />
+            <DrawerItem icon="receipt" label={t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); closeDrawer(); }} />
           </>
         )}
-        <DrawerItem icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); setDrawerOpen(false); }} />
+        <DrawerItem icon="person" label={t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
 
         <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
           <Pressable style={styles.drawerLogout} onPress={logout}>
