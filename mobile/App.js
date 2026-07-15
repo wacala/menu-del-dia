@@ -808,16 +808,9 @@ export default function App() {
             <Ionicons name="menu" size={24} color={colors.text} />
           </Pressable>
           <Text style={styles.brand}>{t('app.name')}</Text>
-          <View>
-            <Pressable onPress={() => setShowLangMenu(!showLangMenu)} style={styles.langBtn}>
-              <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
-            </Pressable>
-            {showLangMenu && (
-              <Pressable onPress={() => { changeLang(lang === 'es-MX' ? 'en' : 'es-MX'); setShowLangMenu(false); }} style={styles.langDrop}>
-                <Text style={styles.langText}>{lang === 'es-MX' ? '🇺🇸' : '🇲🇽'}</Text>
-              </Pressable>
-            )}
-          </View>
+          <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
+            <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
+          </Pressable>
         </View>
       </View>
 
