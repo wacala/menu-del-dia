@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
+  KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
@@ -240,7 +241,14 @@ export default function App() {
         if (session.token) setScreen(session.user?.role === 'cook' ? 'cookDashboard' : 'market');
       }
       const savedLang = await AsyncStorage.getItem(LANG_KEY);
-      if (savedLang) { currentLang = savedLang; setLang(savedLang); }
+      if (savedLang && (savedLang === 'en' || savedLang === 'es-MX')) {
+        currentLang = savedLang;
+        setLang(savedLang);
+      } else {
+        currentLang = 'es-MX';
+        setLang('es-MX');
+        await AsyncStorage.setItem(LANG_KEY, 'es-MX');
+      }
       setReady(true);
     })();
   }, []);
@@ -580,7 +588,15 @@ export default function App() {
           </Pressable>
         )}
 
-        <ScrollView contentContainerStyle={styles.auth}>
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+        <ScrollView
+          contentContainerStyle={styles.auth}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+          showsVerticalScrollIndicator={false}>
           <Text style={styles.icon}>🍽️</Text>
           <Text style={styles.sectionTitle}>{authMode === 'login' ? t('auth.login') : t('auth.register')}</Text>
 
@@ -613,6 +629,7 @@ export default function App() {
             <Text style={styles.primaryText}>{authMode === 'login' ? t('auth.signIn') : t('auth.createAccount')}</Text>
           </Pressable>
         </ScrollView>
+        </KeyboardAvoidingView>
         </Animated.View>
       </View>
     );
