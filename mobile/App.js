@@ -215,11 +215,7 @@ export default function App() {
   };
   const slideAnim = useRef(new Animated.Value(-280)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
-  const currentLangRef = useRef('es-MX');
-  const authPillAnim = useRef(new Animated.Value(0)).current;
-  const authPillWidth = useRef(0);
-
-  const _t = (key) => t(key, currentLangRef.current);
+  const _t = (key) => t(key, lang);
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -244,10 +240,8 @@ export default function App() {
       }
       const savedLang = await AsyncStorage.getItem(LANG_KEY);
       if (savedLang && (savedLang === 'en' || savedLang === 'es-MX')) {
-        currentLangRef.current = savedLang;
         setLang(savedLang);
       } else {
-        currentLangRef.current = 'es-MX';
         setLang('es-MX');
         await AsyncStorage.setItem(LANG_KEY, 'es-MX');
       }
@@ -290,7 +284,6 @@ export default function App() {
   }, []);
 
   const changeLang = async (l) => {
-    currentLangRef.current = l;
     setLang(l);
     AsyncStorage.setItem(LANG_KEY, l);
     Animated.sequence([
