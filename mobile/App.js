@@ -235,13 +235,14 @@ export default function App() {
   }, []);
 
   const changeLang = async (l) => {
-    Animated.sequence([
-      Animated.timing(fadeAnim, { toValue: 0, duration: 150, useNativeDriver: true }),
-      Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
-    ]).start();
-    currentLang = l;
-    setLang(l);
-    await AsyncStorage.setItem(LANG_KEY, l);
+    // Fade out
+    Animated.timing(fadeAnim, { toValue: 0, duration: 120, useNativeDriver: true }).start(() => {
+      currentLang = l;
+      setLang(l);
+      AsyncStorage.setItem(LANG_KEY, l);
+      // Fade in
+      Animated.timing(fadeAnim, { toValue: 1, duration: 180, useNativeDriver: true }).start();
+    });
   };
 
   const saveSession = async (nextToken, nextUser) => {
@@ -508,7 +509,6 @@ export default function App() {
         {drawerOpen && (
           <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}><View /></Pressable>
         )}
-        {drawerOpen && (
         <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
           <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
             <Text style={styles.sectionTitle}>{t('app.name')}</Text>
@@ -522,7 +522,6 @@ export default function App() {
             </Pressable>
           </View>
         </Animated.View>
-        )}
 
         <ScrollView contentContainerStyle={styles.auth}>
           <Text style={styles.icon}>🍽️</Text>
