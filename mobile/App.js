@@ -169,6 +169,7 @@ export default function App() {
     setDrawerOpen(false);
   }, [screen]);
   const slideAnim = useRef(new Animated.Value(-280)).current;
+  const fadeAnim = useRef(new Animated.Value(1)).current;
   const authPillAnim = useRef(new Animated.Value(0)).current;
   const authPillWidth = useRef(0);
 
@@ -234,6 +235,10 @@ export default function App() {
   }, []);
 
   const changeLang = async (l) => {
+    Animated.sequence([
+      Animated.timing(fadeAnim, { toValue: 0, duration: 150, useNativeDriver: true }),
+      Animated.timing(fadeAnim, { toValue: 1, duration: 200, useNativeDriver: true }),
+    ]).start();
     currentLang = l;
     setLang(l);
     await AsyncStorage.setItem(LANG_KEY, l);
@@ -739,6 +744,7 @@ export default function App() {
   return (
     <View style={styles.app}>
       <StatusBar style="dark" />
+      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
       <View style={styles.top}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
@@ -803,6 +809,7 @@ export default function App() {
       {screen === 'menu' && menuView}
       {screen === 'cookDashboard' && cookDashboardView}
       {screen === 'cookOrders' && cookOrdersView}
+      </Animated.View>
     </View>
   );
 }
