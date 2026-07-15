@@ -568,7 +568,7 @@ export default function App() {
                 <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
                   <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); }}>
                     <Ionicons name="arrow-back" size={18} color={colors.muted} />
-                    <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{_t('splash.description')}</Text>
+                    <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>← {_t('app.name')}</Text>
                   </Pressable>
                 </View>
               </Pressable>
