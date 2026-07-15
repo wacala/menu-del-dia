@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
+  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -505,25 +506,26 @@ export default function App() {
           </View>
         </View>
 
-        {/* Drawer overlay */}
-        {drawerOpen && (
-          <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}><View /></Pressable>
-        )}
-        <Animated.View
-          style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}
-          pointerEvents={drawerOpen ? 'auto' : 'none'}>
-          <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
-            <Text style={styles.sectionTitle}>{t('app.name')}</Text>
-          </View>
-          <DrawerItem icon="log-in" label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); setDrawerOpen(false); setError(''); }} />
-          <DrawerItem icon="person-add" label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); setDrawerOpen(false); setError(''); }} />
-          <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
-            <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); setDrawerOpen(false); }}>
-              <Ionicons name="arrow-back" size={18} color={colors.muted} />
-              <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{t('splash.description')}</Text>
-            </Pressable>
-          </View>
-        </Animated.View>
+        {/* Drawer as Modal */}
+        <Modal visible={drawerOpen} transparent animationType="none" onRequestClose={() => setDrawerOpen(false)}>
+          <Pressable style={styles.drawerOverlay} onPress={() => setDrawerOpen(false)}>
+            <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
+              <Pressable onPress={(e) => e.stopPropagation()}>
+                <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
+                  <Text style={styles.sectionTitle}>{t('app.name')}</Text>
+                </View>
+                <DrawerItem icon="log-in" label={t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); setDrawerOpen(false); setError(''); }} />
+                <DrawerItem icon="person-add" label={t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); setDrawerOpen(false); setError(''); }} />
+                <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
+                  <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); setDrawerOpen(false); }}>
+                    <Ionicons name="arrow-back" size={18} color={colors.muted} />
+                    <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{t('splash.description')}</Text>
+                  </Pressable>
+                </View>
+              </Pressable>
+            </Animated.View>
+          </Pressable>
+        </Modal>
 
         <ScrollView contentContainerStyle={styles.auth}>
           <Text style={styles.icon}>🍽️</Text>
