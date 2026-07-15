@@ -518,6 +518,7 @@ export default function App() {
     // Splash
     if (screen === 'splash') {
       return (
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
         <ScrollView contentContainerStyle={styles.auth}>
           <Text style={styles.icon}>🍽️</Text>
           <Text style={styles.title}>{t('app.name')}</Text>
@@ -536,6 +537,7 @@ export default function App() {
           </View>
           <StatusBar style="dark" />
         </ScrollView>
+        </Animated.View>
       );
     }
 
@@ -543,6 +545,7 @@ export default function App() {
     return (
       <View style={styles.app}>
         <StatusBar style="dark" />
+        <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
         {/* Top bar with hamburger */}
         <View style={styles.top}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -610,6 +613,7 @@ export default function App() {
             <Text style={styles.primaryText}>{authMode === 'login' ? t('auth.signIn') : t('auth.createAccount')}</Text>
           </Pressable>
         </ScrollView>
+        </Animated.View>
       </View>
     );
   }
