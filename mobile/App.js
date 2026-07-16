@@ -53,7 +53,7 @@ const t = (key, lng) => {
 const translations = {
   'es-MX': {
     app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
-    splash: { description: 'Compra y vende comida casera en tu comunidad.', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio' },
+    splash: { description: 'Compra y vende comida casera en tu comunidad.', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
     auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver al inicio', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
@@ -63,7 +63,7 @@ const translations = {
   },
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
-    splash: { description: 'Buy and sell homemade food in your community.', login: 'Sign in', register: 'Create account', home: 'Home' },
+    splash: { description: 'Buy and sell homemade food in your community.', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
     auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
     menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
@@ -515,24 +515,48 @@ export default function App() {
     if (screen === 'splash') {
       return (
         <Animated.View style={{ flex: 1, opacity: fadeAnim }} pointerEvents="box-none">
-        <ScrollView contentContainerStyle={styles.auth}>
-          <Text style={styles.icon}>🍽️</Text>
-          <Text style={styles.title}>{_t('app.name')}</Text>
-          <Text style={styles.subtitle}>{_t('app.tagline')}</Text>
-          <Text style={styles.body}>{_t('splash.description')}</Text>
-          <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); closeDrawer(); }}>
-            <Text style={styles.primaryText}>{_t('splash.login')}</Text>
-          </Pressable>
-          <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); closeDrawer(); }}>
-            <Text style={styles.secondaryText}>{_t('splash.register')}</Text>
-          </Pressable>
-          <View style={{ marginTop: 24, alignItems: 'center' }}>
-            <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
-              <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
-            </Pressable>
-          </View>
+        <View style={styles.app}>
           <StatusBar style="dark" />
-        </ScrollView>
+          <View style={styles.top}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+              <View />
+              <Text style={styles.brand}>{_t('app.name')}</Text>
+              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                {user && (
+                  <Text style={[styles.langText, { fontSize: 12 }]}>@{user?.username || user?.first_name}</Text>
+                )}
+                <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
+                  <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+          <ScrollView contentContainerStyle={styles.auth}>
+            <Text style={styles.icon}>🍽️</Text>
+            <Text style={styles.title}>{_t('app.name')}</Text>
+            <Text style={styles.subtitle}>{_t('app.tagline')}</Text>
+            <Text style={styles.body}>{_t('splash.description')}</Text>
+            {user ? (
+              <>
+                <Pressable style={styles.primary} onPress={() => { setScreen(user.role === 'cook' ? 'cookDashboard' : 'market'); closeDrawer(); }}>
+                  <Text style={styles.primaryText}>{_t('splash.goToPanel')}</Text>
+                </Pressable>
+                <Pressable style={styles.secondary} onPress={logout}>
+                  <Text style={styles.secondaryText}>{_t('profile.logout')}</Text>
+                </Pressable>
+              </>
+            ) : (
+              <>
+                <Pressable style={styles.primary} onPress={() => { setScreen('auth'); setAuthMode('login'); closeDrawer(); }}>
+                  <Text style={styles.primaryText}>{_t('splash.login')}</Text>
+                </Pressable>
+                <Pressable style={styles.secondary} onPress={() => { setScreen('auth'); setAuthMode('register'); closeDrawer(); }}>
+                  <Text style={styles.secondaryText}>{_t('splash.register')}</Text>
+                </Pressable>
+              </>
+            )}
+          </ScrollView>
+        </View>
         </Animated.View>
       );
     }
