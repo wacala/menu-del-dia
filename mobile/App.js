@@ -586,7 +586,6 @@ export default function App() {
                 <DrawerItem icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); setError(''); }} />
                 <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
                   <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); }}>
-                    <Ionicons name="arrow-back" size={18} color={colors.muted} />
                     <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{_t('splash.home')}</Text>
                   </Pressable>
                 </View>
