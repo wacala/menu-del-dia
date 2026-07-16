@@ -238,13 +238,8 @@ export default function App() {
         setUser(session.user);
         if (session.token) setScreen(session.user?.role === 'cook' ? 'cookDashboard' : 'market');
       }
-      const savedLang = await AsyncStorage.getItem(LANG_KEY);
-      if (savedLang && (savedLang === 'en' || savedLang === 'es-MX')) {
-        setLang(savedLang);
-      } else {
-        setLang('es-MX');
-        await AsyncStorage.setItem(LANG_KEY, 'es-MX');
-      }
+      setLang('es-MX');
+      await AsyncStorage.setItem(LANG_KEY, 'es-MX');
       setReady(true);
     })();
   }, []);
@@ -520,7 +515,7 @@ export default function App() {
           <View style={styles.top}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <View />
-              <Text style={styles.brand}>{_t('app.name')}</Text>
+              {screen !== 'splash' && <Text style={styles.brand}>{_t('app.name')}</Text>}
               <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
                 {user && (
                   <Text style={[styles.langText, { fontSize: 12 }]}>@{user?.username || user?.first_name}</Text>
