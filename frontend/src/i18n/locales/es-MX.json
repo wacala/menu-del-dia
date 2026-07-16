@@ -12,7 +12,19 @@
     "signInLink": "Inicia sesión", "iWantTo": "Quiero", "buyFood": "Comprar comida", "sellFood": "Vender comida",
     "checkEmail": "Revisa tu correo", "verificationSent": "Te mandamos un enlace de verificación a:",
     "verificationInstructions": "Dale clic al enlace del correo para activar tu cuenta antes de iniciar sesión.",
-    "backToLogin": "Volver al inicio", "registrationFailed": "Error al registrarse", "loginFailed": "Error al iniciar sesión"
+    "backToLogin": "Volver al inicio", "registrationFailed": "Error al registrarse", "loginFailed": "Error al iniciar sesión",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "recoverPassword": "Recuperar contraseña",
+    "sendResetLink": "Enviar enlace de recuperación",
+    "resetLinkSent": "Si ese correo existe, recibirás un enlace para restablecer tu contraseña.",
+    "resetPassword": "Restablecer contraseña",
+    "newPassword": "Nueva contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "passwordResetSuccess": "Contraseña restablecida con éxito. Ya puedes iniciar sesión.",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+    "invalidResetToken": "El enlace de recuperación es inválido o ha expirado.",
+    "backToLoginAfterReset": "Volver a inicio de sesión"
   },
   "marketplace": {
     "title": "Marketplace", "myOrders": "Mis pedidos", "logout": "Salir",

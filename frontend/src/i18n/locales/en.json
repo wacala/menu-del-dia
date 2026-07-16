@@ -12,7 +12,19 @@
     "signInLink": "Sign in", "iWantTo": "I want to", "buyFood": "Buy food", "sellFood": "Sell food",
     "checkEmail": "Check your email", "verificationSent": "We sent a verification link to:",
     "verificationInstructions": "Click the link in the email to activate your account before logging in.",
-    "backToLogin": "Back to Login", "registrationFailed": "Registration failed", "loginFailed": "Login failed"
+    "backToLogin": "Back to Login", "registrationFailed": "Registration failed", "loginFailed": "Login failed",
+    "forgotPassword": "Forgot password?",
+    "recoverPassword": "Recover password",
+    "sendResetLink": "Send reset link",
+    "resetLinkSent": "If that email exists, you will receive a reset link.",
+    "resetPassword": "Reset password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "passwordResetSuccess": "Password reset successful. You can now log in.",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "invalidResetToken": "Invalid or expired reset link.",
+    "backToLoginAfterReset": "Back to login"
   },
   "marketplace": {
     "title": "Marketplace", "myOrders": "My Orders", "logout": "Logout",

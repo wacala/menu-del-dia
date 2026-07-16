@@ -5,6 +5,8 @@ export const authAPI = {
   login: (credentials) => apiClient.post('/auth/login', credentials),
   verifyEmail: (token) => apiClient.post('/auth/verify-email', { token }),
   resendVerification: (email) => apiClient.post('/auth/resend-verification', { email }),
+  forgotPassword: (email) => apiClient.post('/auth/forgot-password', { email }),
+  resetPassword: (token, password) => apiClient.post('/auth/reset-password', { token, password }),
 };
 
 export const usersAPI = {

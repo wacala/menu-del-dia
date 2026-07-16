@@ -121,6 +121,14 @@ export default function LoginPage() {
                 </span>
               ) : t('auth.signIn')}
             </button>
+
+            <Link
+              to="/forgot-password"
+              className="block text-center text-sm text-primary-600 hover:text-primary-700 transition-colors"
+              onClick={clearError}
+            >
+              {t('auth.forgotPassword')}
+            </Link>
           </form>
         </div>
 
