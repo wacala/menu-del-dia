@@ -42,4 +42,42 @@ async function sendVerificationEmail(toEmail, firstName, token) {
   });
 }
 
-module.exports = { sendVerificationEmail };
+async function sendPasswordResetEmail(toEmail, firstName, token) {
+  const resetUrl = `${config.clientUrl}/reset-password?token=${token}`;
+  const deepLink = `menu-del-dia://reset-password?token=${token}`;
+
+  const recipient = config.email.testEmail || toEmail;
+
+  await resend.emails.send({
+    from: 'Menú del Día <onboarding@resend.dev>',
+    to: recipient,
+    subject: firstName
+      ? `${firstName}, restablece tu contraseña — Menú del Día`
+      : 'Restablece tu contraseña — Menú del Día',
+    html: `
+      <div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;max-width:440px;margin:0 auto;padding:32px 16px;">
+        <div style="text-align:center;margin-bottom:24px;">
+          <span style="font-size:40px;">🍽️</span>
+        </div>
+        <h2 style="color:#292524;margin:0 0 8px;">¡Hola${firstName ? `, ${firstName}` : ''}!</h2>
+        <p style="color:#78716c;font-size:15px;line-height:1.6;margin:0 0 24px;">
+          Recibimos una solicitud para restablecer tu contraseña de <strong style="color:#292524;">Menú del Día</strong>.
+          Haz clic en el botón de abajo para crear una nueva contraseña.
+        </p>
+        <a href="${resetUrl}"
+           style="display:block;padding:14px 24px;background:#f97316;color:#fff;border-radius:12px;text-decoration:none;font-weight:700;font-size:15px;text-align:center;margin-bottom:20px;">
+          Restablecer contraseña
+        </a>
+        <p style="color:#a8a29e;font-size:12px;line-height:1.5;margin:0 0 16px;">
+          Este enlace expira en 1 hora. Si no solicitaste este cambio, ignora este mensaje.
+        </p>
+        <hr style="border:none;border-top:1px solid #e7e5e4;margin:16px 0;" />
+        <p style="color:#a8a29e;font-size:11px;text-align:center;margin:0;">
+          Si tienes la app instalada, <a href="${deepLink}" style="color:#f97316;">abrir en la app</a>.
+        </p>
+      </div>
+    `,
+  });
+}
+
+module.exports = { sendVerificationEmail, sendPasswordResetEmail };
