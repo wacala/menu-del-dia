@@ -827,6 +827,56 @@ export default function App() {
     </ScrollView>
   );
 
+  const loggedSplashView = (
+    <ScrollView contentContainerStyle={styles.section}>
+      <View style={{ alignItems: 'center', gap: 16, paddingTop: 40 }}>
+        <Text style={styles.icon}>🍽️</Text>
+        <Text style={styles.title}>{_t('app.name')}</Text>
+        <Text style={styles.subtitle}>{_t('app.tagline')}</Text>
+
+        {/* Signed-in user card */}
+        <View style={[styles.card, { width: '100%', alignItems: 'center', gap: 8 }]}>
+          <View style={styles.avatar}>
+            <Ionicons name="person" size={28} color={colors.primary} />
+          </View>
+          <View style={{ alignItems: 'center' }}>
+            <Text style={styles.cardTitle}>@{user?.username || user?.first_name || user?.email}</Text>
+            <Text style={[styles.body, { color: colors.muted }]}>{user?.email}</Text>
+          </View>
+          <View style={styles.row}>
+            <View style={styles.roleBadge}>
+              <Text style={styles.roleBadgeText}>
+                {user?.role === 'cook' ? _t('profile.cook') : _t('profile.member')}
+              </Text>
+            </View>
+            <Text style={[styles.muted, { fontSize: 12 }]}>✓ Sesión activa</Text>
+          </View>
+        </View>
+
+        {/* Navigation options */}
+        <View style={[styles.card, { width: '100%', gap: 4 }]}>
+          <Pressable
+            style={styles.drawerItem}
+            onPress={() => { setScreen(user?.role === 'cook' ? 'cookDashboard' : 'market'); }}
+          >
+            <Ionicons name={user?.role === 'cook' ? 'grid' : 'cart'} size={20} color={colors.text} />
+            <Text style={styles.drawerItemText}>
+              {user?.role === 'cook' ? _t('cook.dashboard') : _t('market.title')}
+            </Text>
+          </Pressable>
+          <Pressable style={styles.drawerItem} onPress={() => { setScreen('profile'); }}>
+            <Ionicons name="person" size={20} color={colors.text} />
+            <Text style={styles.drawerItemText}>{_t('profile.title')}</Text>
+          </Pressable>
+          <Pressable style={styles.drawerItem} onPress={logout}>
+            <Ionicons name="log-out-outline" size={20} color={colors.danger} />
+            <Text style={[styles.drawerItemText, { color: colors.danger }]}>{_t('profile.logout')}</Text>
+          </Pressable>
+        </View>
+      </View>
+    </ScrollView>
+  );
+
   return (
     <View style={styles.app}>
       <StatusBar style="dark" />
@@ -836,7 +886,7 @@ export default function App() {
           <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
             <Ionicons name="menu" size={24} color={colors.text} />
           </Pressable>
-          <Text style={styles.brand}>{_t('app.name')}</Text>
+          {screen !== 'splash' && <Text style={styles.brand}>{_t('app.name')}</Text>}
           <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
             <Text style={styles.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
           </Pressable>
@@ -889,6 +939,7 @@ export default function App() {
       {screen === 'menu' && menuView}
       {screen === 'cookDashboard' && cookDashboardView}
       {screen === 'cookOrders' && cookOrdersView}
+      {screen === 'splash' && loggedSplashView}
       </Animated.View>
     </View>
   );
