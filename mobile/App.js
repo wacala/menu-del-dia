@@ -73,7 +73,18 @@ const translations = {
   }
 };
 
-const money = (value) => `$${Number(value || 0).toFixed(2)}`;
+const money = (value) => `${Number(value || 0).toFixed(2)}`;
+
+const translateError = (msg, lng) => {
+  const map = {
+    'Ingresa un correo electrónico válido': { 'es-MX': 'Ingresa un correo electrónico válido', en: 'Enter a valid email' },
+    'La contraseña es obligatoria': { 'es-MX': 'La contraseña es obligatoria', en: 'Password is required' },
+    'Invalid credentials': { 'es-MX': 'Correo o contraseña incorrectos', en: 'Invalid email or password' },
+    'Invalid value': { 'es-MX': 'Valor inválido', en: 'Invalid value' },
+    'Please verify your email before logging in. Check your inbox.': { 'es-MX': 'Verifica tu correo antes de iniciar sesión', en: 'Please verify your email before logging in' },
+  };
+  return map[msg]?.[lng] || map[msg]?.['es-MX'] || msg;
+};
 
 async function api(path, { method = 'GET', token, body } = {}) {
   const response = await fetch(`${API_URL}${path}`, {
@@ -464,7 +475,7 @@ export default function App() {
         setPendingVerification(auth.email.trim());
         return;
       }
-      setError(e.message);
+      setError(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }

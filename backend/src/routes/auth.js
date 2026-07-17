@@ -21,12 +21,14 @@ const generateVerificationToken = () => crypto.randomBytes(32).toString('hex');
 router.post(
   '/register',
   [
-    body('email').isEmail().normalizeEmail(),
-    body('password').isLength({ min: 6 }),
-    body('firstName').trim().notEmpty(),
-    body('username').trim().isLength({ min: 3 }).matches(/^[a-zA-Z0-9_]+$/)
-      .withMessage('Username must be alphanumeric, min 3 chars'),
-    body('role').isIn(['cook', 'member']),
+    body('email').isEmail().withMessage('Ingresa un correo electrónico válido').normalizeEmail(),
+    body('password').isLength({ min: 6 }).withMessage('La contraseña debe tener al menos 6 caracteres'),
+    body('firstName').trim().notEmpty().withMessage('El nombre es obligatorio'),
+    body('username').trim().isLength({ min: 3 })
+      .withMessage('El usuario debe tener al menos 3 caracteres')
+      .matches(/^[a-zA-Z0-9_]+$/)
+      .withMessage('El usuario solo puede contener letras, números y guión bajo'),
+    body('role').isIn(['cook', 'member']).withMessage('Selecciona un rol válido'),
   ],
   async (req, res, next) => {
     try {
@@ -102,8 +104,8 @@ router.post(
 router.post(
   '/login',
   [
-    body('email').isEmail().normalizeEmail(),
-    body('password').notEmpty(),
+    body('email').isEmail().withMessage('Ingresa un correo electrónico válido').normalizeEmail(),
+    body('password').notEmpty().withMessage('La contraseña es obligatoria'),
   ],
   async (req, res, next) => {
     try {
