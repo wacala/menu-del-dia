@@ -55,7 +55,7 @@ const translations = {
   'es-MX': {
     app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
     splash: { description: 'Compra y vende comida casera en tu comunidad.', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
-    auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido' },
+    auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
@@ -65,7 +65,7 @@ const translations = {
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
     splash: { description: 'Buy and sell homemade food in your community.', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
-    auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format' },
+    auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
     menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
@@ -83,6 +83,18 @@ const translateError = (msg, lng) => {
     'Invalid credentials': { 'es-MX': 'Correo o contraseña incorrectos', en: 'Invalid email or password' },
     'Invalid value': { 'es-MX': 'Valor inválido', en: 'Invalid value' },
     'Please verify your email before logging in. Check your inbox.': { 'es-MX': 'Verifica tu correo antes de iniciar sesión', en: 'Please verify your email before logging in' },
+    'Verification failed. The link may have expired.': { 'es-MX': 'Verificación fallida. El enlace puede haber expirado.', en: 'Verification failed. The link may have expired.' },
+    'Passwords do not match': { 'es-MX': 'Las contraseñas no coinciden', en: 'Passwords do not match' },
+    'Password must be at least 6 characters': { 'es-MX': 'La contraseña debe tener al menos 6 caracteres', en: 'Password must be at least 6 characters' },
+    'Add at least one item.': { 'es-MX': 'Agrega al menos un platillo', en: 'Add at least one item' },
+    'Add a delivery address.': { 'es-MX': 'Agrega una dirección de entrega', en: 'Add a delivery address' },
+    'Could not create order': { 'es-MX': 'No se pudo crear el pedido', en: 'Could not create order' },
+    'Pago cancelado': { 'es-MX': 'Pago cancelado', en: 'Payment cancelled' },
+    'Order placed successfully.': { 'es-MX': 'Pedido realizado con éxito', en: 'Order placed successfully' },
+    'Menú creado con éxito': { 'es-MX': 'Menú creado con éxito', en: 'Menu created successfully' },
+    'El título es obligatorio': { 'es-MX': 'El título es obligatorio', en: 'Title is required' },
+    'Agrega al menos un platillo con nombre': { 'es-MX': 'Agrega al menos un platillo con nombre', en: 'Add at least one item with a name' },
+    'No hay resultados con esos filtros': { 'es-MX': 'No hay resultados con esos filtros', en: 'No results with these filters' },
   };
   return map[msg]?.[lng] || map[msg]?.['es-MX'] || msg;
 };
@@ -288,12 +300,12 @@ export default function App() {
       try {
         await api('/auth/verify-email', { method: 'POST', body: { token } });
         setError('');
-        setMessage('Email verified! You can now log in.');
+        setMessage(_t('auth.emailVerified'));
         setScreen('auth');
         setAuthMode('login');
         setDrawerOpen(false);
       } catch (err) {
-        setError(err.message || 'Verification failed. The link may have expired.');
+        setError(translateError(err.message || 'Verification failed. The link may have expired.', lang));
       }
     };
 
@@ -443,11 +455,11 @@ export default function App() {
     setError('');
     if (authMode === 'register') {
       if (auth.password !== auth.confirmPassword) {
-        setError('Passwords do not match');
+        setError(translateError('Passwords do not match', lang));
         return;
       }
       if (auth.password.length < 6) {
-        setError('Password must be at least 6 characters');
+        setError(translateError('Password must be at least 6 characters', lang));
         return;
       }
     }
@@ -505,12 +517,12 @@ export default function App() {
       .filter((item) => item.quantity > 0);
 
     if (items.length === 0) {
-      setError('Add at least one item.');
+      setError(translateError('Add at least one item.', lang));
       return;
     }
 
     if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) {
-      setError('Add a delivery address.');
+      setError(translateError('Add a delivery address.', lang));
       return;
     }
 
@@ -529,7 +541,7 @@ export default function App() {
         },
       });
       const orderId = orderData.order?.id || orderData.id;
-      if (!orderId) { setError('Could not create order'); setLoading(false); return; }
+      if (!orderId) { setError(translateError('Could not create order', lang)); setLoading(false); return; }
 
       const payData = await api('/payments/intent', { method: 'POST', token, body: { orderId } });
       const { clientSecret } = payData;
@@ -543,13 +555,13 @@ export default function App() {
 
       const { error: presentError } = await stripe.presentPaymentSheet();
       if (presentError) {
-        setError(presentError.code === 'Canceled' ? 'Pago cancelado' : presentError.message);
+        setError(translateError('Pago cancelado', lang));
         setLoading(false);
         return;
       }
 
       await api('/payments/confirm', { method: 'POST', token, body: { orderId, paymentIntentId: clientSecret } });
-      setMessage('Pedido realizado con éxito');
+      setMessage(translateError('Pedido realizado con éxito', lang));
       setScreen('orders');
       await loadOrders();
     } catch (e) {
@@ -902,7 +914,7 @@ export default function App() {
               <Ionicons name="search-outline" size={48} color={colors.border} />
               <Text style={[styles.helper, { marginTop: 12 }]}>
                 {searchText || cuisineFilter !== 'all' || filterDelivery !== 'all'
-                  ? 'No hay resultados con esos filtros'
+                  ? translateError('No hay resultados con esos filtros', lang)
                   : _t('market.noMenus')}
               </Text>
             </View>
@@ -1129,7 +1141,7 @@ export default function App() {
                   <Text style={[styles.chipText, menuForm.deliveryAvailable && styles.chipTextActive]}>🚚 {_t('cook.deliveryAvailable')}</Text>
                 </Pressable>
               </View>
-              <Pressable style={styles.primary} onPress={() => { if (menuForm.title.trim()) setMenuStep(2); else setError('El título es obligatorio'); }}>
+              <Pressable style={styles.primary} onPress={() => { if (menuForm.title.trim()) setMenuStep(2); else setError(translateError('El título es obligatorio', lang)); }}>
                 <Text style={styles.primaryText}>Siguiente →</Text>
               </Pressable>
             </>
@@ -1163,7 +1175,7 @@ export default function App() {
                 <Pressable style={[styles.secondary, { flex: 1 }]} onPress={() => setMenuStep(1)}>
                   <Text style={styles.secondaryText}>← Atrás</Text>
                 </Pressable>
-                <Pressable style={[styles.primary, { flex: 1 }]} onPress={() => { if (menuItems.some((i) => i.name.trim())) setMenuStep(3); else setError('Agrega al menos un platillo con nombre'); }}>
+                <Pressable style={[styles.primary, { flex: 1 }]} onPress={() => { if (menuItems.some((i) => i.name.trim())) setMenuStep(3); else setError(translateError('Agrega al menos un platillo con nombre', lang)); }}>
                   <Text style={styles.primaryText}>Revisar →</Text>
                 </Pressable>
               </View>
@@ -1210,7 +1222,7 @@ export default function App() {
                       }
                     }
                     setCookMenuId(null); setMenuStep(1); setMenuItems([]);
-                    setMessage('Menú creado con éxito');
+                    setMessage(translateError('Menú creado con éxito', lang));
                     loadMyMenus(); loadCookStats();
                   } catch (e) { setError(e.message); }
                   finally { setLoading(false); }
