@@ -585,12 +585,12 @@ export default function App() {
     return (
       <ScrollView contentContainerStyle={styles.auth}>
         <Text style={styles.title}>📧</Text>
-        <Text style={styles.sectionTitle}>Check your email</Text>
-        <Text style={styles.body}>We sent a verification link to:</Text>
+        <Text style={styles.sectionTitle}>{_t('auth.checkEmail')}</Text>
+        <Text style={styles.body}>{_t('auth.verificationSent')}</Text>
         <Text style={[styles.body, { fontWeight: '800' }]}>{pendingVerification}</Text>
-        <Text style={styles.muted}>Click the link in the email to activate your account before logging in.</Text>
+        <Text style={styles.muted}>{_t('auth.verificationInstructions')}</Text>
         <Pressable style={styles.secondary} onPress={() => { setPendingVerification(null); setAuthMode('login'); setError(''); }}>
-          <Text style={styles.secondaryText}>Back to Login</Text>
+          <Text style={styles.secondaryText}>{_t('auth.backToLogin')}</Text>
         </Pressable>
         <StatusBar style="dark" />
       </ScrollView>
