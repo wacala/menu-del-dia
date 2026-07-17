@@ -786,6 +786,18 @@ export default function App() {
           <Text style={styles.icon}>🍽️</Text>
           <Text style={styles.sectionTitle}>{authMode === 'login' ? _t('auth.login') : _t('auth.register')}</Text>
 
+          {/* Tab switcher between login/register */}
+          <View style={styles.segmentedControl}>
+            <Pressable style={[styles.segment, authMode === 'login' && styles.segmentActive]} onPress={() => { setAuthMode('login'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); setError(''); }}>
+              <Ionicons name="log-in" size={16} color={authMode === 'login' ? colors.primary : colors.muted} />
+              <Text style={[styles.segmentText, authMode === 'login' && styles.segmentTextActive]}>{_t('auth.login')}</Text>
+            </Pressable>
+            <Pressable style={[styles.segment, authMode === 'register' && styles.segmentActive]} onPress={() => { setAuthMode('register'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); setError(''); }}>
+              <Ionicons name="person-add" size={16} color={authMode === 'register' ? colors.primary : colors.muted} />
+              <Text style={[styles.segmentText, authMode === 'register' && styles.segmentTextActive]}>{_t('auth.register')}</Text>
+            </Pressable>
+          </View>
+
           <FloatingField label={_t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => { setAuth((c) => ({ ...c, email })); setError(''); setMessage(''); }} />
           {auth.email.length > 0 && !emailValid && (
             <Text style={{ color: colors.danger, fontSize: 12, marginTop: -8 }}>{_t('auth.emailInvalid')}</Text>
