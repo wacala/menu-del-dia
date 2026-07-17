@@ -18,6 +18,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useStripe } from '@stripe/stripe-react-native';
 
 const STORAGE_KEY = 'menu-del-dia-session';
 const API_URL = process.env.EXPO_PUBLIC_API_URL || Platform.select({
@@ -496,6 +497,8 @@ export default function App() {
     }
   };
 
+  const stripe = useStripe();
+
   const placeOrder = async () => {
     const items = (menu?.items || [])
       .map((item) => ({ menuItemId: item.id, quantity: Number(draft.quantities[item.id] || 0) }))
@@ -514,7 +517,7 @@ export default function App() {
     setLoading(true);
     setError('');
     try {
-      await api('/orders', {
+      const orderData = await api('/orders', {
         method: 'POST',
         token,
         body: {
@@ -525,7 +528,28 @@ export default function App() {
           specialInstructions: draft.specialInstructions.trim() || undefined,
         },
       });
-      setMessage('Order placed successfully.');
+      const orderId = orderData.order?.id || orderData.id;
+      if (!orderId) { setError('Could not create order'); setLoading(false); return; }
+
+      const payData = await api('/payments/intent', { method: 'POST', token, body: { orderId } });
+      const { clientSecret } = payData;
+
+      const { error: initError } = await stripe.initPaymentSheet({
+        paymentIntentClientSecret: clientSecret,
+        merchantDisplayName: 'Menú del Día',
+        style: 'automatic',
+      });
+      if (initError) { setError(initError.message); setLoading(false); return; }
+
+      const { error: presentError } = await stripe.presentPaymentSheet();
+      if (presentError) {
+        setError(presentError.code === 'Canceled' ? 'Pago cancelado' : presentError.message);
+        setLoading(false);
+        return;
+      }
+
+      await api('/payments/confirm', { method: 'POST', token, body: { orderId, paymentIntentId: clientSecret } });
+      setMessage('Pedido realizado con éxito');
       setScreen('orders');
       await loadOrders();
     } catch (e) {

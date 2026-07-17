@@ -25,6 +25,14 @@
     },
     "extra": {
       "webVerifyUrl": "https://menu-del-dia-production.up.railway.app/verify-email"
-    }
+    },
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.menudeldia.app"
+        }
+      ]
+    ]
   }
 }
