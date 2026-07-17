@@ -97,7 +97,10 @@ async function api(path, { method = 'GET', token, body } = {}) {
   }
 
   if (!response.ok) {
-    throw new Error(data.message || `Request failed (${response.status})`);
+    const errMsg = data.message
+      || (data.errors && data.errors.map((e) => e.msg || e.message).join('. '))
+      || `Request failed (${response.status})`;
+    throw new Error(errMsg);
   }
 
   return data;
