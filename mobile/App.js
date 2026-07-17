@@ -100,7 +100,9 @@ async function api(path, { method = 'GET', token, body } = {}) {
     const errMsg = data.message
       || (data.errors && data.errors.map((e) => e.msg || e.message).join('. '))
       || `Request failed (${response.status})`;
-    throw new Error(errMsg);
+    const err = new Error(errMsg);
+    err.data = data;
+    throw err;
   }
 
   return data;
@@ -458,6 +460,10 @@ export default function App() {
       await saveSession(data.token, data.user);
       setScreen(data.user.role === 'cook' ? 'cookDashboard' : 'market');
     } catch (e) {
+      if (e.data?.emailVerificationRequired) {
+        setPendingVerification(auth.email.trim());
+        return;
+      }
       setError(e.message);
     } finally {
       setLoading(false);
@@ -584,7 +590,9 @@ export default function App() {
   if (pendingVerification) {
     return (
       <ScrollView contentContainerStyle={styles.auth}>
-        <Text style={styles.title}>📧</Text>
+        <View style={{ alignItems: 'center', marginBottom: 16 }}>
+          <Ionicons name="mail-unread-outline" size={48} color={colors.primary} />
+        </View>
         <Text style={styles.sectionTitle}>{_t('auth.checkEmail')}</Text>
         <Text style={styles.body}>{_t('auth.verificationSent')}</Text>
         <Text style={[styles.body, { fontWeight: '800' }]}>{pendingVerification}</Text>
