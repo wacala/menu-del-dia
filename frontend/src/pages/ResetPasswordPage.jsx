@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { UtensilsCrossed, ArrowLeft, AlertTriangle, CheckCircle2, Lock } from 'lucide-react';
 import { authAPI } from '../api';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function ResetPasswordPage() {
   const { t } = useTranslation();
@@ -117,6 +118,9 @@ export default function ResetPasswordPage() {
               <Link to="/login" className="btn-primary inline-block mt-4 py-3 px-6 text-center">{t('auth.backToLoginAfterReset')}</Link>
             </div>
           )}
+        </div>
+        <div className="mt-6 flex justify-center">
+          <LanguageSwitcher />
         </div>
       </div>
     </div>

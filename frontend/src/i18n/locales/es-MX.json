@@ -26,6 +26,7 @@
     "invalidResetToken": "El enlace de recuperación es inválido o ha expirado.",
     "backToLoginAfterReset": "Volver a inicio de sesión"
   },
+  "profile": { "logout": "Cerrar sesión" },
   "marketplace": {
     "title": "Marketplace", "myOrders": "Mis pedidos", "logout": "Salir",
     "date": "Fecha", "search": "Buscar", "searchPlaceholder": "Buscar menús, cocineros o platillos...",

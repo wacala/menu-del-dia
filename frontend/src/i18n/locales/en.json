@@ -26,6 +26,7 @@
     "invalidResetToken": "Invalid or expired reset link.",
     "backToLoginAfterReset": "Back to login"
   },
+  "profile": { "logout": "Logout" },
   "marketplace": {
     "title": "Marketplace", "myOrders": "My Orders", "logout": "Logout",
     "date": "Date", "search": "Search", "searchPlaceholder": "Search menus, cooks, or items...",

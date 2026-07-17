@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -138,6 +139,9 @@ export default function LoginPage() {
             {t('auth.createOne')}
           </Link>
         </p>
+        <div className="mt-6 flex justify-center">
+          <LanguageSwitcher />
+        </div>
       </div>
     </div>
   );

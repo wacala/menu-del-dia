@@ -35,6 +35,17 @@ input:-webkit-autofill {
   min-height: 100vh;
 }
 
+/* Fade transition on language change */
+.lang-fade {
+  animation: langFadeIn 1000ms ease-in-out;
+}
+
+@keyframes langFadeIn {
+  0% { opacity: 0; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
 @layer components {
   .btn-primary {
     @apply px-5 py-2.5 bg-primary-500 text-white rounded-xl font-semibold

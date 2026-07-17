@@ -2,6 +2,7 @@ import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyP
 import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ordersAPI } from '../api';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function CookOrderDetailPage() {
   const { t } = useTranslation();
@@ -100,9 +101,12 @@ export default function CookOrderDetailPage() {
       {/* Navigation */}
       <nav className="bg-white shadow">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <Link to="/cook/orders" className="text-blue-600 hover:underline">
-            ← Back to Orders
-          </Link>
+          <div className="flex justify-between items-center">
+            <Link to="/cook/orders" className="text-blue-600 hover:underline">
+              ← Back to Orders
+            </Link>
+            <LanguageSwitcher />
+          </div>
         </div>
       </nav>
 

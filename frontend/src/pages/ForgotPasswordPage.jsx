@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { UtensilsCrossed, ArrowLeft, AlertTriangle, Mail, CheckCircle2 } from 'lucide-react';
 import { authAPI } from '../api';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function ForgotPasswordPage() {
   const { t } = useTranslation();
@@ -109,6 +110,9 @@ export default function ForgotPasswordPage() {
             <ArrowLeft className="w-4 h-4" />
             {t('auth.backToLogin')}
           </Link>
+        </div>
+        <div className="mt-6 flex justify-center">
+          <LanguageSwitcher />
         </div>
       </div>
     </div>

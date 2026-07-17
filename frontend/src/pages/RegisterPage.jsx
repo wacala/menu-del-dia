@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star, Banknote, CreditCard, ShoppingCart, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '../context/authStore';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function RegisterPage() {
   const { t } = useTranslation();
@@ -164,6 +165,9 @@ export default function RegisterPage() {
           {t('auth.haveAccount')}{' '}
           <Link to="/login" className="font-semibold text-primary-600 hover:text-primary-700 transition-colors" onClick={clearError}>{t('auth.signInLink')}</Link>
         </p>
+        <div className="mt-6 flex justify-center">
+          <LanguageSwitcher />
+        </div>
       </div>
     </div>
   );

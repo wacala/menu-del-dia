@@ -5,6 +5,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { menusAPI, ordersAPI, paymentsAPI } from '../api';
 import StripePaymentForm from '../components/StripePaymentForm';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function MenuDetailPage() {
   const { t } = useTranslation();
@@ -148,7 +149,10 @@ export default function MenuDetailPage() {
     <div className="min-h-screen bg-stone-50">
       <nav className="bg-white/80 backdrop-blur-sm border-b border-stone-100 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-3">
-          <Link to="/marketplace" className="btn-ghost text-sm">← Back to Marketplace</Link>
+          <div className="flex justify-between items-center">
+            <Link to="/marketplace" className="btn-ghost text-sm">← Back to Marketplace</Link>
+            <LanguageSwitcher />
+          </div>
         </div>
       </nav>
 

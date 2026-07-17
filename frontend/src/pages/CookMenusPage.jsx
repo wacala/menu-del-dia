@@ -2,6 +2,7 @@ import { CookingPot, ClipboardList, Calendar, Clock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { menusAPI } from '../api';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function CookMenusPage() {
   const { t } = useTranslation();
@@ -85,6 +86,7 @@ export default function CookMenusPage() {
               <Link to="/cook/dashboard" className="btn-ghost text-sm">← Back</Link>
               <h1 className="text-xl font-extrabold text-stone-800 tracking-tight"><ClipboardList className="w-4 h-4 " /> {t('cook.myMenus')}</h1>
             </div>
+            <LanguageSwitcher />
           </div>
         </div>
       </nav>
