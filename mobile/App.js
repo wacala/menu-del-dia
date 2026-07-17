@@ -207,6 +207,17 @@ export default function App() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
+  // Smart search
+  const [searchText, setSearchText] = useState('');
+  const [filterDelivery, setFilterDelivery] = useState('all');
+  const [sortBy, setSortBy] = useState('rating');
+  const [cuisineFilter, setCuisineFilter] = useState('all');
+  // Cook menu expert system
+  const [myMenus, setMyMenus] = useState([]);
+  const [menuStep, setMenuStep] = useState(1);
+  const [menuItems, setMenuItems] = useState([]);
+  const [reviewing, setReviewing] = useState(false);
+  const [cookMenuId, setCookMenuId] = useState(null);
   const closeDrawer = () => {
     Animated.timing(slideAnim, {
       toValue: -280,
@@ -358,6 +369,15 @@ export default function App() {
     } catch (e) { setError(e.message); }
   };
 
+  const loadMyMenus = async () => {
+    setLoading(true); setError('');
+    try {
+      const data = await api('/menus/my/menus', { token });
+      setMyMenus(data.menus || []);
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
   const createMenu = async () => {
     setLoading(true); setError('');
     try {
@@ -495,7 +515,60 @@ export default function App() {
     }
   };
 
-  const publishedMenus = useMemo(() => menus.filter((entry) => entry.status === 'published'), [menus]);
+  const publishedMenus = useMemo(() => {
+    let filtered = menus.filter((entry) => entry.status === 'published');
+
+    // Text search in title, description, cook name, items
+    if (searchText.trim()) {
+      const q = searchText.toLowerCase();
+      filtered = filtered.filter((m) =>
+        m.title?.toLowerCase().includes(q) ||
+        m.description?.toLowerCase().includes(q) ||
+        `${m.cook_first_name || ''} ${m.cook_last_name || ''}`.toLowerCase().includes(q) ||
+        (m.items || []).some((item) => item.name?.toLowerCase().includes(q))
+      );
+    }
+
+    // Cuisine filter
+    if (cuisineFilter !== 'all') {
+      filtered = filtered.filter((m) => m.cuisine_type === cuisineFilter);
+    }
+
+    // Delivery type filter
+    if (filterDelivery === 'pickup') {
+      filtered = filtered.filter((m) => m.pickup_available);
+    } else if (filterDelivery === 'delivery') {
+      filtered = filtered.filter((m) => m.delivery_available);
+    }
+
+    // Sort
+    if (sortBy === 'price_asc') {
+      filtered.sort((a, b) => {
+        const aMin = Math.min(...(a.items || []).map((i) => parseFloat(i.price || 0)));
+        const bMin = Math.min(...(b.items || []).map((i) => parseFloat(i.price || 0)));
+        return aMin - bMin;
+      });
+    } else if (sortBy === 'price_desc') {
+      filtered.sort((a, b) => {
+        const aMin = Math.min(...(a.items || []).map((i) => parseFloat(i.price || 0)));
+        const bMin = Math.min(...(b.items || []).map((i) => parseFloat(i.price || 0)));
+        return bMin - aMin;
+      });
+    } else if (sortBy === 'name') {
+      filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    } else {
+      // Default: by rating desc
+      filtered.sort((a, b) => (b.cook_rating || 0) - (a.cook_rating || 0));
+    }
+
+    return filtered;
+  }, [menus, searchText, cuisineFilter, filterDelivery, sortBy]);
+
+  const cuisines = useMemo(() => {
+    const set = new Set();
+    menus.forEach((m) => { if (m.cuisine_type) set.add(m.cuisine_type); });
+    return ['all', ...Array.from(set)];
+  }, [menus]);
 
   if (!ready) {
     return (
@@ -708,25 +781,94 @@ export default function App() {
 
   const marketView = (
     <View style={styles.section}>
-      <View style={styles.headerRow}>
-        <Text style={styles.sectionTitle}>{_t('market.title')}</Text>
-        <Pressable onPress={loadMenus}><Text style={styles.link}>↻</Text></Pressable>
+      {/* Search bar */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 12 }}>
+          <Ionicons name="search" size={18} color={colors.muted} />
+          <TextInput
+            style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 8, color: colors.text, fontSize: 15 }}
+            placeholder="Buscar menús, platillos..."
+            placeholderTextColor={colors.muted}
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+          {searchText ? (
+            <Pressable onPress={() => setSearchText('')}>
+              <Ionicons name="close-circle" size={18} color={colors.muted} />
+            </Pressable>
+          ) : null}
+        </View>
+        <Pressable onPress={loadMenus} style={{ padding: 8 }}>
+          <Ionicons name="refresh" size={20} color={colors.primary} />
+        </Pressable>
       </View>
+
+      {/* Filter chips row */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 6 }}>
+        {cuisines.map((c) => (
+          <Pressable key={c} style={[styles.chip, cuisineFilter === c && styles.chipActive]} onPress={() => setCuisineFilter(c)}>
+            <Text style={[styles.chipText, cuisineFilter === c && styles.chipTextActive]}>{c === 'all' ? 'Todas' : c}</Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+
+      {/* Sort & delivery filter row */}
+      <View style={{ flexDirection: 'row', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+        {['all', 'pickup', 'delivery'].map((d) => (
+          <Pressable key={d} style={[styles.chip, filterDelivery === d && styles.chipActive]} onPress={() => setFilterDelivery(d)}>
+            <Text style={[styles.chipText, filterDelivery === d && styles.chipTextActive]}>
+              {d === 'all' ? 'Todos' : d === 'pickup' ? '📦 Recoger' : '🚚 Delivery'}
+            </Text>
+          </Pressable>
+        ))}
+        <Pressable style={[styles.chip]} onPress={() => setSortBy((s) => ({ rating: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'rating' }[s] || 'rating'))}>
+          <Text style={styles.chipText}>
+            {sortBy === 'rating' ? '⭐ Mejor' : sortBy === 'price_asc' ? '💰 Menor' : sortBy === 'price_desc' ? '💰 Mayor' : '🔤 A-Z'}
+          </Text>
+        </Pressable>
+      </View>
+
       {loading ? (
         <ActivityIndicator color={colors.primary} />
       ) : (
         <FlatList
           data={publishedMenus}
           keyExtractor={(item) => String(item.id)}
-          ListEmptyComponent={<Text style={styles.helper}>{_t('market.noMenus')}</Text>}
+          ListEmptyComponent={
+            <View style={{ paddingVertical: 40, alignItems: 'center' }}>
+              <Ionicons name="search-outline" size={48} color={colors.border} />
+              <Text style={[styles.helper, { marginTop: 12 }]}>
+                {searchText || cuisineFilter !== 'all' || filterDelivery !== 'all'
+                  ? 'No hay resultados con esos filtros'
+                  : _t('market.noMenus')}
+              </Text>
+            </View>
+          }
           renderItem={({ item }) => (
             <Pressable style={styles.card} onPress={() => openMenu(item.id)}>
-              <Text style={styles.cardTitle}>{item.title}</Text>
-              <Text style={styles.muted}>{item.cook_first_name} {item.cook_last_name}</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.cardTitle}>{item.title}</Text>
+                  <Text style={styles.muted}>👨‍🍳 {item.cook_first_name} {item.cook_last_name}{item.cook_rating ? `  ⭐ ${item.cook_rating}` : ''}</Text>
+                </View>
+                {item.cuisine_type ? (
+                  <Text style={[styles.muted, { fontSize: 11, backgroundColor: colors.primaryLight, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, overflow: 'hidden' }]}>{item.cuisine_type}</Text>
+                ) : null}
+              </View>
               <Text style={styles.body} numberOfLines={2}>{item.description || ''}</Text>
+              <View style={{ flexDirection: 'row', gap: 8, marginTop: 4, flexWrap: 'wrap' }}>
+                {item.pickup_available ? <Text style={[styles.muted, { fontSize: 12 }]}>📦 Recoger</Text> : null}
+                {item.delivery_available ? <Text style={[styles.muted, { fontSize: 12 }]}>🚚 Delivery</Text> : null}
+                {(item.items || []).length > 0 ? (
+                  <Text style={[styles.muted, { fontSize: 12 }]}>
+                    🍽️ {item.items.length} platillo{item.items.length !== 1 ? 's' : ''} • ${Math.min(...item.items.map((i) => parseFloat(i.price || 0))).toFixed(2)}+
+                  </Text>
+                ) : null}
+              </View>
               <Text style={styles.link}>{_t('market.viewMenu')}</Text>
             </Pressable>
           )}
+          ListFooterComponent={<View style={{ height: 100 }} />}
         />
       )}
     </View>
@@ -886,14 +1028,175 @@ export default function App() {
     </ScrollView>
   );
 
+  const cookMenusView = (
+    <View style={styles.section}>
+      <View style={styles.headerRow}>
+        <Text style={styles.sectionTitle}>📋 {_t('cook.myMenus')}</Text>
+        <Pressable onPress={loadMyMenus}><Ionicons name="refresh" size={20} color={colors.primary} /></Pressable>
+      </View>
+
+      {/* Create new menu button */}
+      {!cookMenuId && (
+        <Pressable style={[styles.primary, { marginBottom: 12 }]} onPress={() => { setCookMenuId('new'); setMenuStep(1); setMenuItems([]); setMenuForm({ title: '', description: '', menuDate: new Date().toISOString().split('T')[0], orderStartTime: '', orderEndTime: '', pickupAvailable: true, deliveryAvailable: false, pickupLocation: '' }); }}>
+          <Text style={styles.primaryText}>+ {_t('cook.createMenuBtn')}</Text>
+        </Pressable>
+      )}
+
+      {cookMenuId === 'new' ? (
+        <ScrollView contentContainerStyle={{ gap: 12 }} keyboardShouldPersistTaps="handled">
+          <View style={{ flexDirection: 'row', gap: 4, marginBottom: 4 }}>
+            {[1, 2, 3].map((s) => (
+              <View key={s} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: menuStep >= s ? colors.primary : colors.border }} />
+            ))}
+          </View>
+          {menuStep === 1 && (
+            <>
+              <Text style={{ fontWeight: '800', color: colors.text }}>Paso 1 — Información general</Text>
+              <FloatingField label={_t('cook.menuTitle')} value={menuForm.title} onChangeText={(v) => setMenuForm((c) => ({ ...c, title: v }))} />
+              <FloatingField label={_t('cook.description')} value={menuForm.description} onChangeText={(v) => setMenuForm((c) => ({ ...c, description: v }))} />
+              <FloatingField label={_t('cook.menuDate')} value={menuForm.menuDate} onChangeText={(v) => setMenuForm((c) => ({ ...c, menuDate: v }))} />
+              <FloatingField label={_t('cook.orderStart')} value={menuForm.orderStartTime} onChangeText={(v) => setMenuForm((c) => ({ ...c, orderStartTime: v }))} />
+              <FloatingField label={_t('cook.orderEnd')} value={menuForm.orderEndTime} onChangeText={(v) => setMenuForm((c) => ({ ...c, orderEndTime: v }))} />
+              <FloatingField label={_t('cook.pickupLocation')} value={menuForm.pickupLocation} onChangeText={(v) => setMenuForm((c) => ({ ...c, pickupLocation: v }))} />
+              <View style={{ flexDirection: 'row', gap: 16 }}>
+                <Pressable style={[styles.chip, menuForm.pickupAvailable && styles.chipActive]} onPress={() => setMenuForm((c) => ({ ...c, pickupAvailable: !c.pickupAvailable }))}>
+                  <Text style={[styles.chipText, menuForm.pickupAvailable && styles.chipTextActive]}>📦 {_t('cook.pickupAvailable')}</Text>
+                </Pressable>
+                <Pressable style={[styles.chip, menuForm.deliveryAvailable && styles.chipActive]} onPress={() => setMenuForm((c) => ({ ...c, deliveryAvailable: !c.deliveryAvailable }))}>
+                  <Text style={[styles.chipText, menuForm.deliveryAvailable && styles.chipTextActive]}>🚚 {_t('cook.deliveryAvailable')}</Text>
+                </Pressable>
+              </View>
+              <Pressable style={styles.primary} onPress={() => { if (menuForm.title.trim()) setMenuStep(2); else setError('El título es obligatorio'); }}>
+                <Text style={styles.primaryText}>Siguiente →</Text>
+              </Pressable>
+            </>
+          )}
+          {menuStep === 2 && (
+            <>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Text style={{ fontWeight: '800', color: colors.text }}>Paso 2 — Platillos</Text>
+                <Pressable onPress={() => setMenuItems((prev) => [...prev, { name: '', price: '', quantity: '10', dietary: '' }])}>
+                  <Ionicons name="add-circle" size={28} color={colors.primary} />
+                </Pressable>
+              </View>
+              {menuItems.length === 0 && <Text style={styles.helper}>Agrega al menos un platillo</Text>}
+              {menuItems.map((item, idx) => (
+                <View key={idx} style={[styles.card, { gap: 6 }]}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={{ fontWeight: '700', color: colors.text }}>Platillo #{idx + 1}</Text>
+                    <Pressable onPress={() => setMenuItems((prev) => prev.filter((_, i) => i !== idx))}>
+                      <Ionicons name="trash-outline" size={18} color={colors.danger} />
+                    </Pressable>
+                  </View>
+                  <FloatingField label="Nombre del platillo *" value={item.name} onChangeText={(v) => setMenuItems((prev) => prev.map((p, i) => i === idx ? { ...p, name: v } : p))} />
+                  <View style={{ flexDirection: 'row', gap: 8 }}>
+                    <View style={{ flex: 1 }}><FloatingField label="Precio $" value={item.price} keyboardType="decimal-pad" onChangeText={(v) => setMenuItems((prev) => prev.map((p, i) => i === idx ? { ...p, price: v } : p))} /></View>
+                    <View style={{ flex: 1 }}><FloatingField label="Cantidad" value={item.quantity} keyboardType="number-pad" onChangeText={(v) => setMenuItems((prev) => prev.map((p, i) => i === idx ? { ...p, quantity: v } : p))} /></View>
+                  </View>
+                  <FloatingField label="Etiquetas (ej: vegano, sin gluten)" value={item.dietary} onChangeText={(v) => setMenuItems((prev) => prev.map((p, i) => i === idx ? { ...p, dietary: v } : p))} />
+                </View>
+              ))}
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                <Pressable style={[styles.secondary, { flex: 1 }]} onPress={() => setMenuStep(1)}>
+                  <Text style={styles.secondaryText}>← Atrás</Text>
+                </Pressable>
+                <Pressable style={[styles.primary, { flex: 1 }]} onPress={() => { if (menuItems.some((i) => i.name.trim())) setMenuStep(3); else setError('Agrega al menos un platillo con nombre'); }}>
+                  <Text style={styles.primaryText}>Revisar →</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
+          {menuStep === 3 && (
+            <>
+              <Text style={{ fontWeight: '800', color: colors.text }}>Paso 3 — Revisar y publicar</Text>
+              <View style={styles.card}>
+                <Text style={styles.cardTitle}>{menuForm.title || 'Sin título'}</Text>
+                <Text style={styles.body}>{menuForm.description || 'Sin descripción'}</Text>
+                <Text style={styles.muted}>📅 {menuForm.menuDate}</Text>
+                <Text style={styles.muted}>🕐 {menuForm.orderStartTime} — {menuForm.orderEndTime}</Text>
+                <Text style={styles.muted}>📍 {menuForm.pickupLocation}</Text>
+                <View style={{ flexDirection: 'row', gap: 8 }}>
+                  {menuForm.pickupAvailable ? <Text style={[styles.muted, { fontSize: 12 }]}>📦 Recoger</Text> : null}
+                  {menuForm.deliveryAvailable ? <Text style={[styles.muted, { fontSize: 12 }]}>🚚 Delivery</Text> : null}
+                </View>
+              </View>
+              {menuItems.length > 0 && (
+                <View style={styles.card}>
+                  <Text style={styles.cardTitle}>Platillos ({menuItems.length})</Text>
+                  {menuItems.map((item, idx) => (
+                    <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 }}>
+                      <Text style={styles.body}>{item.name}</Text>
+                      <Text style={{ fontWeight: '700', color: colors.text }}>${parseFloat(item.price || 0).toFixed(2)}</Text>
+                    </View>
+                  ))}
+                  <Text style={styles.muted}>Total: ${menuItems.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 1), 0).toFixed(2)}</Text>
+                </View>
+              )}
+              <View style={{ flexDirection: 'row', gap: 8 }}>
+                <Pressable style={[styles.secondary, { flex: 1 }]} onPress={() => setMenuStep(2)}>
+                  <Text style={styles.secondaryText}>← Editar</Text>
+                </Pressable>
+                <Pressable style={[styles.primary, { flex: 1 }]} onPress={async () => {
+                  setLoading(true); setError('');
+                  try {
+                    const data = await api('/menus', { method: 'POST', token, body: menuForm });
+                    const mid = data.menu?.id;
+                    if (mid && menuItems.length > 0) {
+                      for (const item of menuItems) {
+                        await api(`/menus/${mid}/items`, { method: 'POST', token, body: { name: item.name, price: parseFloat(item.price || 0), quantityAvailable: parseInt(item.quantity || 1), dietaryTags: item.dietary } });
+                      }
+                    }
+                    setCookMenuId(null); setMenuStep(1); setMenuItems([]);
+                    setMessage('Menú creado con éxito');
+                    loadMyMenus(); loadCookStats();
+                  } catch (e) { setError(e.message); }
+                  finally { setLoading(false); }
+                }}>
+                  <Text style={styles.primaryText}>{loading ? 'Publicando...' : '📢 Publicar menú'}</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
+          {!!error && <Text style={styles.error}>{error}</Text>}
+        </ScrollView>
+      ) : (
+        <>
+          {loading ? <ActivityIndicator color={colors.primary} /> : null}
+          <FlatList
+            data={myMenus}
+            keyExtractor={(item) => String(item.id)}
+            ListEmptyComponent={<Text style={styles.helper}>{_t('cook.noMenusYet')}</Text>}
+            renderItem={({ item }) => (
+              <View style={styles.card}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={styles.cardTitle}>{item.title}</Text>
+                  <Text style={[styles.chipText, { fontSize: 12, color: item.status === 'published' ? colors.success : colors.amber }]}>{item.status}</Text>
+                </View>
+                <Text style={styles.muted}>📅 {item.menu_date ? new Date(item.menu_date).toLocaleDateString() : ''}</Text>
+                <Text style={styles.muted}>📦 {item.order_count || 0} pedidos</Text>
+                {item.status === 'draft' && (
+                  <Pressable style={[styles.primary, { marginTop: 8 }]} onPress={async () => {
+                    try { await api(`/menus/${item.id}/publish`, { method: 'PUT', token }); loadMyMenus(); }
+                    catch (e) { setError(e.message); }
+                  }}>
+                    <Text style={styles.primaryText}>📢 Publicar</Text>
+                  </Pressable>
+                )}
+              </View>
+            )}
+            ListFooterComponent={<View style={{ height: 100 }} />}
+          />
+        </>
+      )}
+    </View>
+  );
+
   const loggedSplashView = (
     <ScrollView contentContainerStyle={styles.section}>
       <View style={{ alignItems: 'center', gap: 16, paddingTop: 40 }}>
         <Text style={styles.icon}>🍽️</Text>
         <Text style={styles.title}>{_t('app.name')}</Text>
         <Text style={styles.subtitle}>{_t('app.tagline')}</Text>
-
-        {/* Signed-in user card */}
         <View style={[styles.card, { width: '100%', alignItems: 'center', gap: 8 }]}>
           <View style={styles.avatar}>
             <Ionicons name="person" size={28} color={colors.primary} />
@@ -904,24 +1207,15 @@ export default function App() {
           </View>
           <View style={styles.row}>
             <View style={styles.roleBadge}>
-              <Text style={styles.roleBadgeText}>
-                {user?.role === 'cook' ? _t('profile.cook') : _t('profile.member')}
-              </Text>
+              <Text style={styles.roleBadgeText}>{user?.role === 'cook' ? _t('profile.cook') : _t('profile.member')}</Text>
             </View>
             <Text style={[styles.muted, { fontSize: 12 }]}>✓ Sesión activa</Text>
           </View>
         </View>
-
-        {/* Navigation options */}
         <View style={[styles.card, { width: '100%', gap: 4 }]}>
-          <Pressable
-            style={styles.drawerItem}
-            onPress={() => { setScreen(user?.role === 'cook' ? 'cookDashboard' : 'market'); }}
-          >
+          <Pressable style={styles.drawerItem} onPress={() => { setScreen(user?.role === 'cook' ? 'cookDashboard' : 'market'); }}>
             <Ionicons name={user?.role === 'cook' ? 'grid' : 'cart'} size={20} color={colors.text} />
-            <Text style={styles.drawerItemText}>
-              {user?.role === 'cook' ? _t('cook.dashboard') : _t('market.title')}
-            </Text>
+            <Text style={styles.drawerItemText}>{user?.role === 'cook' ? _t('cook.dashboard') : _t('market.title')}</Text>
           </Pressable>
           <Pressable style={styles.drawerItem} onPress={() => { setScreen('profile'); }}>
             <Ionicons name="person" size={20} color={colors.text} />
@@ -970,6 +1264,7 @@ export default function App() {
         {user?.role === 'cook' ? (
           <>
             <DrawerItem icon="grid" label={_t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); closeDrawer(); }} />
+            <DrawerItem icon="document-text" label={_t('cook.myMenus')} active={screen === 'cookMenus'} onPress={() => { setScreen('cookMenus'); closeDrawer(); loadMyMenus(); }} />
             <DrawerItem icon="list" label={_t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); closeDrawer(); }} />
           </>
         ) : (
@@ -997,6 +1292,7 @@ export default function App() {
       {screen === 'profile' && profileView}
       {screen === 'menu' && menuView}
       {screen === 'cookDashboard' && cookDashboardView}
+      {screen === 'cookMenus' && cookMenusView}
       {screen === 'cookOrders' && cookOrdersView}
       {screen === 'splash' && loggedSplashView}
       </Animated.View>
