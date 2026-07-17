@@ -46,7 +46,7 @@ export default function App() {
   const fetchUser = useAuthStore((state) => state.fetchUser);
   const token = useAuthStore((state) => state.token);
   const { i18n } = useTranslation();
-  const [fadeKey, setFadeKey] = useState(0);
+  const [animating, setAnimating] = useState(false);
   const prevLang = useRef(i18n.language);
 
   useEffect(() => {
@@ -57,13 +57,14 @@ export default function App() {
   useEffect(() => {
     if (i18n.language !== prevLang.current) {
       prevLang.current = i18n.language;
-      setFadeKey((k) => k + 1);
+      setAnimating(true);
+      setTimeout(() => setAnimating(false), 1000);
     }
   }, [i18n.language]);
 
   return (
     <Router>
-      <div key={fadeKey} className="lang-fade">
+      <div className={animating ? 'lang-fade' : ''}>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
