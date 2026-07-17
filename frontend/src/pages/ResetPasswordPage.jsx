@@ -109,11 +109,14 @@ export default function ResetPasswordPage() {
             </>
           ) : (
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-100 mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-100 mb-4 mx-auto">
                 <CheckCircle2 className="w-8 h-8 text-green-600" />
               </div>
-              <h2 className="text-xl font-bold text-stone-800 mb-2 text-center">
-                <span className="inline-flex items-center justify-center gap-2"><Lock className="w-5 h-5 text-green-600" /> {t('auth.passwordResetSuccess')}</span>
+              <h2 className="text-xl font-bold text-stone-800 mb-2">
+                <span className="flex items-center justify-center gap-2 flex-wrap">
+                  <Lock className="w-5 h-5 text-green-600 shrink-0" />
+                  <span>{t('auth.passwordResetSuccess')}</span>
+                </span>
               </h2>
               <Link to="/login" className="btn-primary inline-block mt-4 py-3 px-6 text-center">{t('auth.backToLoginAfterReset')}</Link>
             </div>
