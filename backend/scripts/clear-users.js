@@ -20,6 +20,7 @@ async function clearUsers() {
     await db.query('DELETE FROM menu_items');
     await db.query('DELETE FROM menus');
     await db.query('DELETE FROM email_verifications');
+    await db.query('DELETE FROM password_resets');
     await db.query('DELETE FROM member_addresses');
     await db.query('DELETE FROM member_profiles');
     await db.query('DELETE FROM cook_profiles');
