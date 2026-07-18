@@ -83,6 +83,7 @@ const translateError = (msg, lng) => {
     'Invalid credentials': { 'es-MX': 'Correo o contraseña incorrectos', en: 'Invalid email or password' },
     'Invalid value': { 'es-MX': 'Valor inválido', en: 'Invalid value' },
     'Please verify your email before logging in. Check your inbox.': { 'es-MX': 'Verifica tu correo antes de iniciar sesión', en: 'Please verify your email before logging in' },
+    'Email or username already registered': { 'es-MX': 'El correo o usuario ya está registrado', en: 'Email or username already registered' },
     'Verification failed. The link may have expired.': { 'es-MX': 'Verificación fallida. El enlace puede haber expirado.', en: 'Verification failed. The link may have expired.' },
     'Passwords do not match': { 'es-MX': 'Las contraseñas no coinciden', en: 'Passwords do not match' },
     'Password must be at least 6 characters': { 'es-MX': 'La contraseña debe tener al menos 6 caracteres', en: 'Password must be at least 6 characters' },
@@ -354,7 +355,7 @@ export default function App() {
       const data = await api('/menus');
       setMenus(data.menus || []);
     } catch (e) {
-      setError(e.message);
+      setError(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -368,7 +369,7 @@ export default function App() {
       const data = await api('/orders/my', { token });
       setOrders(data.orders || []);
     } catch (e) {
-      setError(e.message);
+      setError(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -379,7 +380,7 @@ export default function App() {
     try {
       const data = await api('/orders/cook', { token });
       setCookOrders(data.orders || []);
-    } catch (e) { setError(e.message); }
+    } catch (e) { setError(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
@@ -398,7 +399,7 @@ export default function App() {
         pendingOrders: allOrders.filter(o => o.status === 'pending').length,
         revenue: allOrders.reduce((s, o) => s + parseFloat(o.total_amount || 0), 0).toFixed(2),
       });
-    } catch (e) { setError(e.message); }
+    } catch (e) { setError(translateError(e.message, lang)); }
   };
 
   const loadMyMenus = async () => {
@@ -406,7 +407,7 @@ export default function App() {
     try {
       const data = await api('/menus/my/menus', { token });
       setMyMenus(data.menus || []);
-    } catch (e) { setError(e.message); }
+    } catch (e) { setError(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
@@ -417,7 +418,7 @@ export default function App() {
       setShowMenuForm(false);
       setMenuForm({ title: '', description: '', menuDate: new Date().toISOString().split('T')[0], orderStartTime: '', orderEndTime: '', pickupAvailable: true, deliveryAvailable: false, pickupLocation: '' });
       loadCookStats();
-    } catch (e) { setError(e.message); }
+    } catch (e) { setError(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
@@ -425,7 +426,7 @@ export default function App() {
     try {
       await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status } });
       loadCookOrders();
-    } catch (e) { setError(e.message); }
+    } catch (e) { setError(translateError(e.message, lang)); }
   };
 
   useEffect(() => {
@@ -448,7 +449,7 @@ export default function App() {
       setDraft((current) => ({ ...current, quantities }));
       setScreen('menu');
     } catch (e) {
-      setError(e.message);
+      setError(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -506,7 +507,7 @@ export default function App() {
       await api('/auth/forgot-password', { method: 'POST', body: { email: forgotEmail.trim() } });
       setMessage(_t('auth.resetLinkSent'));
     } catch (e) {
-      setError(e.message);
+      setError(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -568,7 +569,7 @@ export default function App() {
       setScreen('orders');
       await loadOrders();
     } catch (e) {
-      setError(e.message);
+      setError(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -1227,7 +1228,7 @@ export default function App() {
                     setCookMenuId(null); setMenuStep(1); setMenuItems([]);
                     setMessage(translateError('Menú creado con éxito', lang));
                     loadMyMenus(); loadCookStats();
-                  } catch (e) { setError(e.message); }
+                  } catch (e) { setError(translateError(e.message, lang)); }
                   finally { setLoading(false); }
                 }}>
                   <Text style={styles.primaryText}>{loading ? 'Publicando...' : '📢 Publicar menú'}</Text>
@@ -1255,7 +1256,7 @@ export default function App() {
                 {item.status === 'draft' && (
                   <Pressable style={[styles.primary, { marginTop: 8 }]} onPress={async () => {
                     try { await api(`/menus/${item.id}/publish`, { method: 'PUT', token }); loadMyMenus(); }
-                    catch (e) { setError(e.message); }
+                    catch (e) { setError(translateError(e.message, lang)); }
                   }}>
                     <Text style={styles.primaryText}>📢 Publicar</Text>
                   </Pressable>
