@@ -515,6 +515,40 @@ export default function App() {
 
   const stripe = useStripe();
 
+  const suggestMealPlan = async () => {
+    setLoading(true); setError(""); setMealPlanResult(null);
+    try {
+      const data = await api("/meal-plans/suggest", {
+        method: "POST", token,
+        body: {
+          people: parseInt(mealPlanForm.people || 1),
+          meals: parseInt(mealPlanForm.meals || 1),
+          budget: parseFloat(mealPlanForm.budget || 50),
+          restrictions: mealPlanForm.restrictions.trim() || undefined,
+          preferredCuisines: mealPlanForm.cuisine.trim() || undefined,
+        },
+      });
+      setMealPlanResult(data);
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
+  const orderMealPlan = async () => {
+    if (!mealPlanResult?.suggestions?.length) return;
+    setLoading(true); setError("");
+    try {
+      await api("/meal-plans/order", {
+        method: "POST", token,
+        body: { suggestions: mealPlanResult.suggestions, deliveryType: "pickup" },
+      });
+      setMealPlanResult(null);
+      setMessage(_t("mealPlanner.ordered"));
+      setScreen("orders");
+      await loadOrders();
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
   const placeOrder = async () => {
     const items = (menu?.items || [])
       .map((item) => ({ menuItemId: item.id, quantity: Number(draft.quantities[item.id] || 0) }))
@@ -1282,7 +1316,67 @@ export default function App() {
     </View>
   );
 
-  const loggedSplashView = (
+  
+  const mealPlannerView = (
+    <ScrollView contentContainerStyle={styles.section}>
+      <View style={{ gap: 12 }}>
+        <Text style={styles.sectionTitle}>{_t("mealPlanner.title")}</Text>
+        <Text style={styles.muted}>{_t("mealPlanner.subtitle")}</Text>
+
+        <FloatingField label={_t("mealPlanner.people")} value={mealPlanForm.people} keyboardType="number-pad"
+          onChangeText={(v) => setMealPlanForm((c) => ({ ...c, people: v }))} />
+        <FloatingField label={_t("mealPlanner.meals")} value={mealPlanForm.meals} keyboardType="number-pad"
+          onChangeText={(v) => setMealPlanForm((c) => ({ ...c, meals: v }))} />
+        <FloatingField label={_t("mealPlanner.budget")} value={mealPlanForm.budget} keyboardType="decimal-pad"
+          onChangeText={(v) => setMealPlanForm((c) => ({ ...c, budget: v }))} />
+        <FloatingField label={_t("mealPlanner.restrictions")} value={mealPlanForm.restrictions}
+          onChangeText={(v) => setMealPlanForm((c) => ({ ...c, restrictions: v }))} />
+        <FloatingField label={_t("mealPlanner.cuisine")} value={mealPlanForm.cuisine}
+          onChangeText={(v) => setMealPlanForm((c) => ({ ...c, cuisine: v }))} />
+
+        <Pressable style={styles.primary} onPress={suggestMealPlan}>
+          <Text style={styles.primaryText}>{loading ? _t("mealPlanner.suggesting") : _t("mealPlanner.suggest")}</Text>
+        </Pressable>
+
+        {!!error && <Text style={styles.error}>{error}</Text>}
+        {!!message && <Text style={styles.success}>{message}</Text>}
+
+        {mealPlanResult && (
+          <View style={{ gap: 12, marginTop: 8 }}>
+            <Text style={{ fontWeight: "800", color: colors.text, fontSize: 18 }}>{_t("mealPlanner.planTitle")}</Text>
+            <View style={styles.card}>
+              <Text style={styles.muted}>{_t("mealPlanner.totalCost")}: ${money(mealPlanResult.summary.totalCost)}</Text>
+              <Text style={styles.muted}>{_t("mealPlanner.remaining")}: ${money(mealPlanResult.summary.remaining)}</Text>
+              <Text style={styles.muted}>{mealPlanResult.summary.mealsPlanned} comidas x {mealPlanResult.summary.people} pers.</Text>
+            </View>
+
+            {mealPlanResult.suggestions.length === 0 && (
+              <Text style={styles.helper}>{_t("mealPlanner.noSuggestions")}</Text>
+            )}
+
+            {mealPlanResult.suggestions.map((s, i) => (
+              <View key={i} style={styles.card}>
+                <Text style={styles.cardTitle}>{s.item.name}</Text>
+                <Text style={styles.muted}>👨‍🍳 {s.cookName}</Text>
+                <Text style={styles.muted}>📅 {s.menuDate ? new Date(s.menuDate).toLocaleDateString() : ""}</Text>
+                <Text style={styles.muted}>{s.cuisineType ? s.cuisineType + " •" : ""} ⭐ {s.cookRating || "—"}</Text>
+                <Text style={{ fontWeight: "700", color: colors.text }}>${money(s.item.price)} {_t("mealPlanner.perMeal")} x {s.item.quantity} = ${s.total}</Text>
+                {s.item.dietaryTags ? <Text style={[styles.muted, { fontSize: 12 }]}>🏷️ {s.item.dietaryTags}</Text> : null}
+              </View>
+            ))}
+
+            {mealPlanResult.suggestions.length > 0 && (
+              <Pressable style={styles.primary} onPress={orderMealPlan}>
+                <Text style={styles.primaryText}>{loading ? _t("mealPlanner.ordering") : _t("mealPlanner.orderAll")}</Text>
+              </Pressable>
+            )}
+          </View>
+        )}
+      </View>
+    </ScrollView>
+  );
+
+const loggedSplashView = (
     <ScrollView contentContainerStyle={styles.section}>
       <View style={{ alignItems: 'center', gap: 16, paddingTop: 40 }}>
         <Text style={styles.icon}>🍽️</Text>
@@ -1362,6 +1456,7 @@ export default function App() {
           <>
             <DrawerItem icon="cart" label={_t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); closeDrawer(); }} />
             <DrawerItem icon="receipt" label={_t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); closeDrawer(); }} />
+            <DrawerItem icon="calendar" label={_t('mealPlanner.title')} active={screen === 'mealPlanner'} onPress={() => { setScreen('mealPlanner'); closeDrawer(); }} />
           </>
         )}
         <DrawerItem icon="person" label={_t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
@@ -1379,6 +1474,7 @@ export default function App() {
       {!!error && <Text style={styles.error}>{error}</Text>}
 
       {screen === 'market' && marketView}
+      {screen === 'mealPlanner' && mealPlannerView}
       {screen === 'orders' && ordersView}
       {screen === 'profile' && profileView}
       {screen === 'menu' && menuView}
