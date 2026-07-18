@@ -10,6 +10,7 @@ const userRoutes = require('./routes/users');
 const menuRoutes = require('./routes/menus');
 const orderRoutes = require('./routes/orders');
 const paymentRoutes = require('./routes/payments');
+const mealPlanRoutes = require('./routes/mealPlans');
 const notificationRoutes = require('./routes/notifications');
 const { errorHandler } = require('./middleware/error');
 
@@ -37,6 +38,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/menus', menuRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
+app.use('/api/meal-plans', mealPlanRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 app.use((req, res) => {
