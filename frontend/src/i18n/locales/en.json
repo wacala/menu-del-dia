@@ -27,6 +27,12 @@
     "backToLoginAfterReset": "Back to login"
   },
   "profile": { "logout": "Logout" },
+  "verification": {
+    "verifyingEmail": "Verifying your email...",
+    "verificationSuccess": "Email verified!",
+    "verificationFailed": "Verification failed",
+    "verificationExpired": "The verification link is invalid or has expired."
+  },
   "marketplace": {
     "title": "Marketplace", "myOrders": "My Orders", "logout": "Logout",
     "date": "Date", "search": "Search", "searchPlaceholder": "Search menus, cooks, or items...",

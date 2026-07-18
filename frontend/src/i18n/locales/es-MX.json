@@ -27,6 +27,12 @@
     "backToLoginAfterReset": "Volver a inicio de sesión"
   },
   "profile": { "logout": "Cerrar sesión" },
+  "verification": {
+    "verifyingEmail": "Verificando tu correo...",
+    "verificationSuccess": "¡Correo verificado!",
+    "verificationFailed": "Verificación fallida",
+    "verificationExpired": "El enlace de verificación es inválido o ha expirado."
+  },
   "marketplace": {
     "title": "Marketplace", "myOrders": "Mis pedidos", "logout": "Salir",
     "date": "Fecha", "search": "Buscar", "searchPlaceholder": "Buscar menús, cocineros o platillos...",
