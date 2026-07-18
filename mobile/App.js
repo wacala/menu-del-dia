@@ -341,7 +341,10 @@ export default function App() {
     setMenus([]);
     setMenu(null);
     setOrders([]);
-    setScreen('market');
+    setError('');
+    setMessage('');
+    setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' });
+    setScreen('splash');
   };
 
   const loadMenus = async () => {
