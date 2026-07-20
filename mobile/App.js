@@ -96,6 +96,8 @@ const translateError = (msg, lng) => {
     'Could not create order': { 'es-MX': 'No se pudo crear el pedido', en: 'Could not create order' },
     'Pago cancelado': { 'es-MX': 'Pago cancelado', en: 'Payment cancelled' },
     'Order placed successfully.': { 'es-MX': 'Pedido realizado con éxito', en: 'Order placed successfully' },
+    'Invalid token': { 'es-MX': 'Sesión expirada. Inicia sesión de nuevo.', en: 'Session expired. Please log in again.' },
+    'No token provided': { 'es-MX': 'Sesión no iniciada', en: 'Not authenticated' },
     'Menú creado con éxito': { 'es-MX': 'Menú creado con éxito', en: 'Menu created successfully' },
     'El título es obligatorio': { 'es-MX': 'El título es obligatorio', en: 'Title is required' },
     'Agrega al menos un platillo con nombre': { 'es-MX': 'Agrega al menos un platillo con nombre', en: 'Add at least one item with a name' },
@@ -131,6 +133,10 @@ async function api(path, { method = 'GET', token, body } = {}) {
       || `Request failed (${response.status})`;
     const err = new Error(errMsg);
     err.data = data;
+    err.status = response.status;
+    if (response.status === 401) {
+      await AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
+    }
     throw err;
   }
 
@@ -263,6 +269,12 @@ export default function App() {
   };
   const slideAnim = useRef(new Animated.Value(-280)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    if (!error) return;
+    const t = setTimeout(() => setError(''), 5000);
+    return () => clearTimeout(t);
+  }, [error]);
   const _t = (key) => t(key, lang);
 
   useEffect(() => {
