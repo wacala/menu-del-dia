@@ -59,6 +59,8 @@ const translations = {
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
+    mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
+    search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortRating: 'Mejor', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
     profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración' },
     cook: { dashboard: 'Panel', orders: 'Pedidos', menus: 'Menús', profile: 'Perfil', noOrders: 'Sin pedidos aún', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:' }
   },
@@ -69,6 +71,8 @@ const translations = {
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
     menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
+    mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
+    search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortRating: 'Best', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
     profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings' },
     cook: { dashboard: 'Dashboard', orders: 'Orders', menus: 'Menus', profile: 'Profile', noOrders: 'No orders yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:' }
   }
@@ -918,7 +922,7 @@ export default function App() {
           <Ionicons name="search" size={18} color={colors.muted} />
           <TextInput
             style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 8, color: colors.text, fontSize: 15 }}
-            placeholder="Buscar menús, platillos..."
+            placeholder={_t('search.placeholder')}
             placeholderTextColor={colors.muted}
             value={searchText}
             onChangeText={setSearchText}
@@ -938,7 +942,7 @@ export default function App() {
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 6 }}>
         {cuisines.map((c) => (
           <Pressable key={c} style={[styles.chip, cuisineFilter === c && styles.chipActive]} onPress={() => setCuisineFilter(c)}>
-            <Text style={[styles.chipText, cuisineFilter === c && styles.chipTextActive]}>{c === 'all' ? 'Todas' : c}</Text>
+            <Text style={[styles.chipText, cuisineFilter === c && styles.chipTextActive]}>{c === 'all' ? _t('search.all') : c}</Text>
           </Pressable>
         ))}
       </ScrollView>
@@ -948,13 +952,13 @@ export default function App() {
         {['all', 'pickup', 'delivery'].map((d) => (
           <Pressable key={d} style={[styles.chip, filterDelivery === d && styles.chipActive]} onPress={() => setFilterDelivery(d)}>
             <Text style={[styles.chipText, filterDelivery === d && styles.chipTextActive]}>
-              {d === 'all' ? 'Todos' : d === 'pickup' ? '📦 Recoger' : '🚚 Delivery'}
+              {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
             </Text>
           </Pressable>
         ))}
         <Pressable style={[styles.chip]} onPress={() => setSortBy((s) => ({ rating: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'rating' }[s] || 'rating'))}>
           <Text style={styles.chipText}>
-            {sortBy === 'rating' ? '⭐ Mejor' : sortBy === 'price_asc' ? '💰 Menor' : sortBy === 'price_desc' ? '💰 Mayor' : '🔤 A-Z'}
+            {sortBy === 'rating' ? _t('search.sortRating') : sortBy === 'price_asc' ? _t('search.sortPriceAsc') : sortBy === 'price_desc' ? _t('search.sortPriceDesc') : _t('search.sortName')}
           </Text>
         </Pressable>
       </View>
@@ -992,7 +996,7 @@ export default function App() {
                 {item.delivery_available ? <Text style={[styles.muted, { fontSize: 12 }]}><Ionicons name="car-outline" size={13} color={colors.muted} /> Delivery</Text> : null}
                 {(item.items || []).length > 0 ? (
                   <Text style={[styles.muted, { fontSize: 12 }]}>
-                    <Ionicons name="restaurant-outline" size={13} color={colors.muted} /> {item.items.length} platillo{item.items.length !== 1 ? 's' : ''} • ${Math.min(...item.items.map((i) => parseFloat(i.price || 0))).toFixed(2)}+
+                    <Ionicons name="restaurant-outline" size={13} color={colors.muted} /> {item.items.length === 1 ? _t('search.items').replace('{{count}}', item.items.length) : _t('search.items_plural').replace('{{count}}', item.items.length)} • ${Math.min(...item.items.map((i) => parseFloat(i.price || 0))).toFixed(2)}+
                   </Text>
                 ) : null}
               </View>
