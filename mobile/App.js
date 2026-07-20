@@ -938,29 +938,41 @@ export default function App() {
         </Pressable>
       </View>
 
-      {/* Filter chips row */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 8 }} contentContainerStyle={{ gap: 6 }}>
-        {cuisines.map((c) => (
-          <Pressable key={c} style={[styles.chip, cuisineFilter === c && styles.chipActive]} onPress={() => setCuisineFilter(c)}>
-            <Text style={[styles.chipText, cuisineFilter === c && styles.chipTextActive]}>{c === 'all' ? _t('search.all') : c}</Text>
-          </Pressable>
-        ))}
-      </ScrollView>
+      {/* Filters section */}
+      <View style={{ marginBottom: 8, gap: 8 }}>
+        {/* Cuisine filters */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+          {cuisines.map((c) => {
+            const active = cuisineFilter === c;
+            return (
+              <Pressable key={c} onPress={() => setCuisineFilter(c)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
+                <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>{c === 'all' ? _t('search.all') : c}</Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
 
-      {/* Sort & delivery filter row */}
-      <View style={{ flexDirection: 'row', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
-        {['all', 'pickup', 'delivery'].map((d) => (
-          <Pressable key={d} style={[styles.chip, filterDelivery === d && styles.chipActive]} onPress={() => setFilterDelivery(d)}>
-            <Text style={[styles.chipText, filterDelivery === d && styles.chipTextActive]}>
-              {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
-            </Text>
+        {/* Delivery & Sort row */}
+        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          {['all', 'pickup', 'delivery'].map((d) => {
+            const active = filterDelivery === d;
+            return (
+              <Pressable key={d} onPress={() => setFilterDelivery(d)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
+                <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
+                  {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
+                </Text>
+              </Pressable>
+            );
+          })}
+          <View style={{ flex: 1 }} />
+          <Pressable onPress={() => setSortBy((s) => ({ rating: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'rating' }[s] || 'rating'))}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
+            <Ionicons name="swap-vertical" size={16} color={colors.muted} />
+            <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'rating' ? 'Rating' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
           </Pressable>
-        ))}
-        <Pressable style={[styles.chip]} onPress={() => setSortBy((s) => ({ rating: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'rating' }[s] || 'rating'))}>
-          <Text style={styles.chipText}>
-            {sortBy === 'rating' ? _t('search.sortRating') : sortBy === 'price_asc' ? _t('search.sortPriceAsc') : sortBy === 'price_desc' ? _t('search.sortPriceDesc') : _t('search.sortName')}
-          </Text>
-        </Pressable>
+        </View>
       </View>
 
       {loading ? (
