@@ -677,6 +677,22 @@ export default function App() {
     return ['all', ...Array.from(set)];
   }, [menus]);
 
+  const searchSuggestions = useMemo(() => {
+    if (!searchText.trim()) return [];
+    const q = searchText.toLowerCase().trim();
+    const words = new Set();
+    menus.forEach((m) => {
+      if (m.title?.toLowerCase().includes(q)) words.add(m.title);
+      if (m.cuisine_type?.toLowerCase().includes(q)) words.add(m.cuisine_type);
+      if (m.cook_first_name?.toLowerCase().includes(q)) words.add(m.cook_first_name);
+      if (m.cook_last_name?.toLowerCase().includes(q)) words.add(m.cook_last_name);
+      (m.items || []).forEach((item) => {
+        if (item.name?.toLowerCase().includes(q)) words.add(item.name);
+      });
+    });
+    return Array.from(words).slice(0, 6);
+  }, [menus, searchText]);
+
   if (!ready) {
     return (
       <View style={styles.center}>
@@ -937,6 +953,19 @@ export default function App() {
           <Ionicons name="refresh" size={20} color={colors.primary} />
         </Pressable>
       </View>
+
+      {/* Predictive suggestions */}
+      {searchSuggestions.length > 0 && (
+        <View style={{ marginBottom: 8, backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, overflow: 'hidden' }}>
+          {searchSuggestions.map((s, i) => (
+            <Pressable key={s} onPress={() => { setSearchText(s); }}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderBottomWidth: i < searchSuggestions.length - 1 ? 1 : 0, borderBottomColor: colors.border }}>
+              <Ionicons name="search-outline" size={16} color={colors.muted} />
+              <Text style={{ color: colors.text, fontSize: 14 }}>{s}</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
 
       {/* Filters section */}
       <View style={{ marginBottom: 8, gap: 8 }}>
