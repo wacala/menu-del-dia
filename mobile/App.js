@@ -980,7 +980,7 @@ export default function App() {
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={styles.muted}>👨‍🍳 {item.cook_first_name} {item.cook_last_name}{item.cook_rating ? `  ⭐ ${item.cook_rating}` : ''}</Text>
+                  <Text style={styles.muted}><Ionicons name="person" size={14} color={colors.muted} /> {item.cook_first_name} {item.cook_last_name}{item.cook_rating ? <Text style={{ color: '#f59e0b' }}> ☆ {item.cook_rating}</Text> : null}</Text>
                 </View>
                 {item.cuisine_type ? (
                   <Text style={[styles.muted, { fontSize: 11, backgroundColor: colors.primaryLight, paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, overflow: 'hidden' }]}>{item.cuisine_type}</Text>
@@ -988,11 +988,11 @@ export default function App() {
               </View>
               <Text style={styles.body} numberOfLines={2}>{item.description || ''}</Text>
               <View style={{ flexDirection: 'row', gap: 8, marginTop: 4, flexWrap: 'wrap' }}>
-                {item.pickup_available ? <Text style={[styles.muted, { fontSize: 12 }]}>📦 Recoger</Text> : null}
-                {item.delivery_available ? <Text style={[styles.muted, { fontSize: 12 }]}>🚚 Delivery</Text> : null}
+                {item.pickup_available ? <Text style={[styles.muted, { fontSize: 12 }]}><Ionicons name="bag-handle-outline" size={13} color={colors.muted} /> Recoger</Text> : null}
+                {item.delivery_available ? <Text style={[styles.muted, { fontSize: 12 }]}><Ionicons name="car-outline" size={13} color={colors.muted} /> Delivery</Text> : null}
                 {(item.items || []).length > 0 ? (
                   <Text style={[styles.muted, { fontSize: 12 }]}>
-                    🍽️ {item.items.length} platillo{item.items.length !== 1 ? 's' : ''} • ${Math.min(...item.items.map((i) => parseFloat(i.price || 0))).toFixed(2)}+
+                    <Ionicons name="restaurant-outline" size={13} color={colors.muted} /> {item.items.length} platillo{item.items.length !== 1 ? 's' : ''} • ${Math.min(...item.items.map((i) => parseFloat(i.price || 0))).toFixed(2)}+
                   </Text>
                 ) : null}
               </View>
