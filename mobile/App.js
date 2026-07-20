@@ -687,7 +687,7 @@ export default function App() {
         </View>
         <Text style={styles.sectionTitle}>{_t('auth.checkEmail')}</Text>
         <Text style={styles.body}>{_t('auth.verificationSent')}</Text>
-        <Text style={[styles.body, { fontWeight: '800' }]}>{pendingVerification}</Text>
+        <Text style={[styles.body, { fontWeight: '800', textAlign: 'center' }]}>{pendingVerification}</Text>
         <Text style={styles.muted}>{_t('auth.verificationInstructions')}</Text>
         <Pressable style={styles.secondary} onPress={() => { setPendingVerification(null); setAuthMode('login'); setError(''); }}>
           <Text style={styles.secondaryText}>{_t('auth.backToLogin')}</Text>
