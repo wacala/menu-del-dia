@@ -50,15 +50,15 @@ export default function MemberOrderDetailPage() {
     pending: '<Hourglass className="w-4 h-4 " />',
     confirmed: '<Check className="w-4 h-4 " />',
     ready: '🟢',
-    delivered: '<PartyPopper className="w-4 h-4 " />',
+    delivered: '🎉',
     cancelled: '<X className="w-4 h-4 " />',
   };
 
   const statusMessages = {
     pending: 'Your order has been placed. Waiting for cook confirmation.',
     confirmed: 'Cook has confirmed your order! It\'s being prepared.',
-    ready: '<PartyPopper className="w-4 h-4 " /> Your order is ready for pickup!',
-    delivered: 'Order delivered! Thank you for your purchase.',
+    ready: '🎉 Your order is ready for pickup!',
+    delivered: '🎉',
     cancelled: 'This order has been cancelled.',
   };
 

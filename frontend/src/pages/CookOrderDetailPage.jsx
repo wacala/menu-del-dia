@@ -61,7 +61,7 @@ export default function CookOrderDetailPage() {
     pending: '<Hourglass className="w-4 h-4 " />',
     confirmed: '<Check className="w-4 h-4 " />',
     ready: '🟢',
-    delivered: '<PartyPopper className="w-4 h-4 " />',
+    delivered: '🎉',
     cancelled: '<X className="w-4 h-4 " />',
   };
 
@@ -69,7 +69,7 @@ export default function CookOrderDetailPage() {
     pending: ['confirmed', 'cancelled'],
     confirmed: ['ready', 'cancelled'],
     ready: ['delivered', 'cancelled'],
-    delivered: [],
+    delivered: '🎉',
     cancelled: [],
   };
 
