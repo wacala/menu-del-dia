@@ -932,6 +932,14 @@ export default function App() {
 
   const marketView = (
     <View style={styles.section}>
+      {/* Screen title */}
+      <View style={styles.headerRow}>
+        <Text style={styles.sectionTitle}>{_t('market.title')}</Text>
+        <Pressable onPress={loadMenus}>
+          <Ionicons name="refresh" size={20} color={colors.primary} />
+        </Pressable>
+      </View>
+
       {/* Search bar */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 }}>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 12 }}>
@@ -949,9 +957,6 @@ export default function App() {
             </Pressable>
           ) : null}
         </View>
-        <Pressable onPress={loadMenus} style={{ padding: 8 }}>
-          <Ionicons name="refresh" size={20} color={colors.primary} />
-        </Pressable>
       </View>
 
       {/* Predictive suggestions */}
