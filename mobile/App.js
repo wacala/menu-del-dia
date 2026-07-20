@@ -322,6 +322,10 @@ export default function App() {
 
   const changeLang = async (l) => {
     setLang(l);
+    setError('');
+    setMessage('');
+    setMealPlanResult(null);
+    setMenu(null);
     AsyncStorage.setItem(LANG_KEY, l);
     Animated.sequence([
       Animated.timing(fadeAnim, { toValue: 0, duration: 250, useNativeDriver: false }),
