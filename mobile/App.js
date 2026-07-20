@@ -251,7 +251,7 @@ export default function App() {
   const [searchText, setSearchText] = useState('');
   const [filterDelivery, setFilterDelivery] = useState('all');
   const [sortBy, setSortBy] = useState('rating');
-  const [cuisineFilter, setCuisineFilter] = useState('all');
+  const [cuisineFilter, setCuisineFilter] = useState([]);
   const [mealPlanForm, setMealPlanForm] = useState({ people: '2', meals: '3', budget: '50', restrictions: '', cuisine: '' });
   const [mealPlanResult, setMealPlanResult] = useState(null);
   // Cook menu expert system
@@ -648,9 +648,9 @@ export default function App() {
       );
     }
 
-    // Cuisine filter
-    if (cuisineFilter !== 'all') {
-      filtered = filtered.filter((m) => m.cuisine_type === cuisineFilter);
+    // Cuisine filter (multi-select)
+    if (cuisineFilter.length > 0) {
+      filtered = filtered.filter((m) => cuisineFilter.includes(m.cuisine_type));
     }
 
     // Delivery type filter
@@ -686,7 +686,7 @@ export default function App() {
   const cuisines = useMemo(() => {
     const set = new Set();
     menus.forEach((m) => { if (m.cuisine_type) set.add(m.cuisine_type); });
-    return ['all', ...Array.from(set)];
+    return Array.from(set);
   }, [menus]);
 
   const searchSuggestions = useMemo(() => {
@@ -986,14 +986,20 @@ export default function App() {
 
       {/* Filters section */}
       <View style={{ marginBottom: 8, gap: 8 }}>
-        {/* Cuisine filters */}
+        {/* Cuisine filters — independent checkboxes */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-          {cuisines.map((c) => {
-            const active = cuisineFilter === c;
+          {cuisines.filter((c) => c !== 'all').map((c) => {
+            const active = cuisineFilter.includes(c);
             return (
-              <Pressable key={c} onPress={() => setCuisineFilter(c)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+              <Pressable key={c} onPress={() => {
+                setCuisineFilter((prev) =>
+                  active ? prev.filter((x) => x !== c) : [...prev, c]
+                );
+              }} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                 <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
-                <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>{c === 'all' ? _t('search.all') : c}</Text>
+                <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
+                  {c.charAt(0).toUpperCase() + c.slice(1)}
+                </Text>
               </Pressable>
             );
           })}
@@ -1031,7 +1037,7 @@ export default function App() {
             <View style={{ paddingVertical: 40, alignItems: 'center' }}>
               <Ionicons name="search-outline" size={48} color={colors.border} />
               <Text style={[styles.helper, { marginTop: 12 }]}>
-                {searchText || cuisineFilter !== 'all' || filterDelivery !== 'all'
+                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all'
                   ? translateError('No hay resultados con esos filtros', lang)
                   : _t('market.noMenus')}
               </Text>
