@@ -242,6 +242,8 @@ export default function App() {
   const [filterDelivery, setFilterDelivery] = useState('all');
   const [sortBy, setSortBy] = useState('rating');
   const [cuisineFilter, setCuisineFilter] = useState('all');
+  const [mealPlanForm, setMealPlanForm] = useState({ people: '2', meals: '3', budget: '50', restrictions: '', cuisine: '' });
+  const [mealPlanResult, setMealPlanResult] = useState(null);
   // Cook menu expert system
   const [myMenus, setMyMenus] = useState([]);
   const [menuStep, setMenuStep] = useState(1);
