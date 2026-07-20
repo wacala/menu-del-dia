@@ -42,11 +42,11 @@ export default function CookOrdersPage() {
   };
 
   const statusEmojis = {
-    pending: '<Hourglass className="w-4 h-4 " />',
-    confirmed: '<Check className="w-4 h-4 " />',
+    pending: '⏳',
+    confirmed: '✅',
     ready: '🟢',
     delivered: '🎉',
-    cancelled: '<X className="w-4 h-4 " />',
+    cancelled: '❌',
   };
 
   const pendingCount = orders.filter((o) => o.status === 'pending').length;

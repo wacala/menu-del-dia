@@ -47,11 +47,11 @@ export default function MemberOrderDetailPage() {
   };
 
   const statusEmojis = {
-    pending: '<Hourglass className="w-4 h-4 " />',
-    confirmed: '<Check className="w-4 h-4 " />',
+    pending: '⏳',
+    confirmed: '✅',
     ready: '🟢',
     delivered: '🎉',
-    cancelled: '<X className="w-4 h-4 " />',
+    cancelled: '❌',
   };
 
   const statusMessages = {
