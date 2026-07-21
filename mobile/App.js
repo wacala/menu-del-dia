@@ -263,6 +263,7 @@ export default function App() {
   const [menuItems, setMenuItems] = useState([]);
   const [reviewing, setReviewing] = useState(false);
   const [cookMenuId, setCookMenuId] = useState(null);
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const closeDrawer = () => {
     Animated.timing(slideAnim, {
       toValue: -280,
@@ -462,6 +463,7 @@ export default function App() {
   }, [ready, token]);
 
   const openMenu = async (id) => {
+    setCarouselIndex(0);
     setLoading(true);
     setError('');
     try {
@@ -1142,8 +1144,13 @@ export default function App() {
             showsHorizontalScrollIndicator={false}
             data={menu.items.filter((i) => i.image_url || true)}
             keyExtractor={(item) => String(item.id)}
-            snapToInterval={220}
+            snapToInterval={210}
             decelerationRate="fast"
+            onScroll={(e) => {
+              const idx = Math.round(e.nativeEvent.contentOffset.x / 210);
+              setCarouselIndex(idx);
+            }}
+            scrollEventThrottle={16}
             renderItem={({ item }) => (
               <View style={{ width: 200, height: 140, borderRadius: 16, marginRight: 10, backgroundColor: colors.coffeeLight || '#f5ebe0', overflow: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
                 {item.image_url ? (
@@ -1160,6 +1167,15 @@ export default function App() {
               </View>
             )}
           />
+          {/* Page dots */}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, marginTop: 8 }}>
+            {menu.items.filter((i) => i.image_url || true).map((_, i) => (
+              <View key={i} style={{
+                width: carouselIndex === i ? 20 : 8, height: 8, borderRadius: 4,
+                backgroundColor: carouselIndex === i ? colors.primary : colors.border,
+              }} />
+            ))}
+          </View>
         </View>
       )}
 
