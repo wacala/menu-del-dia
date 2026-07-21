@@ -63,7 +63,7 @@ const translations = {
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
-    search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortRating: 'Mejor', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
+    search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
     profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración' },
     cook: { dashboard: 'Panel', orders: 'Pedidos', menus: 'Menús', profile: 'Perfil', noOrders: 'Sin pedidos aún', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:' }
   },
@@ -75,7 +75,7 @@ const translations = {
     menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
-    search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortRating: 'Best', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
+    search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
     profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings' },
     cook: { dashboard: 'Dashboard', orders: 'Orders', menus: 'Menus', profile: 'Profile', noOrders: 'No orders yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:' }
   }
@@ -253,7 +253,7 @@ export default function App() {
   // Smart search
   const [searchText, setSearchText] = useState('');
   const [filterDelivery, setFilterDelivery] = useState('all');
-  const [sortBy, setSortBy] = useState('rating');
+  const [sortBy, setSortBy] = useState('balanced');
   const [cuisineFilter, setCuisineFilter] = useState([]);
   const [mealPlanForm, setMealPlanForm] = useState({ people: '2', meals: '3', budget: '50', restrictions: '', cuisine: '' });
   const [mealPlanResult, setMealPlanResult] = useState(null);
@@ -681,8 +681,38 @@ export default function App() {
     } else if (sortBy === 'name') {
       filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
     } else {
-      // Default: by rating desc
-      filtered.sort((a, b) => (b.cook_rating || 0) - (a.cook_rating || 0));
+      // "balanced" (default) — balance between price fairness, quality and community
+      const prices = filtered.flatMap((m) => (m.items || []).map((i) => parseFloat(i.price || 0)));
+      const maxPrice = Math.max(...prices, 1);
+      const cuisinesCount = {};
+      filtered.forEach((m) => { const c = m.cuisine_type || 'otra'; cuisinesCount[c] = (cuisinesCount[c] || 0) + 1; });
+      const totalMenus = filtered.length || 1;
+
+      filtered.sort((a, b) => {
+        const aPrice = Math.min(...(a.items || []).map((i) => parseFloat(i.price || 0)));
+        const bPrice = Math.min(...(b.items || []).map((i) => parseFloat(i.price || 0)));
+        const aRating = parseFloat(a.cook_rating || 0);
+        const bRating = parseFloat(b.cook_rating || 0);
+
+        // Price score (inverted: lower price = higher score), normalized 0-1
+        const aPriceScore = 1 - (aPrice / maxPrice);
+        const bPriceScore = 1 - (bPrice / maxPrice);
+
+        // Rating score, normalized 0-1
+        const aRatingScore = aRating / 5;
+        const bRatingScore = bRating / 5;
+
+        // Diversity score: prefer cuisines that appear less frequently
+        const aCuisine = a.cuisine_type || 'otra';
+        const bCuisine = b.cuisine_type || 'otra';
+        const aDivScore = 1 - ((cuisinesCount[aCuisine] || 1) / totalMenus);
+        const bDivScore = 1 - ((cuisinesCount[bCuisine] || 1) / totalMenus);
+
+        // Balanced total: 40% price, 35% rating, 25% diversity
+        const aTotal = aPriceScore * 0.40 + aRatingScore * 0.35 + aDivScore * 0.25;
+        const bTotal = bPriceScore * 0.40 + bRatingScore * 0.35 + bDivScore * 0.25;
+        return bTotal - aTotal;
+      });
     }
 
     return filtered;
@@ -1024,10 +1054,10 @@ export default function App() {
             );
           })}
           <View style={{ flex: 1 }} />
-          <Pressable onPress={() => setSortBy((s) => ({ rating: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'rating' }[s] || 'rating'))}
+          <Pressable onPress={() => setSortBy((s) => ({ balanced: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'balanced' }[s] || 'balanced'))}
             style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
             <Ionicons name="swap-vertical" size={16} color={colors.muted} />
-            <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'rating' ? 'Rating' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
+            <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'balanced' ? 'Balanced' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
           </Pressable>
         </View>
       </View>
