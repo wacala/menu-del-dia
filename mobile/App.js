@@ -255,6 +255,9 @@ export default function App() {
   const [filterDelivery, setFilterDelivery] = useState('all');
   const [sortBy, setSortBy] = useState('balanced');
   const [cuisineFilter, setCuisineFilter] = useState([]);
+  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState('');
+  const [minRating, setMinRating] = useState(0);
   const [mealPlanForm, setMealPlanForm] = useState({ people: '2', meals: '3', budget: '50', restrictions: '', cuisine: '' });
   const [mealPlanResult, setMealPlanResult] = useState(null);
   // Cook menu expert system
@@ -665,6 +668,25 @@ export default function App() {
       filtered = filtered.filter((m) => m.delivery_available);
     }
 
+    // Price range filter
+    if (minPrice) {
+      const min = parseFloat(minPrice);
+      filtered = filtered.filter((m) =>
+        (m.items || []).some((i) => parseFloat(i.price || 0) >= min),
+      );
+    }
+    if (maxPrice) {
+      const max = parseFloat(maxPrice);
+      filtered = filtered.filter((m) =>
+        (m.items || []).some((i) => parseFloat(i.price || 0) <= max),
+      );
+    }
+
+    // Minimum rating filter
+    if (minRating > 0) {
+      filtered = filtered.filter((m) => parseFloat(m.cook_rating || 0) >= minRating);
+    }
+
     // Sort
     if (sortBy === 'price_asc') {
       filtered.sort((a, b) => {
@@ -716,7 +738,7 @@ export default function App() {
     }
 
     return filtered;
-  }, [menus, searchText, cuisineFilter, filterDelivery, sortBy]);
+  }, [menus, searchText, cuisineFilter, filterDelivery, sortBy, minPrice, maxPrice, minRating]);
 
   const cuisines = useMemo(() => {
     const set = new Set();
@@ -1040,6 +1062,23 @@ export default function App() {
           })}
         </ScrollView>
 
+        {/* Price range & rating filters */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
+            <Ionicons name="pricetag-outline" size={14} color={colors.muted} />
+            <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ min" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
+            <Text style={{ color: colors.muted }}>—</Text>
+            <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ max" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
+          </View>
+          {[0, 3, 3.5, 4, 4.5].map((r) => (
+            <Pressable key={r} onPress={() => setMinRating(minRating === r ? 0 : r)}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 8, paddingVertical: 6, borderRadius: 10, backgroundColor: minRating === r ? colors.primaryLight : colors.card, borderWidth: 1, borderColor: minRating === r ? colors.primary : colors.border }}>
+              <Text style={{ fontSize: 14, color: r === 0 ? colors.muted : '#d97706' }}>{r === 0 ? 'Todas' : '★'}</Text>
+              {r > 0 ? <Text style={{ fontSize: 13, color: colors.text, fontWeight: '600' }}>{r}</Text> : null}
+            </Pressable>
+          ))}
+        </ScrollView>
+
         {/* Delivery & Sort row */}
         <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           {['all', 'pickup', 'delivery'].map((d) => {
@@ -1072,7 +1111,7 @@ export default function App() {
             <View style={{ paddingVertical: 40, alignItems: 'center' }}>
               <Ionicons name="search-outline" size={48} color={colors.border} />
               <Text style={[styles.helper, { marginTop: 12 }]}>
-                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all'
+                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice || minRating > 0
                   ? translateError('No hay resultados con esos filtros', lang)
                   : _t('market.noMenus')}
               </Text>
