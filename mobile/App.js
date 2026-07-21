@@ -268,6 +268,7 @@ export default function App() {
   const [cookMenuId, setCookMenuId] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
+  const [fusionLevel, setFusionLevel] = useState(50);
   const closeDrawer = () => {
     Animated.timing(slideAnim, {
       toValue: -280,
@@ -688,6 +689,23 @@ export default function App() {
       filtered = filtered.filter((m) => parseFloat(m.cook_rating || 0) >= minRating);
     }
 
+    // Traditional ↔ Fusion ramp filter
+    if (fusionLevel !== 50) {
+      const cuisineScore = {
+        mexicana: 10, casera: 10, tradicional: 10,
+        parrilla: 30, mariscos: 35,
+        repostería: 50, postres: 50,
+        italiana: 70, mediterránea: 70,
+        vegana: 80, saludable: 80,
+        asiática: 90, oriental: 90, japonesa: 90, china: 90,
+      };
+      filtered = filtered.filter((m) => {
+        const score = cuisineScore[m.cuisine_type?.toLowerCase()] || 50;
+        if (fusionLevel < 50) return score <= 50 + (50 - fusionLevel) * 0.8;
+        return score >= 50 - (fusionLevel - 50) * 0.8;
+      });
+    }
+
     // Sort
     if (sortBy === 'price_asc') {
       filtered.sort((a, b) => {
@@ -741,7 +759,7 @@ export default function App() {
     }
 
     return filtered;
-  }, [menus, searchText, cuisineFilter, filterDelivery, sortBy, minPrice, maxPrice, minRating]);
+  }, [menus, searchText, cuisineFilter, filterDelivery, sortBy, minPrice, maxPrice, minRating, fusionLevel]);
 
   const cuisines = useMemo(() => {
     const set = new Set();
@@ -1049,7 +1067,7 @@ export default function App() {
         <Ionicons name="funnel-outline" size={18} color={colors.primary} />
         <Text style={{ fontSize: 14, color: colors.primary, fontWeight: '600' }}>{showFilters ? 'Ocultar filtros' : 'Filtros'}</Text>
         {(() => {
-          const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0);
+          const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0);
           return count > 0 ? <View style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 7, paddingVertical: 2 }}><Text style={{ color: '#fff', fontSize: 11, fontWeight: '800' }}>{count}</Text></View> : null;
         })()}
       </Pressable>
@@ -1086,6 +1104,27 @@ export default function App() {
             </ScrollView>
           </View>
 
+          {/* Tradicional ↔ Fusión */}
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tradicional ← → Fusión</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+              <Text style={{ fontSize: 11, color: colors.muted }}>Tradicional</Text>
+              <View style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: colors.border, position: 'relative' }}>
+                <View style={{ position: 'absolute', left: `${fusionLevel}%`, marginLeft: -12, top: -7 }}>
+                  <Pressable onPress={() => setFusionLevel(Math.max(0, fusionLevel - 10))} hitSlop={8}>
+                    <Ionicons name="remove" size={16} color={colors.muted} />
+                  </Pressable>
+                </View>
+                <View style={{ width: `${fusionLevel}%`, height: 6, borderRadius: 3, backgroundColor: colors.primary }} />
+              </View>
+              <Text style={{ fontSize: 11, color: colors.muted }}>Fusión</Text>
+              <Pressable onPress={() => setFusionLevel(Math.min(100, fusionLevel + 10))} hitSlop={8}>
+                <Ionicons name="add" size={16} color={colors.muted} />
+              </Pressable>
+              <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary, minWidth: 24, textAlign: 'center' }}>{fusionLevel}%</Text>
+            </View>
+          </View>
+
           {/* Entrega y Orden */}
           <View style={{ padding: 12 }}>
             <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Entrega</Text>
@@ -1105,7 +1144,7 @@ export default function App() {
               <View style={{ flex: 1 }} />
               <Pressable onPress={() => setSortBy((s) => ({ balanced: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'rating', rating: 'balanced' }[s] || 'balanced'))}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 8, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
-                <Ionicons name="swap-vertical" size={16} color={colors.muted} />
+                <Ionicons name={sortBy === 'price_asc' ? 'arrow-up' : sortBy === 'price_desc' ? 'arrow-down' : sortBy === 'rating' ? 'star' : 'swap-vertical'} size={16} color={sortBy === 'rating' ? '#d97706' : colors.muted} />
                 <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'balanced' ? 'Balanced' : sortBy === 'rating' ? 'Rating' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
               </Pressable>
             </View>
@@ -1123,7 +1162,7 @@ export default function App() {
             <View style={{ paddingVertical: 40, alignItems: 'center' }}>
               <Ionicons name="search-outline" size={48} color={colors.border} />
               <Text style={[styles.helper, { marginTop: 12 }]}>
-                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice
+                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice || fusionLevel !== 50
                   ? translateError('No hay resultados con esos filtros', lang)
                   : _t('market.noMenus')}
               </Text>
