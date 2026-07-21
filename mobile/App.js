@@ -267,6 +267,7 @@ export default function App() {
   const [reviewing, setReviewing] = useState(false);
   const [cookMenuId, setCookMenuId] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
   const closeDrawer = () => {
     Animated.timing(slideAnim, {
       toValue: -280,
@@ -1041,65 +1042,72 @@ export default function App() {
         </View>
       )}
 
-      {/* Filters section */}
-      <View style={{ marginBottom: 8, gap: 8 }}>
-        {/* Cuisine filters — independent checkboxes */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-          {cuisines.filter((c) => c !== 'all').map((c) => {
-            const active = cuisineFilter.includes(c);
-            return (
-              <Pressable key={c} onPress={() => {
-                setCuisineFilter((prev) =>
-                  active ? prev.filter((x) => x !== c) : [...prev, c]
-                );
-              }} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
-                <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
-                  {c.charAt(0).toUpperCase() + c.slice(1)}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
+      <Pressable onPress={() => setShowFilters((p) => !p)}
+        style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 8, paddingVertical: 4 }}>
+        <Ionicons name="funnel-outline" size={18} color={colors.primary} />
+        <Text style={{ fontSize: 14, color: colors.primary, fontWeight: '600' }}>{showFilters ? 'Ocultar filtros' : 'Filtros'}</Text>
+        {(() => {
+          const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (minRating > 0 ? 1 : 0);
+          return count > 0 ? <View style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 7, paddingVertical: 2 }}><Text style={{ color: '#fff', fontSize: 11, fontWeight: '800' }}>{count}</Text></View> : null;
+        })()}
+      </Pressable>
 
-        {/* Price range & rating filters */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
-            <Ionicons name="pricetag-outline" size={14} color={colors.muted} />
-            <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ min" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
-            <Text style={{ color: colors.muted }}>—</Text>
-            <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ max" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
-          </View>
-          {[0, 3, 3.5, 4, 4.5].map((r) => (
-            <Pressable key={r} onPress={() => setMinRating(minRating === r ? 0 : r)}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 8, paddingVertical: 6, borderRadius: 10, backgroundColor: minRating === r ? colors.primaryLight : colors.card, borderWidth: 1, borderColor: minRating === r ? colors.primary : colors.border }}>
-              <Text style={{ fontSize: 14, color: r === 0 ? colors.muted : '#d97706' }}>{r === 0 ? 'Todas' : '★'}</Text>
-              {r > 0 ? <Text style={{ fontSize: 13, color: colors.text, fontWeight: '600' }}>{r}</Text> : null}
+      {showFilters && (
+        <View style={{ marginBottom: 8, gap: 8 }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+            {cuisines.filter((c) => c !== 'all').map((c) => {
+              const active = cuisineFilter.includes(c);
+              return (
+                <Pressable key={c} onPress={() => {
+                  setCuisineFilter((prev) =>
+                    active ? prev.filter((x) => x !== c) : [...prev, c]
+                  );
+                }} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
+                  <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
+                    {c.charAt(0).toUpperCase() + c.slice(1)}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
+              <Ionicons name="pricetag-outline" size={14} color={colors.muted} />
+              <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ min" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
+              <Text style={{ color: colors.muted }}>—</Text>
+              <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ max" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
+            </View>
+            {[0, 3, 3.5, 4, 4.5].map((r) => (
+              <Pressable key={r} onPress={() => setMinRating(minRating === r ? 0 : r)}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 8, paddingVertical: 6, borderRadius: 10, backgroundColor: minRating === r ? colors.primaryLight : colors.card, borderWidth: 1, borderColor: minRating === r ? colors.primary : colors.border }}>
+                <Text style={{ fontSize: 14, color: r === 0 ? colors.muted : '#d97706' }}>{r === 0 ? '☆' : '★'}</Text>
+                {r > 0 ? <Text style={{ fontSize: 13, color: colors.text, fontWeight: '600' }}>{r}</Text> : null}
+              </Pressable>
+            ))}
+          </ScrollView>
+
+          <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            {['all', 'pickup', 'delivery'].map((d) => {
+              const active = filterDelivery === d;
+              return (
+                <Pressable key={d} onPress={() => setFilterDelivery(d)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                  <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
+                  <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
+                    {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
+                  </Text>
+                </Pressable>
+              );
+            })}
+            <Pressable onPress={() => setSortBy((s) => ({ balanced: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'balanced' }[s] || 'balanced'))}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
+              <Ionicons name="swap-vertical" size={16} color={colors.muted} />
+              <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'balanced' ? 'Balanced' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
             </Pressable>
-          ))}
-        </ScrollView>
-
-        {/* Delivery & Sort row */}
-        <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          {['all', 'pickup', 'delivery'].map((d) => {
-            const active = filterDelivery === d;
-            return (
-              <Pressable key={d} onPress={() => setFilterDelivery(d)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
-                <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
-                  {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
-                </Text>
-              </Pressable>
-            );
-          })}
-          <View style={{ flex: 1 }} />
-          <Pressable onPress={() => setSortBy((s) => ({ balanced: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'balanced' }[s] || 'balanced'))}
-            style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
-            <Ionicons name="swap-vertical" size={16} color={colors.muted} />
-            <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'balanced' ? 'Balanced' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
-          </Pressable>
+          </View>
         </View>
-      </View>
+      )}
 
       {loading ? (
         <ActivityIndicator color={colors.primary} />
