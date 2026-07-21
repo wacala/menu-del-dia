@@ -1047,64 +1047,66 @@ export default function App() {
         <Ionicons name="funnel-outline" size={18} color={colors.primary} />
         <Text style={{ fontSize: 14, color: colors.primary, fontWeight: '600' }}>{showFilters ? 'Ocultar filtros' : 'Filtros'}</Text>
         {(() => {
-          const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (minRating > 0 ? 1 : 0);
+          const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0);
           return count > 0 ? <View style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 7, paddingVertical: 2 }}><Text style={{ color: '#fff', fontSize: 11, fontWeight: '800' }}>{count}</Text></View> : null;
         })()}
       </Pressable>
 
       {showFilters && (
-        <View style={{ marginBottom: 8, gap: 8 }}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-            {cuisines.filter((c) => c !== 'all').map((c) => {
-              const active = cuisineFilter.includes(c);
-              return (
-                <Pressable key={c} onPress={() => {
-                  setCuisineFilter((prev) =>
-                    active ? prev.filter((x) => x !== c) : [...prev, c]
-                  );
-                }} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                  <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
-                  <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
-                    {c.charAt(0).toUpperCase() + c.slice(1)}
-                  </Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+        <View style={{ marginBottom: 8, gap: 0, backgroundColor: colors.card, borderRadius: 16, borderWidth: 1, borderColor: colors.border, overflow: 'hidden' }}>
+          {/* Tipo de cocina */}
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tipo de cocina</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+              {cuisines.filter((c) => c !== 'all').map((c) => {
+                const active = cuisineFilter.includes(c);
+                return (
+                  <Pressable key={c} onPress={() => setCuisineFilter((prev) => active ? prev.filter((x) => x !== c) : [...prev, c])}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: active ? colors.primaryLight : colors.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
+                    <Ionicons name={active ? 'checkbox' : 'square-outline'} size={16} color={active ? colors.primary : colors.muted} />
+                    <Text style={{ fontSize: 13, color: active ? colors.primary : colors.text, fontWeight: active ? '700' : '500' }}>{c.charAt(0).toUpperCase() + c.slice(1)}</Text>
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
+          </View>
 
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
-              <Ionicons name="pricetag-outline" size={14} color={colors.muted} />
-              <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ min" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
-              <Text style={{ color: colors.muted }}>—</Text>
-              <TextInput style={{ width: 40, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ max" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
-            </View>
-            {[0, 3, 3.5, 4, 4.5].map((r) => (
-              <Pressable key={r} onPress={() => setMinRating(minRating === r ? 0 : r)}
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 2, paddingHorizontal: 8, paddingVertical: 6, borderRadius: 10, backgroundColor: minRating === r ? colors.primaryLight : colors.card, borderWidth: 1, borderColor: minRating === r ? colors.primary : colors.border }}>
-                <Text style={{ fontSize: 14, color: r === 0 ? colors.muted : '#d97706' }}>{r === 0 ? '☆' : '★'}</Text>
-                {r > 0 ? <Text style={{ fontSize: 13, color: colors.text, fontWeight: '600' }}>{r}</Text> : null}
+          {/* Precio y Calificación */}
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Precio</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
+                <Ionicons name="pricetag-outline" size={14} color={colors.muted} />
+                <TextInput style={{ width: 36, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ min" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
+                <Text style={{ color: colors.muted }}>—</Text>
+                <TextInput style={{ width: 36, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ max" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
+              </View>
+            </ScrollView>
+          </View>
+
+          {/* Entrega y Orden */}
+          <View style={{ padding: 12 }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Entrega</Text>
+            <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
+              {['all', 'pickup', 'delivery'].map((d) => {
+                const active = filterDelivery === d;
+                return (
+                  <Pressable key={d} onPress={() => setFilterDelivery(d)}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: active ? colors.primaryLight : colors.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
+                    <Ionicons name={active ? 'checkbox' : 'square-outline'} size={16} color={active ? colors.primary : colors.muted} />
+                    <Text style={{ fontSize: 13, color: active ? colors.primary : colors.text, fontWeight: active ? '700' : '500' }}>
+                      {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+              <View style={{ flex: 1 }} />
+              <Pressable onPress={() => setSortBy((s) => ({ balanced: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'balanced' }[s] || 'balanced'))}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 8, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
+                <Ionicons name="swap-vertical" size={16} color={colors.muted} />
+                <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'balanced' ? 'Balanced' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
               </Pressable>
-            ))}
-          </ScrollView>
-
-          <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            {['all', 'pickup', 'delivery'].map((d) => {
-              const active = filterDelivery === d;
-              return (
-                <Pressable key={d} onPress={() => setFilterDelivery(d)} style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-                  <Ionicons name={active ? 'checkbox' : 'square-outline'} size={18} color={active ? colors.primary : colors.muted} />
-                  <Text style={{ fontSize: 13, color: active ? colors.primary : colors.muted, fontWeight: active ? '700' : '500' }}>
-                    {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
-                  </Text>
-                </Pressable>
-              );
-            })}
-            <Pressable onPress={() => setSortBy((s) => ({ balanced: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'balanced' }[s] || 'balanced'))}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 10, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
-              <Ionicons name="swap-vertical" size={16} color={colors.muted} />
-              <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'balanced' ? 'Balanced' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
-            </Pressable>
+            </View>
           </View>
         </View>
       )}
@@ -1119,7 +1121,7 @@ export default function App() {
             <View style={{ paddingVertical: 40, alignItems: 'center' }}>
               <Ionicons name="search-outline" size={48} color={colors.border} />
               <Text style={[styles.helper, { marginTop: 12 }]}>
-                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice || minRating > 0
+                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice
                   ? translateError('No hay resultados con esos filtros', lang)
                   : _t('market.noMenus')}
               </Text>
