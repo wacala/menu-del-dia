@@ -96,14 +96,15 @@ async function seed() {
         // Add items
         for (const item of template.items) {
           await db.query(
-            `INSERT INTO menu_items (menu_id, name, description, price, quantity_available, dietary_tags)
-             VALUES ($1, $2, $3, $4, $5, $6)`,
+            `INSERT INTO menu_items (menu_id, name, description, price, quantity_available, dietary_tags, image_url)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
             [menuId,
              `${item.name}`,
              `${item.name} preparado por ${cook.firstName}`,
              item.price,
              item.qty,
              ['vegana', 'saludable'].includes(cook.cuisine) ? 'vegano, sin gluten' : item.name.includes('Ensalada') ? 'vegano' : '',
+             `https://picsum.photos/seed/${cook.username}${menuIdx}${item.name.replace(/\s/g,'')}/400/300`,
             ],
           );
         }

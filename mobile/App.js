@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   Animated,
   FlatList,
+  Image,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -1132,6 +1133,37 @@ export default function App() {
       <Pressable onPress={() => setScreen('market')}>
         <Text style={styles.link}>{_t('menu.back')}</Text>
       </Pressable>
+
+      {/* Item images carousel */}
+      {(menu?.items || []).length > 0 && (
+        <View style={{ marginBottom: 12 }}>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={menu.items.filter((i) => i.image_url || true)}
+            keyExtractor={(item) => String(item.id)}
+            snapToInterval={220}
+            decelerationRate="fast"
+            renderItem={({ item }) => (
+              <View style={{ width: 200, height: 140, borderRadius: 16, marginRight: 10, backgroundColor: colors.coffeeLight || '#f5ebe0', overflow: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
+                {item.image_url ? (
+                  <Image source={{ uri: item.image_url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                ) : (
+                  <>
+                    <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: colors.primaryLight, justifyContent: 'center', alignItems: 'center' }}>
+                      <Ionicons name="restaurant-outline" size={24} color={colors.primary} />
+                    </View>
+                    <Text style={{ marginTop: 6, fontWeight: '700', color: colors.text, fontSize: 13, letterSpacing: 0.3 }}>{item.name}</Text>
+                    <Text style={{ fontWeight: '700', color: colors.primary, fontSize: 14, marginTop: 2 }}>{money(item.price)}</Text>
+                  </>
+                )}
+              </View>
+            )}
+          />
+        </View>
+      )}
+
+      {/* Info card */}
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{menu?.title}</Text>
         <Text style={styles.body}>{menu?.description}</Text>
