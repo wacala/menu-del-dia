@@ -258,6 +258,7 @@ export default function App() {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [minRating, setMinRating] = useState(0);
+  const [minRating, setMinRating] = useState(0);
   const [mealPlanForm, setMealPlanForm] = useState({ people: '2', meals: '3', budget: '50', restrictions: '', cuisine: '' });
   const [mealPlanResult, setMealPlanResult] = useState(null);
   // Cook menu expert system
@@ -1067,7 +1068,7 @@ export default function App() {
         <Ionicons name="funnel-outline" size={18} color={colors.primary} />
         <Text style={{ fontSize: 14, color: colors.primary, fontWeight: '600' }}>{showFilters ? 'Ocultar filtros' : 'Filtros'}</Text>
         {(() => {
-          const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0);
+          const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0);
           return count > 0 ? <View style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 7, paddingVertical: 2 }}><Text style={{ color: '#fff', fontSize: 11, fontWeight: '800' }}>{count}</Text></View> : null;
         })()}
       </Pressable>
@@ -1125,7 +1126,41 @@ export default function App() {
             </View>
           </View>
 
-          {/* Entrega y Orden */}
+          {/* Otros: Calificación + Orden */}
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Otros</Text>
+
+            {/* Calificación mínima */}
+            <Text style={{ fontSize: 11, color: colors.muted, marginBottom: 6 }}>Calificación mínima</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, marginBottom: 10 }}>
+              {[0, 3, 3.5, 4, 4.5].map((r) => (
+                <Pressable key={r} onPress={() => setMinRating(minRating === r ? 0 : r)}
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 3, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 8, backgroundColor: minRating === r ? colors.primaryLight : colors.coffeeLight || '#f5ebe0' }}>
+                  <Text style={{ fontSize: 14, color: r === 0 ? colors.muted : '#d97706' }}>{r === 0 ? '☆' : '★'}</Text>
+                  <Text style={{ fontSize: 13, color: minRating === r ? colors.primary : colors.text, fontWeight: minRating === r ? '700' : '500' }}>{r === 0 ? 'Cualquiera' : `${r}`}</Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+
+            {/* Ordenar por */}
+            <Text style={{ fontSize: 11, color: colors.muted, marginBottom: 6 }}>Ordenar por</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
+              {[
+                { key: 'balanced', label: _t('search.sortBalanced') },
+                { key: 'rating', label: `⭐ ${_t('search.sortRating')}` },
+                { key: 'price_asc', label: `💰 ${_t('search.sortPriceAsc')}` },
+                { key: 'price_desc', label: `💰 ${_t('search.sortPriceDesc')}` },
+                { key: 'name', label: `🔤 ${_t('search.sortName')}` },
+              ].map((opt) => (
+                <Pressable key={opt.key} onPress={() => setSortBy(opt.key)}
+                  style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8, backgroundColor: sortBy === opt.key ? colors.primaryLight : colors.coffeeLight || '#f5ebe0' }}>
+                  <Text style={{ fontSize: 13, color: sortBy === opt.key ? colors.primary : colors.text, fontWeight: sortBy === opt.key ? '700' : '500' }}>{opt.label}</Text>
+                </Pressable>
+              ))}
+            </ScrollView>
+          </View>
+
+          {/* Entrega */}
           <View style={{ padding: 12 }}>
             <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Entrega</Text>
             <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
@@ -1142,11 +1177,7 @@ export default function App() {
                 );
               })}
               <View style={{ flex: 1 }} />
-              <Pressable onPress={() => setSortBy((s) => ({ balanced: 'price_asc', price_asc: 'price_desc', price_desc: 'name', name: 'rating', rating: 'balanced' }[s] || 'balanced'))}
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.card, borderRadius: 8, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 10, paddingVertical: 6 }}>
-                <Ionicons name={sortBy === 'price_asc' ? 'arrow-up' : sortBy === 'price_desc' ? 'arrow-down' : sortBy === 'rating' ? 'star' : 'swap-vertical'} size={16} color={sortBy === 'rating' ? '#d97706' : colors.muted} />
-                <Text style={{ fontSize: 13, color: colors.text }}>{_t('search.sort' + (sortBy === 'balanced' ? 'Balanced' : sortBy === 'rating' ? 'Rating' : sortBy === 'price_asc' ? 'PriceAsc' : sortBy === 'price_desc' ? 'PriceDesc' : 'Name'))}</Text>
-              </Pressable>
+            </View>
             </View>
           </View>
         </View>
@@ -1162,7 +1193,7 @@ export default function App() {
             <View style={{ paddingVertical: 40, alignItems: 'center' }}>
               <Ionicons name="search-outline" size={48} color={colors.border} />
               <Text style={[styles.helper, { marginTop: 12 }]}>
-                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice || fusionLevel !== 50
+                {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice || fusionLevel !== 50 || minRating > 0
                   ? translateError('No hay resultados con esos filtros', lang)
                   : _t('market.noMenus')}
               </Text>
