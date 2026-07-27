@@ -147,11 +147,13 @@ router.get('/my', authenticate, authorize(['member']), async (req, res, next) =>
   try {
     const result = await db.query(
       `SELECT o.*, m.title AS menu_title, m.menu_date,
-              u.first_name AS cook_first_name, u.last_name AS cook_last_name
+              u.first_name AS cook_first_name, u.last_name AS cook_last_name,
+              CASE WHEN rr.id IS NOT NULL THEN TRUE ELSE FALSE END AS rated
        FROM orders o
        JOIN menus m ON m.id = o.menu_id
        JOIN cook_profiles cp ON cp.id = o.cook_id
        JOIN users u ON u.id = cp.user_id
+       LEFT JOIN ratings_reviews rr ON rr.order_id = o.id AND rr.reviewer_id = (SELECT user_id FROM member_profiles WHERE id = o.member_id)
        WHERE o.member_id = (SELECT id FROM member_profiles WHERE user_id = $1)
        ORDER BY o.created_at DESC LIMIT 50`,
       [req.user.userId],

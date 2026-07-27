@@ -12,6 +12,7 @@ const orderRoutes = require('./routes/orders');
 const paymentRoutes = require('./routes/payments');
 const mealPlanRoutes = require('./routes/mealPlans');
 const notificationRoutes = require('./routes/notifications');
+const ratingRoutes = require('./routes/ratings');
 const { errorHandler } = require('./middleware/error');
 
 if (config.sentry?.dsn) {
@@ -40,6 +41,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/meal-plans', mealPlanRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/ratings', ratingRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });

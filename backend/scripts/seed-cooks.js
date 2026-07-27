@@ -22,6 +22,18 @@ const cooks = [
   { firstName: 'Diego', lastName: 'Morales', username: 'diego_wok', email: 'diego@test.com', cuisine: 'asiática' },
 ];
 
+const foodImages = {
+  'Sopa de verduras': 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&h=300&fit=crop', // soup
+  'Guisado de res': 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop', // mexican stew
+  'Arroz con leche': 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=300&fit=crop', // dessert
+  'Enchiladas verdes': 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=300&fit=crop', // mexican dish
+  'Chiles rellenos': 'https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400&h=300&fit=crop', // stuffed pepper
+  'Frijoles charros': 'https://images.unsplash.com/photo-1603073163308-9654c3fb70b5?w=400&h=300&fit=crop', // beans
+  'Ensalada de quinoa': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop', // salad
+  'Pechuga asada': 'https://images.unsplash.com/photo-1432139555190-58524dae6a55?w=400&h=300&fit=crop', // grilled chicken
+  'Smoothie verde': 'https://images.unsplash.com/photo-1502741224143-90386d7f8c82?w=400&h=300&fit=crop', // smoothie
+};
+
 const menuTemplates = [
   { title: 'Comida corrida', description: 'Menú completo con sopa, guisado y postre', items: [
     { name: 'Sopa de verduras', price: 45, qty: 15 },
@@ -104,7 +116,7 @@ async function seed() {
              item.price,
              item.qty,
              ['vegana', 'saludable'].includes(cook.cuisine) ? 'vegano, sin gluten' : item.name.includes('Ensalada') ? 'vegano' : '',
-             `https://picsum.photos/seed/${cook.username}${menuIdx}${item.name.replace(/\s/g,'')}/400/300`,
+             foodImages[item.name] || `https://picsum.photos/seed/${cook.username}${menuIdx}${item.name.replace(/\s/g,'')}/400/300`,
             ],
           );
         }
