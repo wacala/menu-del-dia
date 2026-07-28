@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useFonts, PlayfairDisplay_700Bold, PlayfairDisplay_400Regular } from '@expo-google-fonts/playfair-display';
 import { StatusBar } from 'expo-status-bar';
 import {
   ActivityIndicator,
@@ -210,7 +211,7 @@ function Field(props) {
   return <TextInput placeholderTextColor={colors.muted} style={styles.input} {...props} />;
 }
 
-const FloatingField = React.forwardRef(({ label, value, onChangeText, secureTextEntry, autoCapitalize, ...props }, ref) => {
+const FloatingField = React.forwardRef(({ label, value, onChangeText, secureTextEntry, autoCapitalize, required, ...props }, ref) => {
   const [focused, setFocused] = useState(false);
   const anim = useRef(new Animated.Value(value ? 1 : 0)).current;
 
@@ -234,7 +235,7 @@ const FloatingField = React.forwardRef(({ label, value, onChangeText, secureText
       <Animated.Text
         style={[styles.floatLabel, { top: labelTop, fontSize: labelSize, color: labelColor }]}
         pointerEvents="none">
-        {label}
+        {label}{required ? <Text style={{ color: colors.danger, fontSize: 12 }}> *</Text> : null}
       </Animated.Text>
       <TextInput
         ref={ref}
@@ -253,6 +254,10 @@ const FloatingField = React.forwardRef(({ label, value, onChangeText, secureText
 });
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    PlayfairDisplay_700Bold,
+    PlayfairDisplay_400Regular,
+  });
   const [ready, setReady] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
@@ -858,7 +863,7 @@ export default function App() {
     setTimeout(() => scrollRef.current?.scrollTo({ y, animated: true }), 150);
   };
 
-  if (!ready) {
+  if (!ready || !fontsLoaded) {
     return (
       <View style={styles.center}>
         <ActivityIndicator color={colors.primary} />
@@ -1038,17 +1043,17 @@ export default function App() {
             </Pressable>
           </View>
 
-          <FloatingField label={_t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => { setAuth((c) => ({ ...c, email })); setError(''); setMessage(''); }} />
+          <FloatingField required label={_t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => { setAuth((c) => ({ ...c, email })); setError(''); setMessage(''); }} />
           {auth.email.length > 0 && !emailValid && (
             <Text style={{ color: colors.danger, fontSize: 12, marginTop: -8 }}>{_t('auth.emailInvalid')}</Text>
           )}
-          <FloatingField label={_t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
+          <FloatingField required label={_t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
 
           {authMode === 'register' && (
             <>
-              <FloatingField label={_t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
+              <FloatingField required label={_t('auth.confirmPassword')} value={auth.confirmPassword} secureTextEntry onChangeText={(v) => setAuth((c) => ({ ...c, confirmPassword: v }))} />
               <View>
-                <FloatingField label="@usuario" value={auth.username} autoCapitalize="none" onChangeText={(v) => {
+                <FloatingField required label="@usuario" value={auth.username} autoCapitalize="none" onChangeText={(v) => {
                   const sanitized = v.replace(/[^a-zA-Z0-9_]/g, '').toLowerCase();
                   setAuth((c) => ({ ...c, username: sanitized }));
                 }} />
@@ -1060,8 +1065,8 @@ export default function App() {
                 )}
               </View>
               <View style={styles.row}>
-                <View style={{ flex: 1 }}><FloatingField label={_t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} /></View>
-                <View style={{ flex: 1 }}><FloatingField label={_t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} /></View>
+                <View style={{ flex: 1 }}><FloatingField required label={_t('auth.firstName')} value={auth.firstName} onChangeText={(v) => setAuth((c) => ({ ...c, firstName: v }))} /></View>
+                <View style={{ flex: 1 }}><FloatingField required label={_t('auth.lastName')} value={auth.lastName} onChangeText={(v) => setAuth((c) => ({ ...c, lastName: v }))} /></View>
               </View>
               <View style={styles.segmentedControl}>
                 <Pressable style={[styles.segment, auth.role === 'member' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))}>
@@ -2176,7 +2181,7 @@ const styles = StyleSheet.create({
   section: { flex: 1, padding: 16, gap: 12 },
   title: { fontSize: 32, fontWeight: '800', color: colors.text, letterSpacing: 0.5 },
   subtitle: { color: colors.muted, fontSize: 16, letterSpacing: 0.3 },
-  brand: { fontSize: 18, fontWeight: '800', color: colors.text, letterSpacing: 0.5 },
+  brand: { fontSize: 20, fontWeight: '800', color: colors.text, letterSpacing: 0.3, fontFamily: 'PlayfairDisplay_700Bold' },
   sectionTitle: { fontSize: 20, fontWeight: '800', color: colors.text, letterSpacing: 0.4 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   row: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },

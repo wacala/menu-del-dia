@@ -37,7 +37,8 @@
         {
           "merchantIdentifier": "merchant.com.menudeldia.app"
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }
