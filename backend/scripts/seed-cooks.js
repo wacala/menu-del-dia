@@ -98,8 +98,8 @@ async function seed() {
            `${template.title} - ${cook.firstName}`,
            template.description,
            menuDate,
-           `${menuDate}T08:00:00.000Z`,
-           `${menuDate}T20:00:00.000Z`,
+           `${menuDate}T08:00:00`,
+           `${menuDate}T23:59:00`,
            menuIdx % 2 === 0,
            `${cook.firstName}'s Cocina, Col. Centro #123`,
         ]);

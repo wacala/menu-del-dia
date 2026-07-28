@@ -106,6 +106,8 @@ const translateError = (msg, lng) => {
     'El título es obligatorio': { 'es-MX': 'El título es obligatorio', en: 'Title is required' },
     'Agrega al menos un platillo con nombre': { 'es-MX': 'Agrega al menos un platillo con nombre', en: 'Add at least one item with a name' },
     'No hay resultados con esos filtros': { 'es-MX': 'No hay resultados con esos filtros', en: 'No results with these filters' },
+    'Menu not available for ordering': { 'es-MX': 'Menú no disponible para ordenar', en: 'Menu not available for ordering' },
+    'Member profile not found': { 'es-MX': 'Perfil de miembro no encontrado', en: 'Member profile not found' },
   };
   return map[msg]?.[lng] || map[msg]?.['es-MX'] || msg;
 };
