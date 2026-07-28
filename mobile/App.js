@@ -1004,7 +1004,7 @@ export default function App() {
             <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
               <Pressable onPress={(e) => e.stopPropagation()} style={{ flex: 1 }}>
                 <View style={{ paddingHorizontal: 16, paddingTop: 56 }}>
-                  <Text style={styles.sectionTitle}>{_t('app.name')}</Text>
+                  <Text style={styles.brand}>{_t('app.name')}</Text>
                 </View>
                 <DrawerItem icon="log-in" label={_t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); setError(''); }} />
                 <DrawerItem icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); setError(''); }} />
