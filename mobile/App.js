@@ -22,6 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useStripe } from '@stripe/stripe-react-native';
 
 const STORAGE_KEY = 'menu-del-dia-session';
+const DEV_SKIP_PAYMENT = true; // Skip Stripe for testing
 const API_URL = process.env.EXPO_PUBLIC_API_URL || Platform.select({
   ios: 'http://localhost:3001/api',
   android: 'http://10.0.2.2:3001/api',
@@ -629,6 +630,17 @@ export default function App() {
       });
       const orderId = orderData.order?.id || orderData.id;
       if (!orderId) { setError(translateError('Could not create order', lang)); setLoading(false); return; }
+
+      if (DEV_SKIP_PAYMENT) {
+        // Test mode — skip Stripe payment
+        await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'confirmed' } });
+        await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'delivered' } });
+        setMessage(translateError('Pedido realizado con éxito', lang));
+        setScreen('orders');
+        await loadOrders();
+        setLoading(false);
+        return;
+      }
 
       const payData = await api('/payments/intent', { method: 'POST', token, body: { orderId } });
       const { clientSecret } = payData;
