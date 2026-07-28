@@ -9,7 +9,12 @@
     "scheme": "menu-del-dia",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.menudeldia.app"
+      "bundleIdentifier": "com.menudeldia.app",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
+      }
     },
     "android": {
       "package": "com.menudeldia.app",
