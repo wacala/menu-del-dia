@@ -59,7 +59,7 @@ const t = (key, lng) => {
 const translations = {
   'es-MX': {
     app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
-    splash: { description: 'Compra y vende comida casera en tu comunidad.', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
+    splash: { description: 'Compra y vende comida casera en tu comunidad.', tagline: 'Cocina comunitaria para tu comunidad', mission1: 'Ayudamos a cocineras y cocineros comunitarios a comercializar sus menús sin intermediarios abusivos', mission2: 'Impulsamos el talento culinario de tu comunidad — hecha en México, para México', mission3: 'Emprende tu propio negocio de cocina, sin ataduras a plataformas monopólicas', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
     auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.', usernameRules: 'Solo letras, números y guión bajo. Mínimo 3 caracteres.', usernameTaken: 'Este usuario ya está registrado' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
@@ -71,7 +71,7 @@ const translations = {
   },
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
-    splash: { description: 'Buy and sell homemade food in your community.', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
+    splash: { description: 'Buy and sell homemade food in your community.', tagline: 'Community kitchen for your community', mission1: 'We help community cooks commercialize their menus without abusive intermediaries', mission2: 'Empowering your community\'s culinary talent — made in Mexico, for Mexico', mission3: 'Start your own kitchen business, free from monopolistic platforms', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
     auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.', usernameRules: 'Only letters, numbers, and underscores. Min 3 characters.', usernameTaken: 'This username is already taken' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
     menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', deliveryAddress: 'Address', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
@@ -910,10 +910,30 @@ export default function App() {
             </View>
           </View>
           <ScrollView contentContainerStyle={styles.auth}>
-            <Text style={styles.icon}>🍽️</Text>
-            <Text style={styles.title}>{_t('app.name')}</Text>
-            <Text style={styles.subtitle}>{_t('app.tagline')}</Text>
-            <Text style={styles.body}>{_t('splash.description')}</Text>
+            <View style={{ alignItems: 'center', gap: 4, marginBottom: 8 }}>
+              <Text style={{ fontSize: 48, marginBottom: 8 }}>🍽️</Text>
+              <Text style={styles.title}>{_t('app.name')}</Text>
+              <Text style={[styles.subtitle, { marginTop: 4 }]}>{_t('splash.tagline')}</Text>
+            </View>
+
+            <View style={{ gap: 12, marginVertical: 16 }}>
+              {[
+                { icon: '👨‍🍳', text: _t('splash.mission1') },
+                { icon: '🌮', text: _t('splash.mission2') },
+                { icon: '🚀', text: _t('splash.mission3') },
+              ].map((item, i) => (
+                <View key={i} style={{
+                  flexDirection: 'row', alignItems: 'flex-start', gap: 12,
+                  backgroundColor: colors.primaryLight, borderRadius: 14,
+                  padding: 14, borderWidth: 1, borderColor: colors.primary,
+                }}>
+                  <Text style={{ fontSize: 24 }}>{item.icon}</Text>
+                  <Text style={{ flex: 1, color: colors.textSecondary, fontSize: 13, lineHeight: 18, fontWeight: '500' }}>
+                    {item.text}
+                  </Text>
+                </View>
+              ))}
+            </View>
             {user ? (
               <>
                 <Pressable style={styles.primary} onPress={() => { setScreen(user.role === 'cook' ? 'cookDashboard' : 'market'); closeDrawer(); }}>
