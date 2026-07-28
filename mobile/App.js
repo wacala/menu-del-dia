@@ -108,6 +108,9 @@ const translateError = (msg, lng) => {
     'No hay resultados con esos filtros': { 'es-MX': 'No hay resultados con esos filtros', en: 'No results with these filters' },
     'Menu not available for ordering': { 'es-MX': 'Menú no disponible para ordenar', en: 'Menu not available for ordering' },
     'Member profile not found': { 'es-MX': 'Perfil de miembro no encontrado', en: 'Member profile not found' },
+    'Network request failed': { 'es-MX': 'Error de conexión. Revisa tu red.', en: 'Network request failed' },
+    'Request failed': { 'es-MX': 'Error del servidor', en: 'Request failed' },
+    'AbortError': { 'es-MX': 'La solicitud fue cancelada', en: 'Request was cancelled' },
   };
   return map[msg]?.[lng] || map[msg]?.['es-MX'] || msg;
 };
@@ -585,7 +588,7 @@ export default function App() {
         },
       });
       setMealPlanResult(data);
-    } catch (e) { setError(e.message); }
+    } catch (e) { setError(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
