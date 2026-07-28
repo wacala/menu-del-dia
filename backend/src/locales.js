@@ -32,6 +32,10 @@ const locales = {
     'Calificación guardada': 'Calificación guardada',
   },
   en: {
+    'No token provided': 'No token provided',
+    'Invalid token': 'Invalid token',
+    'Not authenticated': 'Not authenticated',
+    'Insufficient permissions': 'Insufficient permissions',
     'Datos inválidos': 'Invalid data',
     'Perfil de miembro no encontrado': 'Member profile not found',
     'No puedes calificar esta orden': 'You cannot rate this order',
