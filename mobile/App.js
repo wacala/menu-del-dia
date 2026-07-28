@@ -853,7 +853,6 @@ export default function App() {
 
   const scrollRef = useRef(null);
   const addressRef = useRef(null);
-  const [gentleAlert, setGentleAlert] = useState('');
 
   const scrollToField = (y) => {
     setTimeout(() => scrollRef.current?.scrollTo({ y, animated: true }), 150);
@@ -1083,11 +1082,20 @@ export default function App() {
             </Pressable>
           )}
 
-          <Pressable style={styles.primary} onPress={submitAuth}>
+          <Pressable
+            style={[styles.primary, (!auth.email.trim() || !auth.password) && { opacity: 0.4, backgroundColor: colors.muted }]}
+            onPress={() => {
+              if (!auth.email.trim() || !auth.password) {
+                setError(authMode === 'login' ? 'Ingresa tu correo y contraseña' : 'Completa todos los campos');
+                return;
+              }
+              submitAuth();
+            }}>
             <Text style={styles.primaryText}>{authMode === 'login' ? _t('auth.signIn') : _t('auth.createAccount')}</Text>
           </Pressable>
         </ScrollView>
         </KeyboardAvoidingView>
+        <Toast message={toastMessage} type={toastType} onClose={() => { setError(''); setMessage(''); }} />
         </Animated.View>
       </View>
     );
@@ -1749,28 +1757,12 @@ export default function App() {
           <FloatingField ref={addressRef} label={_t('menu.deliveryAddress')} value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} onFocus={() => scrollToField(800)} />
         )}
         <FloatingField label={_t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} onFocus={() => scrollToField(900)} />
-        {gentleAlert ? (
-          <View style={{
-            backgroundColor: colors.coffeeLight, borderRadius: 12, padding: 12,
-            flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4,
-            borderWidth: 1, borderColor: colors.border,
-          }}>
-            <Ionicons name="information-circle-outline" size={20} color={colors.primary} />
-            <Text style={{ color: colors.textSecondary, fontSize: 13, fontWeight: '500', flex: 1 }}>
-              {gentleAlert}
-            </Text>
-            <Pressable onPress={() => setGentleAlert('')} hitSlop={8}>
-              <Ionicons name="close" size={16} color={colors.muted} />
-            </Pressable>
-          </View>
-        ) : null}
         <Pressable
           style={[styles.primary, !canOrder && { opacity: 0.4, backgroundColor: colors.muted }]}
           onPress={() => {
             if (!canOrder) {
-              if (!hasItems) setGentleAlert('Selecciona al menos un platillo');
-              else if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) setGentleAlert('Ingresa una dirección de entrega');
-              setTimeout(() => setGentleAlert(''), 3000);
+              if (!hasItems) setError('Selecciona al menos un platillo');
+              else if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) setError('Ingresa una dirección de entrega');
               return;
             }
             placeOrder();
