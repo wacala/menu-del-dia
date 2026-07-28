@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useFonts, PlayfairDisplay_700Bold, PlayfairDisplay_400Regular } from '@expo-google-fonts/playfair-display';
+import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 import { StatusBar } from 'expo-status-bar';
 import {
   ActivityIndicator,
@@ -255,8 +255,7 @@ const FloatingField = React.forwardRef(({ label, value, onChangeText, secureText
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    PlayfairDisplay_700Bold,
-    PlayfairDisplay_400Regular,
+    Pacifico_400Regular,
   });
   const [ready, setReady] = useState(false);
   const [token, setToken] = useState(null);
@@ -2181,7 +2180,7 @@ const styles = StyleSheet.create({
   section: { flex: 1, padding: 16, gap: 12 },
   title: { fontSize: 32, fontWeight: '800', color: colors.text, letterSpacing: 0.5 },
   subtitle: { color: colors.muted, fontSize: 16, letterSpacing: 0.3 },
-  brand: { fontSize: 20, fontWeight: '800', color: colors.text, letterSpacing: 0.3, fontFamily: 'PlayfairDisplay_700Bold' },
+  brand: { fontSize: 24, color: colors.text, letterSpacing: 0.5, fontFamily: 'Pacifico_400Regular' },
   sectionTitle: { fontSize: 20, fontWeight: '800', color: colors.text, letterSpacing: 0.4 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   row: { flexDirection: 'row', gap: 8, flexWrap: 'wrap' },
