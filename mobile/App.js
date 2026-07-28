@@ -2178,7 +2178,7 @@ const styles = StyleSheet.create({
   auth: { padding: 24, gap: 12, flexGrow: 1, justifyContent: 'center' },
   top: { paddingHorizontal: 16, paddingBottom: 12, gap: 12 },
   section: { flex: 1, padding: 16, gap: 12 },
-  title: { fontSize: 32, fontWeight: '800', color: colors.text, letterSpacing: 0.5 },
+  title: { fontSize: 32, fontWeight: '800', color: colors.text, letterSpacing: 0.5, fontFamily: 'Pacifico_400Regular' },
   subtitle: { color: colors.muted, fontSize: 16, letterSpacing: 0.3 },
   brand: { fontSize: 24, color: colors.text, letterSpacing: 0.5, fontFamily: 'Pacifico_400Regular' },
   sectionTitle: { fontSize: 20, fontWeight: '800', color: colors.text, letterSpacing: 0.4 },
