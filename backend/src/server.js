@@ -13,6 +13,7 @@ const paymentRoutes = require('./routes/payments');
 const mealPlanRoutes = require('./routes/mealPlans');
 const notificationRoutes = require('./routes/notifications');
 const ratingRoutes = require('./routes/ratings');
+const { t } = require('./locales');
 const { errorHandler } = require('./middleware/error');
 
 if (config.sentry?.dsn) {
@@ -32,6 +33,15 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'API is running' });
+});
+
+app.use('/api/health', (req, res) => res.json({ ok: true }));
+
+// Localization middleware — adds req.t() to all routes
+app.use((req, res, next) => {
+  const lang = req.headers['accept-language'] || 'es-MX';
+  req.t = (msg) => t(msg, lang);
+  next();
 });
 
 app.use('/api/auth', authRoutes);

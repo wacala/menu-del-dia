@@ -112,11 +112,14 @@ const translateError = (msg, lng) => {
   return map[msg]?.[lng] || map[msg]?.['es-MX'] || msg;
 };
 
+let _apiLang = 'es-MX';
+
 async function api(path, { method = 'GET', token, body } = {}) {
   const response = await fetch(`${API_URL}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
+      'Accept-Language': _apiLang,
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: body ? JSON.stringify(body) : undefined,
@@ -355,6 +358,7 @@ export default function App() {
 
   const changeLang = async (l) => {
     setLang(l);
+    _apiLang = l;
     setError('');
     setMessage('');
     setMealPlanResult(null);

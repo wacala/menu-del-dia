@@ -55,7 +55,7 @@ router.post(
       );
 
       if (menuResult.rows.length === 0) {
-        return res.status(400).json({ message: 'Menu not available for ordering' });
+        return res.status(400).json({ message: req.t('Menu not available for ordering') });
       }
 
       const menu = menuResult.rows[0];

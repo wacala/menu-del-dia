@@ -19,7 +19,7 @@ router.post(
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ message: 'Datos inválidos', errors: errors.array() });
+        return res.status(400).json({ message: req.t('Datos inválidos'), errors: errors.array() });
       }
 
       const {
