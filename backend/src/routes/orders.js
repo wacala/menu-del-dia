@@ -50,7 +50,7 @@ router.post(
       const memberId = memberResult.rows[0].id;
 
       const menuResult = await db.query(
-        'SELECT * FROM menus WHERE id = $1 AND status = \'published\' AND order_end_time > NOW()',
+        'SELECT * FROM menus WHERE id = $1 AND status = \'published\' AND order_end_time > LOCALTIMESTAMP',
         [menuId],
       );
 
