@@ -964,8 +964,6 @@ export default function App() {
             <Text style={styles.sectionTitle}>{_t('auth.recoverPassword')}</Text>
             <Text style={[styles.body, { textAlign: 'center' }]}>{_t('auth.forgotPassword')}</Text>
             <FloatingField label={_t('auth.email')} value={forgotEmail} autoCapitalize="none" onChangeText={setForgotEmail} />
-            {!!error && <Text style={styles.error}>{error}</Text>}
-            {!!message && <Text style={styles.success}>{message}</Text>}
             <Pressable style={styles.primary} onPress={submitForgotPassword}>
               <Text style={styles.primaryText}>{loading ? '...' : _t('auth.sendResetLink')}</Text>
             </Pressable>
@@ -1085,7 +1083,6 @@ export default function App() {
             </Pressable>
           )}
 
-          {!!error && <Text style={styles.error}>{error}</Text>}
           <Pressable style={styles.primary} onPress={submitAuth}>
             <Text style={styles.primaryText}>{authMode === 'login' ? _t('auth.signIn') : _t('auth.createAccount')}</Text>
           </Pressable>
@@ -1752,7 +1749,6 @@ export default function App() {
           <FloatingField ref={addressRef} label={_t('menu.deliveryAddress')} value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} onFocus={() => scrollToField(800)} />
         )}
         <FloatingField label={_t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} onFocus={() => scrollToField(900)} />
-        {!!error && <Text style={styles.error}>{error}</Text>}
         {gentleAlert ? (
           <View style={{
             backgroundColor: colors.coffeeLight, borderRadius: 12, padding: 12,
@@ -1980,7 +1976,6 @@ export default function App() {
               </View>
             </>
           )}
-          {!!error && <Text style={styles.error}>{error}</Text>}
         </ScrollView>
       ) : (
         <>
@@ -2036,8 +2031,6 @@ export default function App() {
           <Text style={styles.primaryText}>{loading ? _t("mealPlanner.suggesting") : _t("mealPlanner.suggest")}</Text>
         </Pressable>
 
-        {!!error && <Text style={styles.error}>{error}</Text>}
-        {!!message && <Text style={styles.success}>{message}</Text>}
 
         {mealPlanResult && (
           <View style={{ gap: 12, marginTop: 8 }}>
@@ -2167,9 +2160,6 @@ const loggedSplashView = (
           </Pressable>
         </View>
       </Animated.View>
-
-      {!!message && <Text style={styles.success}>{message}</Text>}
-      {!!error && <Text style={styles.error}>{error}</Text>}
 
       {screen === 'market' && marketView}
       {screen === 'mealPlanner' && mealPlannerView}
