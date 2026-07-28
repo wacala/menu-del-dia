@@ -155,6 +155,33 @@ async function api(path, { method = 'GET', token, body } = {}) {
   return data;
 }
 
+function Toast({ message, type, onClose }) {
+  if (!message) return null;
+  const isError = type === 'error';
+  const colors2 = {
+    bg: isError ? '#fef2f2' : '#f0fdf4',
+    border: isError ? '#fecaca' : '#bbf7d0',
+    icon: isError ? colors.danger : colors.success,
+    text: isError ? colors.danger : '#166534',
+  };
+  return (
+    <View style={{
+      position: 'absolute', bottom: 100, left: 16, right: 16,
+      backgroundColor: colors2.bg, borderRadius: 14,
+      borderWidth: 1, borderColor: colors2.border,
+      padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10,
+      elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.15, shadowRadius: 8, zIndex: 999,
+    }}>
+      <Ionicons name={isError ? 'alert-circle' : 'checkmark-circle'} size={22} color={colors2.icon} />
+      <Text style={{ flex: 1, color: colors2.text, fontWeight: '600', fontSize: 14, lineHeight: 18 }}>{message}</Text>
+      <Pressable onPress={onClose} hitSlop={8}>
+        <Ionicons name="close" size={18} color={colors2.icon} />
+      </Pressable>
+    </View>
+  );
+}
+
 function Chip({ label, active, onPress, icon }) {
   return (
     <Pressable onPress={onPress} style={[styles.chip, active && styles.chipActive]}>
@@ -253,6 +280,15 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const toastType = error ? 'error' : message ? 'success' : null;
+  const toastMessage = error || message || '';
+
+  // Auto-dismiss toast after 5 seconds
+  useEffect(() => {
+    if (!toastMessage) return;
+    const t = setTimeout(() => { setError(''); setMessage(''); }, 5000);
+    return () => clearTimeout(t);
+  }, [toastMessage]);
   const [pendingVerification, setPendingVerification] = useState(null);
   const [cookOrders, setCookOrders] = useState([]);
   const [cookStats, setCookStats] = useState({ activeMenus: 0, totalOrders: 0, pendingOrders: 0, revenue: '0' });
@@ -290,12 +326,6 @@ export default function App() {
   };
   const slideAnim = useRef(new Animated.Value(-280)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
-
-  useEffect(() => {
-    if (!error) return;
-    const t = setTimeout(() => setError(''), 5000);
-    return () => clearTimeout(t);
-  }, [error]);
   const _t = (key) => t(key, lang);
 
   useEffect(() => {
@@ -2150,6 +2180,7 @@ const loggedSplashView = (
       {screen === 'cookMenus' && cookMenusView}
       {screen === 'cookOrders' && cookOrdersView}
       {screen === 'splash' && loggedSplashView}
+      <Toast message={toastMessage} type={toastType} onClose={() => { setError(''); setMessage(''); }} />
       </Animated.View>
     </View>
   );
