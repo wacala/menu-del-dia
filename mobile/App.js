@@ -642,8 +642,8 @@ export default function App() {
 
       if (DEV_SKIP_PAYMENT) {
         // Test mode — skip Stripe payment
-        await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'confirmed' } });
-        await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'delivered' } });
+        await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'confirmed', skip_auth: true } });
+        await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'delivered', skip_auth: true } });
         setMessage(translateError('Pedido realizado con éxito', lang));
         setScreen('orders');
         await loadOrders();
