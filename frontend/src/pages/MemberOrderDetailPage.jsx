@@ -1,7 +1,8 @@
 import { CookingPot, ClipboardList, Calendar, Clock, Hourglass, X, Check, PartyPopper, Inbox, Sparkles, RefreshCw, UtensilsCrossed, AlertTriangle, Package, Search, Star } from 'lucide-react';
-import { useTranslation } from 'react-i18next';import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ordersAPI } from '../api';
+import { ordersAPI, ratingsAPI } from '../api';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function MemberOrderDetailPage() {

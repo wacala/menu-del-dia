@@ -202,12 +202,14 @@ router.get('/:id', authenticate, async (req, res, next) => {
     const result = await db.query(`SELECT o.*,
               o.special_instructions AS notes,
               cu.first_name AS cook_first_name, cu.last_name AS cook_last_name,
-              mu.first_name AS member_first_name, mu.last_name AS member_last_name
+              mu.first_name AS member_first_name, mu.last_name AS member_last_name,
+              CASE WHEN rr.id IS NOT NULL THEN TRUE ELSE FALSE END AS rated
        FROM orders o
        JOIN cook_profiles cp ON cp.id = o.cook_id
        JOIN users cu ON cu.id = cp.user_id
        JOIN member_profiles mp ON mp.id = o.member_id
        JOIN users mu ON mu.id = mp.user_id
+       LEFT JOIN ratings_reviews rr ON rr.order_id = o.id AND rr.reviewer_id = mu.id
        WHERE o.id = $1`, [req.params.id]);
 
     if (result.rows.length === 0) {

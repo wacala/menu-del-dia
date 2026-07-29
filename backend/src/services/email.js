@@ -1,9 +1,22 @@
 const { Resend } = require('resend');
 const config = require('../config');
 
-const resend = new Resend(config.email.resendApiKey);
+// Lazy init — don't crash if RESEND_API_KEY is missing or invalid (e.g. 're_placeholder')
+function getResend() {
+  try {
+    return new Resend(config.email.resendApiKey);
+  } catch {
+    return null;
+  }
+}
 
 async function sendVerificationEmail(toEmail, firstName, token) {
+  const resend = getResend();
+  if (!resend) {
+    console.log('[Email SKIP] No valid RESEND_API_KEY — verification email not sent');
+    return;
+  }
+
   const verifyUrl = `${config.clientUrl}/verify-email?token=${token}`;
   const deepLink = `menu-del-dia://verify?token=${token}`;
 
@@ -43,6 +56,12 @@ async function sendVerificationEmail(toEmail, firstName, token) {
 }
 
 async function sendPasswordResetEmail(toEmail, firstName, token) {
+  const resend = getResend();
+  if (!resend) {
+    console.log('[Email SKIP] No valid RESEND_API_KEY — password reset email not sent');
+    return;
+  }
+
   const resetUrl = `${config.clientUrl}/reset-password?token=${token}`;
   const deepLink = `menu-del-dia://reset-password?token=${token}`;
 

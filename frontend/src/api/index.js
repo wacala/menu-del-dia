@@ -35,3 +35,8 @@ export const ordersAPI = {
   listCookOrders: () => apiClient.get('/orders/cook'),
   updateStatus: (id, status) => apiClient.put(`/orders/${id}/status`, { status }),
 };
+
+export const ratingsAPI = {
+  create: (data) => apiClient.post('/ratings', data),
+  getByCook: (cookId) => apiClient.get(`/ratings/${cookId}`),
+};

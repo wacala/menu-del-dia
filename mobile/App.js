@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useFonts, Pacifico_400Regular } from '@expo-google-fonts/pacifico';
 import { StatusBar } from 'expo-status-bar';
 import {
@@ -60,26 +60,26 @@ const translations = {
   'es-MX': {
     app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
     splash: { description: 'Compra y vende comida casera en tu comunidad.', tagline: 'Cocina comunitaria para tu comunidad', mission1: 'Ayudamos a cocineras y cocineros comunitarios a comercializar sus menús sin intermediarios abusivos', mission2: 'Impulsamos el talento culinario de tu comunidad — hecha en México, para México', mission3: 'Emprende tu propio negocio de cocina, sin ataduras a plataformas monopólicas', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
-    auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.', usernameRules: 'Solo letras, números y guión bajo. Mínimo 3 caracteres.', usernameTaken: 'Este usuario ya está registrado' },
+    auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.', usernameRules: 'Solo letras, números y guión bajo. Mínimo 3 caracteres.', usernameTaken: 'Este usuario ya está registrado', enterCredentials: 'Ingresa tu correo y contraseña', completeFields: 'Completa todos los campos' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
-    menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', addItem: 'Agrega al menos un platillo', orderPlaced: 'Pedido realizado con éxito' },
+    menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', selectItem: 'Selecciona al menos un platillo', enterAddress: 'Ingresa una dirección de entrega', orderPlaced: 'Pedido realizado con éxito', couldNotCreate: 'No se pudo crear el pedido', paymentCancelled: 'Pago cancelado' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
     profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración' },
-    cook: { dashboard: 'Panel', orders: 'Pedidos', menus: 'Menús', profile: 'Perfil', noOrders: 'Sin pedidos aún', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:' }
+    cook: { dashboard: 'Panel', orders: 'Pedidos', menus: 'Menús', profile: 'Perfil', noOrders: 'Sin pedidos aún', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito' }
   },
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
     splash: { description: 'Buy and sell homemade food in your community.', tagline: 'Community kitchen for your community', mission1: 'We help community cooks commercialize their menus without abusive intermediaries', mission2: 'Empowering your community\'s culinary talent — made in Mexico, for Mexico', mission3: 'Start your own kitchen business, free from monopolistic platforms', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
-    auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.', usernameRules: 'Only letters, numbers, and underscores. Min 3 characters.', usernameTaken: 'This username is already taken' },
+    auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.', usernameRules: 'Only letters, numbers, and underscores. Min 3 characters.', usernameTaken: 'This username is already taken', enterCredentials: 'Enter your email and password', completeFields: 'Complete all fields' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
-    menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', deliveryAddress: 'Address', total: 'Total', placeOrder: 'Place order', addItem: 'Add at least one item', orderPlaced: 'Order placed successfully' },
+    menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', deliveryAddress: 'Address', total: 'Total', placeOrder: 'Place order', selectItem: 'Select at least one item', enterAddress: 'Enter a delivery address', orderPlaced: 'Order placed successfully', couldNotCreate: 'Could not create order', paymentCancelled: 'Payment cancelled' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
     profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings' },
-    cook: { dashboard: 'Dashboard', orders: 'Orders', menus: 'Menus', profile: 'Profile', noOrders: 'No orders yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:' }
+    cook: { dashboard: 'Dashboard', orders: 'Orders', menus: 'Menus', profile: 'Profile', noOrders: 'No orders yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully' }
   }
 };
 
@@ -112,72 +112,97 @@ const translateError = (msg, lng) => {
     'Network request failed': { 'es-MX': 'Error de conexión. Revisa tu red.', en: 'Network request failed' },
     'Request failed': { 'es-MX': 'Error del servidor', en: 'Request failed' },
     'AbortError': { 'es-MX': 'La solicitud fue cancelada', en: 'Request was cancelled' },
+    'La solicitud tardó demasiado. Revisa tu conexión e intenta de nuevo.': { 'es-MX': 'La solicitud tardó demasiado. Revisa tu conexión e intenta de nuevo.', en: 'Request timed out. Check your connection and try again.' },
   };
   return map[msg]?.[lng] || map[msg]?.['es-MX'] || msg;
 };
 
 let _apiLang = 'es-MX';
 
-async function api(path, { method = 'GET', token, body } = {}) {
-  const response = await fetch(`${API_URL}${path}`, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept-Language': _apiLang,
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+async function api(path, { method = 'GET', token, body, signal } = {}) {
+  // 10-second timeout for all requests
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-  const text = await response.text();
-  let data = {};
+  try {
+    const response = await fetch(`${API_URL}${path}`, {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept-Language': _apiLang,
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: signal || controller.signal,
+    });
 
-  if (text) {
-    try {
-      data = JSON.parse(text);
-    } catch {
-      data = { message: text };
+    clearTimeout(timeoutId);
+
+    const text = await response.text();
+    let data = {};
+
+    if (text) {
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { message: text };
+      }
     }
-  }
 
-  if (!response.ok) {
-    const errMsg = data.message
-      || (data.errors && data.errors.map((e) => e.msg || e.message).join('. '))
-      || `Request failed (${response.status})`;
-    const err = new Error(errMsg);
-    err.data = data;
-    err.status = response.status;
-    if (response.status === 401) {
-      await AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
+    if (!response.ok) {
+      const errMsg = data.message
+        || (data.errors && data.errors.map((e) => e.msg || e.message).join('. '))
+        || `Request failed (${response.status})`;
+      const err = new Error(errMsg);
+      err.data = data;
+      err.status = response.status;
+      if (response.status === 401) {
+        await AsyncStorage.removeItem(STORAGE_KEY).catch(() => {});
+      }
+      throw err;
     }
-    throw err;
-  }
 
-  return data;
+    return data;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error('La solicitud tardó demasiado. Revisa tu conexión e intenta de nuevo.');
+    }
+    throw error;
+  }
 }
+
+const TOAST_ICONS = {
+  error: { name: 'alert-circle', color: colors.danger },
+  success: { name: 'checkmark-circle', color: colors.success },
+  warning: { name: 'warning', color: colors.amber },
+  info: { name: 'information-circle', color: colors.primary },
+};
+
+const TOAST_STYLES = {
+  error: { bg: '#fef2f2', border: '#fecaca', text: colors.danger },
+  success: { bg: '#f0fdf4', border: '#bbf7d0', text: '#166534' },
+  warning: { bg: '#fffbeb', border: '#fde68a', text: '#92400e' },
+  info: { bg: '#eff6ff', border: '#bfdbfe', text: '#1e40af' },
+};
 
 function Toast({ message, type, onClose }) {
   if (!message) return null;
-  const isError = type === 'error';
-  const colors2 = {
-    bg: isError ? '#fef2f2' : '#f0fdf4',
-    border: isError ? '#fecaca' : '#bbf7d0',
-    icon: isError ? colors.danger : colors.success,
-    text: isError ? colors.danger : '#166534',
-  };
+  const icon = TOAST_ICONS[type] || TOAST_ICONS.error;
+  const style = TOAST_STYLES[type] || TOAST_STYLES.error;
   return (
     <View style={{
       position: 'absolute', bottom: 100, left: 16, right: 16,
-      backgroundColor: colors2.bg, borderRadius: 14,
-      borderWidth: 1, borderColor: colors2.border,
+      backgroundColor: style.bg, borderRadius: 14,
+      borderWidth: 1, borderColor: style.border,
       padding: 14, flexDirection: 'row', alignItems: 'center', gap: 10,
       elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.15, shadowRadius: 8, zIndex: 999,
     }}>
-      <Ionicons name={isError ? 'alert-circle' : 'checkmark-circle'} size={22} color={colors2.icon} />
-      <Text style={{ flex: 1, color: colors2.text, fontWeight: '600', fontSize: 14, lineHeight: 18 }}>{message}</Text>
+      <Ionicons name={icon.name} size={22} color={icon.color} />
+      <Text style={{ flex: 1, color: style.text, fontWeight: '600', fontSize: 14, lineHeight: 18 }}>{message}</Text>
       <Pressable onPress={onClose} hitSlop={8}>
-        <Ionicons name="close" size={18} color={colors2.icon} />
+        <Ionicons name="close" size={18} color={icon.color} />
       </Pressable>
     </View>
   );
@@ -282,17 +307,16 @@ export default function App() {
     quantities: {},
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const toastType = error ? 'error' : message ? 'success' : null;
-  const toastMessage = error || message || '';
+  const [toast, setToast] = useState({ message: '', type: 'error' });
+  const showToast = useCallback((msg, type = 'error') => setToast({ message: msg, type }), []);
+  const clearToast = useCallback(() => setToast({ message: '', type: 'error' }), []);
 
   // Auto-dismiss toast after 5 seconds
   useEffect(() => {
-    if (!toastMessage) return;
-    const t = setTimeout(() => { setError(''); setMessage(''); }, 5000);
+    if (!toast.message) return;
+    const t = setTimeout(clearToast, 5000);
     return () => clearTimeout(t);
-  }, [toastMessage]);
+  }, [toast.message, clearToast]);
   const [pendingVerification, setPendingVerification] = useState(null);
   const [cookOrders, setCookOrders] = useState([]);
   const [cookStats, setCookStats] = useState({ activeMenus: 0, totalOrders: 0, pendingOrders: 0, revenue: '0' });
@@ -373,13 +397,12 @@ export default function App() {
     const verifyEmailToken = async (token) => {
       try {
         await api('/auth/verify-email', { method: 'POST', body: { token } });
-        setError('');
-        setMessage(_t('auth.emailVerified'));
+        showToast(_t('auth.emailVerified'), 'success');
         setScreen('auth');
         setAuthMode('login');
         setDrawerOpen(false);
       } catch (err) {
-        setError(translateError(err.message || 'Verification failed. The link may have expired.', lang));
+        showToast(translateError(err.message || 'Verification failed. The link may have expired.', lang));
       }
     };
 
@@ -396,8 +419,7 @@ export default function App() {
   const changeLang = async (l) => {
     setLang(l);
     _apiLang = l;
-    setError('');
-    setMessage('');
+    clearToast();
     setMealPlanResult(null);
     setMenu(null);
     AsyncStorage.setItem(LANG_KEY, l);
@@ -420,20 +442,19 @@ export default function App() {
     setMenus([]);
     setMenu(null);
     setOrders([]);
-    setError('');
-    setMessage('');
+    clearToast();
     setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' });
     setScreen('splash');
   };
 
   const loadMenus = async () => {
     setLoading(true);
-    setError('');
+    clearToast();
     try {
       const data = await api('/menus');
       setMenus(data.menus || []);
     } catch (e) {
-      setError(translateError(e.message, lang));
+      showToast(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -442,23 +463,23 @@ export default function App() {
   const loadOrders = async () => {
     if (!token || user?.role !== 'member') return;
     setLoading(true);
-    setError('');
+    clearToast();
     try {
       const data = await api('/orders/my', { token });
       setOrders(data.orders || []);
     } catch (e) {
-      setError(translateError(e.message, lang));
+      showToast(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
   };
 
   const loadCookOrders = async () => {
-    setLoading(true); setError('');
+    setLoading(true); clearToast();
     try {
       const data = await api('/orders/cook', { token });
       setCookOrders(data.orders || []);
-    } catch (e) { setError(translateError(e.message, lang)); }
+    } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
@@ -477,26 +498,26 @@ export default function App() {
         pendingOrders: allOrders.filter(o => o.status === 'pending').length,
         revenue: allOrders.reduce((s, o) => s + parseFloat(o.total_amount || 0), 0).toFixed(2),
       });
-    } catch (e) { setError(translateError(e.message, lang)); }
+    } catch (e) { showToast(translateError(e.message, lang)); }
   };
 
   const loadMyMenus = async () => {
-    setLoading(true); setError('');
+    setLoading(true); clearToast();
     try {
       const data = await api('/menus/my/menus', { token });
       setMyMenus(data.menus || []);
-    } catch (e) { setError(translateError(e.message, lang)); }
+    } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
   const createMenu = async () => {
-    setLoading(true); setError('');
+    setLoading(true); clearToast();
     try {
       await api('/menus', { method: 'POST', token, body: menuForm });
       setShowMenuForm(false);
       setMenuForm({ title: '', description: '', menuDate: new Date().toISOString().split('T')[0], orderStartTime: '', orderEndTime: '', pickupAvailable: true, deliveryAvailable: false, pickupLocation: '' });
       loadCookStats();
-    } catch (e) { setError(translateError(e.message, lang)); }
+    } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
@@ -504,7 +525,7 @@ export default function App() {
     try {
       await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status } });
       loadCookOrders();
-    } catch (e) { setError(translateError(e.message, lang)); }
+    } catch (e) { showToast(translateError(e.message, lang)); }
   };
 
   const [ratingState, setRatingState] = useState({ orderId: null, cookId: null, value: 0, submitting: false });
@@ -516,7 +537,7 @@ export default function App() {
       setRatingState({ orderId: null, cookId: null, value: 0, submitting: false });
       loadOrders();
     } catch (e) {
-      setError(translateError(e.message, lang));
+      showToast(translateError(e.message, lang));
       setRatingState((prev) => ({ ...prev, submitting: false }));
     }
   };
@@ -531,7 +552,7 @@ export default function App() {
   const openMenu = async (id) => {
     setCarouselIndex(0);
     setLoading(true);
-    setError('');
+    clearToast();
     try {
       const data = await api(`/menus/${id}`);
       setMenu(data.menu);
@@ -542,21 +563,21 @@ export default function App() {
       setDraft((current) => ({ ...current, quantities }));
       setScreen('menu');
     } catch (e) {
-      setError(translateError(e.message, lang));
+      showToast(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
   };
 
   const submitAuth = async () => {
-    setError('');
+    clearToast();
     if (authMode === 'register') {
       if (auth.password !== auth.confirmPassword) {
-        setError(translateError('Passwords do not match', lang));
+        showToast(_t('auth.passwordsMatch'));
         return;
       }
       if (auth.password.length < 6) {
-        setError(translateError('Password must be at least 6 characters', lang));
+        showToast(_t('auth.passwordLength'));
         return;
       }
     }
@@ -585,22 +606,21 @@ export default function App() {
         setPendingVerification(auth.email.trim());
         return;
       }
-      setError(translateError(e.message, lang));
+      showToast(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
   };
 
   const submitForgotPassword = async () => {
-    setError('');
-    setMessage('');
+    clearToast();
     if (!forgotEmail.trim()) return;
     setLoading(true);
     try {
       await api('/auth/forgot-password', { method: 'POST', body: { email: forgotEmail.trim() } });
-      setMessage(_t('auth.resetLinkSent'));
+      showToast(_t('auth.resetLinkSent'), 'success');
     } catch (e) {
-      setError(translateError(e.message, lang));
+      showToast(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -609,7 +629,7 @@ export default function App() {
   const stripe = useStripe();
 
   const suggestMealPlan = async () => {
-    setLoading(true); setError(""); setMealPlanResult(null);
+    setLoading(true); clearToast(); setMealPlanResult(null);
     try {
       const data = await api("/meal-plans/suggest", {
         method: "POST", token,
@@ -622,23 +642,23 @@ export default function App() {
         },
       });
       setMealPlanResult(data);
-    } catch (e) { setError(translateError(e.message, lang)); }
+    } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
 
   const orderMealPlan = async () => {
     if (!mealPlanResult?.suggestions?.length) return;
-    setLoading(true); setError("");
+    setLoading(true); clearToast();
     try {
       await api("/meal-plans/order", {
         method: "POST", token,
         body: { suggestions: mealPlanResult.suggestions, deliveryType: "pickup" },
       });
       setMealPlanResult(null);
-      setMessage(_t("mealPlanner.ordered"));
+      showToast(_t("mealPlanner.ordered"), "success");
       setScreen("orders");
       await loadOrders();
-    } catch (e) { setError(e.message); }
+    } catch (e) { showToast(e.message); }
     finally { setLoading(false); }
   };
 
@@ -648,17 +668,17 @@ export default function App() {
       .filter((item) => item.quantity > 0);
 
     if (items.length === 0) {
-      setError(translateError('Add at least one item.', lang));
+      showToast(_t('menu.selectItem'), 'warning');
       return;
     }
 
     if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) {
-      setError(translateError('Add a delivery address.', lang));
+      showToast(_t('menu.enterAddress'), 'warning');
       return;
     }
 
     setLoading(true);
-    setError('');
+    clearToast();
     try {
       const orderData = await api('/orders', {
         method: 'POST',
@@ -672,13 +692,13 @@ export default function App() {
         },
       });
       const orderId = orderData.order?.id || orderData.id;
-      if (!orderId) { setError(translateError('Could not create order', lang)); setLoading(false); return; }
+      if (!orderId) { showToast(_t('menu.couldNotCreate')); setLoading(false); return; }
 
       if (DEV_SKIP_PAYMENT) {
         // Test mode — skip Stripe payment
         await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'confirmed', skip_auth: true } });
         await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'delivered', skip_auth: true } });
-        setMessage(translateError('Pedido realizado con éxito', lang));
+        showToast(_t('menu.orderPlaced'), 'success');
         setScreen('orders');
         await loadOrders();
         setLoading(false);
@@ -693,21 +713,21 @@ export default function App() {
         merchantDisplayName: 'Menú del Día',
         style: 'automatic',
       });
-      if (initError) { setError(initError.message); setLoading(false); return; }
+      if (initError) { showToast(initError.message); setLoading(false); return; }
 
       const { error: presentError } = await stripe.presentPaymentSheet();
       if (presentError) {
-        setError(translateError('Pago cancelado', lang));
+        showToast(_t('menu.paymentCancelled'));
         setLoading(false);
         return;
       }
 
       await api('/payments/confirm', { method: 'POST', token, body: { orderId, paymentIntentId: clientSecret } });
-      setMessage(translateError('Pedido realizado con éxito', lang));
+      showToast(_t('menu.orderPlaced'), 'success');
       setScreen('orders');
       await loadOrders();
     } catch (e) {
-      setError(translateError(e.message, lang));
+      showToast(translateError(e.message, lang));
     } finally {
       setLoading(false);
     }
@@ -880,7 +900,7 @@ export default function App() {
         <Text style={styles.body}>{_t('auth.verificationSent')}</Text>
         <Text style={[styles.body, { fontWeight: '800', textAlign: 'center' }]}>{pendingVerification}</Text>
         <Text style={styles.muted}>{_t('auth.verificationInstructions')}</Text>
-        <Pressable style={styles.secondary} onPress={() => { setPendingVerification(null); setAuthMode('login'); setError(''); }}>
+        <Pressable style={styles.secondary} onPress={() => { setPendingVerification(null); setAuthMode('login'); clearToast(); }}>
           <Text style={styles.secondaryText}>{_t('auth.backToLogin')}</Text>
         </Pressable>
         <StatusBar style="dark" />
@@ -990,7 +1010,7 @@ export default function App() {
             <Pressable style={styles.primary} onPress={submitForgotPassword}>
               <Text style={styles.primaryText}>{loading ? '...' : _t('auth.sendResetLink')}</Text>
             </Pressable>
-            <Pressable onPress={() => { setScreen('auth'); setAuthMode('login'); setError(''); setMessage(''); setForgotEmail(''); }}>
+            <Pressable onPress={() => { setScreen('auth'); setAuthMode('login'); clearToast(); setForgotEmail(''); }}>
               <Text style={[styles.link, { textAlign: 'center' }]}>{_t('auth.backToLogin')}</Text>
             </Pressable>
           </ScrollView>
@@ -1026,10 +1046,10 @@ export default function App() {
                 <View style={{ paddingHorizontal: 16, paddingTop: 56 }}>
                   <Text style={styles.brand}>{_t('app.name')}</Text>
                 </View>
-                <DrawerItem icon="log-in" label={_t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); setError(''); }} />
-                <DrawerItem icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); setError(''); }} />
+                <DrawerItem icon="log-in" label={_t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); clearToast(); }} />
+                <DrawerItem icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); clearToast(); }} />
                 <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
-                  <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); setError(''); setMessage(''); }}>
+                  <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); clearToast(); }}>
                     <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{_t('splash.home')}</Text>
                   </Pressable>
                 </View>
@@ -1052,17 +1072,17 @@ export default function App() {
 
           {/* Tab switcher between login/register */}
           <View style={styles.segmentedControl}>
-            <Pressable style={[styles.segment, authMode === 'login' && styles.segmentActive]} onPress={() => { setAuthMode('login'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); setError(''); }}>
+            <Pressable style={[styles.segment, authMode === 'login' && styles.segmentActive]} onPress={() => { setAuthMode('login'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); clearToast(); }}>
               <Ionicons name="log-in" size={16} color={authMode === 'login' ? colors.primary : colors.muted} />
               <Text style={[styles.segmentText, authMode === 'login' && styles.segmentTextActive]}>{_t('auth.login')}</Text>
             </Pressable>
-            <Pressable style={[styles.segment, authMode === 'register' && styles.segmentActive]} onPress={() => { setAuthMode('register'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); setError(''); }}>
+            <Pressable style={[styles.segment, authMode === 'register' && styles.segmentActive]} onPress={() => { setAuthMode('register'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); clearToast(); }}>
               <Ionicons name="person-add" size={16} color={authMode === 'register' ? colors.primary : colors.muted} />
               <Text style={[styles.segmentText, authMode === 'register' && styles.segmentTextActive]}>{_t('auth.register')}</Text>
             </Pressable>
           </View>
 
-          <FloatingField required label={_t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => { setAuth((c) => ({ ...c, email })); setError(''); setMessage(''); }} />
+          <FloatingField required label={_t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => { setAuth((c) => ({ ...c, email })); clearToast(); }} />
           {auth.email.length > 0 && !emailValid && (
             <Text style={{ color: colors.danger, fontSize: 12, marginTop: -8 }}>{_t('auth.emailInvalid')}</Text>
           )}
@@ -1110,7 +1130,7 @@ export default function App() {
             style={[styles.primary, (!auth.email.trim() || !auth.password) && { opacity: 0.4, backgroundColor: colors.muted }]}
             onPress={() => {
               if (!auth.email.trim() || !auth.password) {
-                setError(authMode === 'login' ? 'Ingresa tu correo y contraseña' : 'Completa todos los campos');
+                showToast(authMode === 'login' ? _t('auth.enterCredentials') : _t('auth.completeFields'));
                 return;
               }
               submitAuth();
@@ -1119,7 +1139,7 @@ export default function App() {
           </Pressable>
         </ScrollView>
         </KeyboardAvoidingView>
-        <Toast message={toastMessage} type={toastType} onClose={() => { setError(''); setMessage(''); }} />
+        <Toast message={toast.message} type={toast.type} onClose={clearToast} />
         </Animated.View>
       </View>
     );
@@ -1785,8 +1805,8 @@ export default function App() {
           style={[styles.primary, !canOrder && { opacity: 0.4, backgroundColor: colors.muted }]}
           onPress={() => {
             if (!canOrder) {
-              if (!hasItems) setError('Selecciona al menos un platillo');
-              else if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) setError('Ingresa una dirección de entrega');
+              if (!hasItems) showToast(_t('menu.selectItem'), 'warning');
+              else if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) showToast(_t('menu.enterAddress'), 'warning');
               return;
             }
             placeOrder();
@@ -1901,7 +1921,7 @@ export default function App() {
                   <Text style={[styles.chipText, menuForm.deliveryAvailable && styles.chipTextActive]}>🚚 {_t('cook.deliveryAvailable')}</Text>
                 </Pressable>
               </View>
-              <Pressable style={styles.primary} onPress={() => { if (menuForm.title.trim()) setMenuStep(2); else setError(translateError('El título es obligatorio', lang)); }}>
+              <Pressable style={styles.primary} onPress={() => { if (menuForm.title.trim()) setMenuStep(2); else showToast(_t('cook.titleRequired')); }}>
                 <Text style={styles.primaryText}>Siguiente →</Text>
               </Pressable>
             </>
@@ -1935,7 +1955,7 @@ export default function App() {
                 <Pressable style={[styles.secondary, { flex: 1 }]} onPress={() => setMenuStep(1)}>
                   <Text style={styles.secondaryText}>← Atrás</Text>
                 </Pressable>
-                <Pressable style={[styles.primary, { flex: 1 }]} onPress={() => { if (menuItems.some((i) => i.name.trim())) setMenuStep(3); else setError(translateError('Agrega al menos un platillo con nombre', lang)); }}>
+                <Pressable style={[styles.primary, { flex: 1 }]} onPress={() => { if (menuItems.some((i) => i.name.trim())) setMenuStep(3); else showToast(_t('cook.itemNameRequired')); }}>
                   <Text style={styles.primaryText}>Revisar →</Text>
                 </Pressable>
               </View>
@@ -1972,7 +1992,7 @@ export default function App() {
                   <Text style={styles.secondaryText}>← Editar</Text>
                 </Pressable>
                 <Pressable style={[styles.primary, { flex: 1 }]} onPress={async () => {
-                  setLoading(true); setError('');
+                  setLoading(true); clearToast();
                   try {
                     const data = await api('/menus', { method: 'POST', token, body: menuForm });
                     const mid = data.menu?.id;
@@ -1982,9 +2002,9 @@ export default function App() {
                       }
                     }
                     setCookMenuId(null); setMenuStep(1); setMenuItems([]);
-                    setMessage(translateError('Menú creado con éxito', lang));
+                    showToast(_t('cook.menuCreated'), 'success');
                     loadMyMenus(); loadCookStats();
-                  } catch (e) { setError(translateError(e.message, lang)); }
+                  } catch (e) { showToast(translateError(e.message, lang)); }
                   finally { setLoading(false); }
                 }}>
                   <Text style={styles.primaryText}>{loading ? 'Publicando...' : '📢 Publicar menú'}</Text>
@@ -2011,7 +2031,7 @@ export default function App() {
                 {item.status === 'draft' && (
                   <Pressable style={[styles.primary, { marginTop: 8 }]} onPress={async () => {
                     try { await api(`/menus/${item.id}/publish`, { method: 'PUT', token }); loadMyMenus(); }
-                    catch (e) { setError(translateError(e.message, lang)); }
+                    catch (e) { showToast(translateError(e.message, lang)); }
                   }}>
                     <Text style={styles.primaryText}>📢 Publicar</Text>
                   </Pressable>
@@ -2186,7 +2206,7 @@ const loggedSplashView = (
       {screen === 'cookMenus' && cookMenusView}
       {screen === 'cookOrders' && cookOrdersView}
       {screen === 'splash' && loggedSplashView}
-      <Toast message={toastMessage} type={toastType} onClose={() => { setError(''); setMessage(''); }} />
+      <Toast message={toast.message} type={toast.type} onClose={clearToast} />
       </Animated.View>
     </View>
   );
