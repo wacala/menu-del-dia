@@ -24,6 +24,7 @@ router.post(
     body('items.*.menuItemId').isInt(),
     body('items.*.quantity').isInt({ min: 1 }),
     body('deliveryType').isIn(['pickup', 'delivery']),
+    body('paymentMethod').optional().isIn(['cash', 'spei', 'stripe']),
     body('deliveryAddress').optional().trim(),
     body('specialInstructions').optional().trim(),
   ],
@@ -35,7 +36,7 @@ router.post(
       }
 
       const {
-        menuId, items, deliveryType, deliveryAddress, specialInstructions,
+        menuId, items, deliveryType, paymentMethod, deliveryAddress, specialInstructions,
       } = req.body;
 
       const memberResult = await db.query(
@@ -101,10 +102,11 @@ router.post(
         `INSERT INTO orders
            (order_number, menu_id, member_id, cook_id, subtotal, delivery_fee,
             total_amount, delivery_type, delivery_address, special_instructions, payment_method)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'cash')
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,COALESCE($11,'cash'))
          RETURNING *`,
         [orderNumber, menuId, memberId, menu.cook_id, subtotal,
-          deliveryFee, totalAmount, deliveryType, deliveryAddress, specialInstructions],
+          deliveryFee, totalAmount, deliveryType, deliveryAddress,
+          specialInstructions, paymentMethod],
       );
 
       const order = orderResult.rows[0];

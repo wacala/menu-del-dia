@@ -82,7 +82,7 @@ const translations = {
     splash: { description: 'Compra y vende comida casera en tu comunidad.', tagline: 'Cocina comunitaria para tu comunidad', mission1: 'Ayudamos a cocineras y cocineros comunitarios a comercializar sus menús sin intermediarios abusivos', mission2: 'Impulsamos el talento culinario de tu comunidad — hecha en México, para México', mission3: 'Emprende tu propio negocio de cocina, sin ataduras a plataformas monopólicas', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
     auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.', usernameRules: 'Solo letras, números y guión bajo. Mínimo 3 caracteres.', usernameTaken: 'Este usuario ya está registrado', enterCredentials: 'Ingresa tu correo y contraseña', completeFields: 'Completa todos los campos' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
-    menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', selectItem: 'Selecciona al menos un platillo', enterAddress: 'Ingresa una dirección de entrega', orderPlaced: 'Pedido realizado con éxito', couldNotCreate: 'No se pudo crear el pedido', paymentCancelled: 'Pago cancelado' },
+    menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', selectItem: 'Selecciona al menos un platillo', enterAddress: 'Ingresa una dirección de entrega', orderPlaced: 'Pedido realizado con éxito', couldNotCreate: 'No se pudo crear el pedido', paymentCancelled: 'Pago cancelado', paymentLabel: 'Método de pago', cash: 'Efectivo', spei: 'Transferencia SPEI', card: 'Tarjeta' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
@@ -95,7 +95,7 @@ const translations = {
     splash: { description: 'Buy and sell homemade food in your community.', tagline: 'Community kitchen for your community', mission1: 'We help community cooks commercialize their menus without abusive intermediaries', mission2: 'Empowering your community\'s culinary talent — made in Mexico, for Mexico', mission3: 'Start your own kitchen business, free from monopolistic platforms', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
     auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.', usernameRules: 'Only letters, numbers, and underscores. Min 3 characters.', usernameTaken: 'This username is already taken', enterCredentials: 'Enter your email and password', completeFields: 'Complete all fields' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
-    menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', deliveryAddress: 'Address', total: 'Total', placeOrder: 'Place order', selectItem: 'Select at least one item', enterAddress: 'Enter a delivery address', orderPlaced: 'Order placed successfully', couldNotCreate: 'Could not create order', paymentCancelled: 'Payment cancelled' },
+    menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', deliveryAddress: 'Address', total: 'Total', placeOrder: 'Place order', selectItem: 'Select at least one item', enterAddress: 'Enter a delivery address', orderPlaced: 'Order placed successfully', couldNotCreate: 'Could not create order', paymentCancelled: 'Payment cancelled', paymentLabel: 'Payment method', cash: 'Cash', spei: 'SPEI Transfer', card: 'Card' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
@@ -390,6 +390,7 @@ export default function App() {
   const [orders, setOrders] = useState([]);
   const [draft, setDraft] = useState({
     deliveryType: 'pickup',
+    paymentMethod: 'cash',
     deliveryAddress: '',
     specialInstructions: '',
     quantities: {},
@@ -824,6 +825,7 @@ export default function App() {
         body: {
           menuId: menu.id,
           items,
+          paymentMethod: draft.paymentMethod,
           deliveryType: draft.deliveryType,
           deliveryAddress: draft.deliveryAddress.trim() || undefined,
           specialInstructions: draft.specialInstructions.trim() || undefined,
@@ -832,35 +834,31 @@ export default function App() {
       const orderId = orderData.order?.id || orderData.id;
       if (!orderId) { showToast(_t('menu.couldNotCreate')); setLoading(false); return; }
 
-      if (DEV_SKIP_PAYMENT) {
-        // Test mode — skip Stripe payment
+      if (draft.paymentMethod === 'stripe' && !DEV_SKIP_PAYMENT) {
+        // Stripe payment flow
+        const payData = await api('/payments/intent', { method: 'POST', token, body: { orderId } });
+        const { clientSecret } = payData;
+
+        const { error: initError } = await stripe.initPaymentSheet({
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: 'Menú del Día',
+          style: 'automatic',
+        });
+        if (initError) { showToast(initError.message); setLoading(false); return; }
+
+        const { error: presentError } = await stripe.presentPaymentSheet();
+        if (presentError) {
+          showToast(_t('menu.paymentCancelled'));
+          setLoading(false);
+          return;
+        }
+
+        await api('/payments/confirm', { method: 'POST', token, body: { orderId, paymentIntentId: clientSecret } });
+      } else {
+        // Cash or SPEI — confirm order immediately
         await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'confirmed', skip_auth: true } });
         await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'delivered', skip_auth: true } });
-        showToast(_t('menu.orderPlaced'), 'success');
-        setScreen('orders');
-        await loadOrders();
-        setLoading(false);
-        return;
       }
-
-      const payData = await api('/payments/intent', { method: 'POST', token, body: { orderId } });
-      const { clientSecret } = payData;
-
-      const { error: initError } = await stripe.initPaymentSheet({
-        paymentIntentClientSecret: clientSecret,
-        merchantDisplayName: 'Menú del Día',
-        style: 'automatic',
-      });
-      if (initError) { showToast(initError.message); setLoading(false); return; }
-
-      const { error: presentError } = await stripe.presentPaymentSheet();
-      if (presentError) {
-        showToast(_t('menu.paymentCancelled'));
-        setLoading(false);
-        return;
-      }
-
-      await api('/payments/confirm', { method: 'POST', token, body: { orderId, paymentIntentId: clientSecret } });
       showToast(_t('menu.orderPlaced'), 'success');
       setScreen('orders');
       await loadOrders();
@@ -1893,6 +1891,23 @@ export default function App() {
         {draft.deliveryType === 'delivery' && (
           <FloatingField ref={addressRef} label={_t('menu.deliveryAddress')} value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} onFocus={() => scrollToField(800)} />
         )}
+        <Text style={[s.cardTitle, { marginTop: 8 }]}>{_t('menu.paymentLabel')}</Text>
+        <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
+          {['cash', 'spei', 'stripe'].map((m) => {
+            const active = draft.paymentMethod === m;
+            return (
+              <Pressable key={m} onPress={() => setDraft((c) => ({ ...c, paymentMethod: m }))}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 7, borderRadius: 16,
+                  backgroundColor: active ? T.primary : T.card,
+                  borderWidth: 1, borderColor: active ? T.primary : T.border }}>
+                <Text style={{ fontSize: 12, fontWeight: '700', color: active ? '#fff' : T.text }}>
+                  {m === 'cash' ? '💵 ' : m === 'spei' ? '🏦 ' : '💳 '}
+                  {m === 'cash' ? _t('menu.cash') : m === 'spei' ? _t('menu.spei') : _t('menu.card')}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
         <FloatingField label={_t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} onFocus={() => scrollToField(900)} />
         <Pressable
           style={[s.primary, !canOrder && { opacity: 0.4, backgroundColor: T.muted }]}

@@ -31,7 +31,7 @@ CREATE TYPE user_role AS ENUM ('cook', 'member', 'admin');
 CREATE TYPE user_status AS ENUM ('active', 'inactive', 'suspended');
 CREATE TYPE menu_status AS ENUM ('draft', 'published', 'closed', 'cancelled');
 CREATE TYPE order_status AS ENUM ('pending', 'confirmed', 'ready', 'picked_up', 'delivered', 'cancelled');
-CREATE TYPE payment_method AS ENUM ('cash', 'stripe');
+CREATE TYPE payment_method AS ENUM ('cash', 'spei', 'stripe');
 CREATE TYPE payment_status AS ENUM ('pending', 'completed', 'failed', 'refunded');
 CREATE TYPE payout_status AS ENUM ('pending', 'processing', 'completed', 'failed');
 CREATE TYPE cook_status AS ENUM ('pending_approval', 'approved', 'rejected');
