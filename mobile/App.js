@@ -1388,7 +1388,6 @@ export default function App() {
       <View style={{ marginBottom: 8 }}>
         <Text style={{ fontSize: 13, color: T.muted, fontWeight: '600' }}>
           {publishedMenus.length} menú{publishedMenus.length !== 1 ? 's' : ''}
-          {filterDelivery !== 'all' && ` · ${filterDelivery === 'pickup' ? 'Recoger' : 'Envío'}`}
         </Text>
       </View>
       </>
@@ -1504,6 +1503,70 @@ export default function App() {
           }}
           ListFooterComponent={<View style={{ height: 100 }} />}
         />
+      {showFilterModal && (
+        <Modal transparent animationType="slide" visible={showFilterModal} onRequestClose={() => setShowFilterModal(false)}>
+          <Pressable style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' }} onPress={() => setShowFilterModal(false)}>
+            <View />
+          </Pressable>
+          <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: T.card, borderTopLeftRadius: 20, borderTopRightRadius: 20, maxHeight: '80%', paddingBottom: 40 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: T.border }}>
+              <Text style={{ fontSize: 18, fontWeight: '800', color: T.text }}>Filtros</Text>
+              <Pressable onPress={() => setShowFilterModal(false)}>
+                <Ionicons name="close" size={24} color={T.text} />
+              </Pressable>
+            </View>
+            <ScrollView style={{ padding: 16 }} nestedScrollEnabled>
+              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Ordenar por</Text>
+              <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
+                {[['balanced', 'swap-vertical', 'Balanceado'], ['rating', 'star', 'Calificación'], ['price_asc', 'trending-up', 'Precio ↑'], ['price_desc', 'trending-down', 'Precio ↓'], ['name', 'text', 'A-Z']].map(([val, icon, lab]) => (
+                  <Pressable key={val} onPress={() => setSortBy(val)}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
+                      backgroundColor: sortBy === val ? T.primary : T.card,
+                      borderWidth: 1, borderColor: sortBy === val ? T.primary : T.border }}>
+                    <Ionicons name={icon} size={14} color={sortBy === val ? '#fff' : T.text} />
+                    <Text style={{ fontSize: 12, fontWeight: '700', color: sortBy === val ? '#fff' : T.text }}>{lab}</Text>
+                  </Pressable>
+                ))}
+              </View>
+              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Precio</Text>
+              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center', marginBottom: 20 }}>
+                <TextInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Mín" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
+                <Text style={{ color: T.muted }}>—</Text>
+                <TextInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Máx" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
+              </View>
+              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Calificación mínima</Text>
+              <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
+                {[0, 1, 2, 3, 4, 5].map((r) => (
+                  <Pressable key={r} onPress={() => setMinRating(r)}
+                    style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
+                      backgroundColor: minRating === r ? T.primary : T.card,
+                      borderWidth: 1, borderColor: minRating === r ? T.primary : T.border }}>
+                    <Text style={{ fontSize: 12, fontWeight: '700', color: minRating === r ? '#fff' : T.text }}>
+                      {r === 0 ? 'Cualquiera' : `${'★'.repeat(r)}${'☆'.repeat(5 - r)}`}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tradicional ↔ Fusión — {fusionLevel}%</Text>
+              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+                <Pressable onPress={() => setFusionLevel(Math.max(0, fusionLevel - 10))} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: T.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="remove" size={20} color={T.primary} />
+                </Pressable>
+                <View style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: T.border }}>
+                  <View style={{ width: `${fusionLevel}%`, height: 6, borderRadius: 3, backgroundColor: T.primary }} />
+                </View>
+                <Pressable onPress={() => setFusionLevel(Math.min(100, fusionLevel + 10))} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: T.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="add" size={20} color={T.primary} />
+                </Pressable>
+              </View>
+              <Pressable onPress={() => { setCuisineFilter([]); setMinPrice(''); setMaxPrice(''); setMinRating(0); setFusionLevel(50); setSortBy('balanced'); setFilterDelivery('all'); setShowFilterModal(false); }}
+                style={{ paddingVertical: 12, alignItems: 'center', marginTop: 8 }}>
+                <Text style={{ color: T.danger, fontWeight: '700', fontSize: 14 }}>Limpiar todos los filtros</Text>
+              </Pressable>
+            </ScrollView>
+          </View>
+        </Modal>
+      )}
     </View>
   );
 
@@ -2244,70 +2307,6 @@ const loggedSplashView = (
       </Animated.View>
 
       {screen === 'market' && marketView}
-      {showFilterModal && (
-        <Modal transparent animationType="slide" visible={showFilterModal} onRequestClose={() => setShowFilterModal(false)}>
-          <Pressable style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' }} onPress={() => setShowFilterModal(false)}>
-            <View />
-          </Pressable>
-          <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: T.card, borderTopLeftRadius: 20, borderTopRightRadius: 20, maxHeight: '80%', paddingBottom: 40 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderBottomColor: T.border }}>
-              <Text style={{ fontSize: 18, fontWeight: '800', color: T.text }}>Filtros</Text>
-              <Pressable onPress={() => setShowFilterModal(false)}>
-                <Ionicons name="close" size={24} color={T.text} />
-              </Pressable>
-            </View>
-            <ScrollView style={{ padding: 16 }} nestedScrollEnabled>
-              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Ordenar por</Text>
-              <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
-                {[['balanced', 'swap-vertical', 'Balanceado'], ['rating', 'star', 'Calificación'], ['price_asc', 'trending-up', 'Precio ↑'], ['price_desc', 'trending-down', 'Precio ↓'], ['name', 'text', 'A-Z']].map(([val, icon, lab]) => (
-                  <Pressable key={val} onPress={() => setSortBy(val)}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
-                      backgroundColor: sortBy === val ? T.primary : T.card,
-                      borderWidth: 1, borderColor: sortBy === val ? T.primary : T.border }}>
-                    <Ionicons name={icon} size={14} color={sortBy === val ? '#fff' : T.text} />
-                    <Text style={{ fontSize: 12, fontWeight: '700', color: sortBy === val ? '#fff' : T.text }}>{lab}</Text>
-                  </Pressable>
-                ))}
-              </View>
-              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Precio</Text>
-              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center', marginBottom: 20 }}>
-                <TextInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Mín" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
-                <Text style={{ color: T.muted }}>—</Text>
-                <TextInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Máx" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
-              </View>
-              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Calificación mínima</Text>
-              <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
-                {[0, 1, 2, 3, 4, 5].map((r) => (
-                  <Pressable key={r} onPress={() => setMinRating(r)}
-                    style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
-                      backgroundColor: minRating === r ? T.primary : T.card,
-                      borderWidth: 1, borderColor: minRating === r ? T.primary : T.border }}>
-                    <Text style={{ fontSize: 12, fontWeight: '700', color: minRating === r ? '#fff' : T.text }}>
-                      {r === 0 ? 'Cualquiera' : `${'★'.repeat(r)}${'☆'.repeat(5 - r)}`}
-                    </Text>
-                  </Pressable>
-                ))}
-              </View>
-              <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tradicional ↔ Fusión — {fusionLevel}%</Text>
-              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                <Pressable onPress={() => setFusionLevel(Math.max(0, fusionLevel - 10))} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: T.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
-                  <Ionicons name="remove" size={20} color={T.primary} />
-                </Pressable>
-                <View style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: T.border }}>
-                  <View style={{ width: `${fusionLevel}%`, height: 6, borderRadius: 3, backgroundColor: T.primary }} />
-                </View>
-                <Pressable onPress={() => setFusionLevel(Math.min(100, fusionLevel + 10))} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: T.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
-                  <Ionicons name="add" size={20} color={T.primary} />
-                </Pressable>
-              </View>
-              <Pressable onPress={() => { setCuisineFilter([]); setMinPrice(''); setMaxPrice(''); setMinRating(0); setFusionLevel(50); setSortBy('balanced'); setFilterDelivery('all'); setShowFilterModal(false); }}
-                style={{ paddingVertical: 12, alignItems: 'center', marginTop: 8 }}>
-                <Text style={{ color: T.danger, fontWeight: '700', fontSize: 14 }}>Limpiar todos los filtros</Text>
-              </Pressable>
-            </ScrollView>
-          </View>
-        </Modal>
-      )}
       {screen === 'mealPlanner' && mealPlannerView}
       {screen === 'orders' && ordersView}
       {screen === 'profile' && profileView}
