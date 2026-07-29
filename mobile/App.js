@@ -1838,20 +1838,41 @@ export default function App() {
         </View>
       )}
 
-      {(menu?.items || []).map((item) => (
-        <View key={item.id} style={{ backgroundColor: T.card, borderRadius: 14, borderWidth: 1, borderColor: T.border, padding: 12, gap: 6 }}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={{ fontSize: 14, fontWeight: '600', color: T.text, flex: 1 }}>{item.name}</Text>
-            <Text style={{ color: T.primary, fontWeight: '800', fontSize: 14 }}>{money(item.price)}</Text>
-          </View>
-          <Text style={[s.muted, { fontSize: 11 }]}>{item.quantity_available} disponibles</Text>
-          <View style={s.qtyRow}>
-            <Chip label="−" onPress={() => setDraft((c) => ({ ...c, quantities: { ...c.quantities, [item.id]: Math.max(0, Number(c.quantities[item.id] || 1) - 1) } }))} />
-            <Text style={s.qtyValue}>{draft.quantities[item.id] || 0}</Text>
-            <Chip label="+" onPress={() => setDraft((c) => ({ ...c, quantities: { ...c.quantities, [item.id]: Number(c.quantities[item.id] || 0) + 1 } }))} />
-          </View>
-        </View>
-      ))}
+      {/* Items — compactos tipo Uber Eats */}
+      <View style={{ backgroundColor: T.card, borderRadius: 16, borderWidth: 1, borderColor: T.border, overflow: 'hidden' }}>
+        {(menu?.items || []).map((item, idx) => {
+          const qty = Number(draft.quantities[item.id] || 0);
+          return (
+            <View key={item.id} style={{
+              flexDirection: 'row', alignItems: 'center', padding: 14,
+              borderBottomWidth: idx < menu.items.length - 1 ? 1 : 0,
+              borderBottomColor: T.border,
+            }}>
+              {/* Item info */}
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 15, fontWeight: '600', color: T.text }}>{item.name}</Text>
+                <Text style={{ color: T.primary, fontWeight: '800', fontSize: 14, marginTop: 2 }}>{money(item.price)}</Text>
+              </View>
+              {/* Quantity controls */}
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
+                {qty > 0 ? (
+                  <>
+                    <Pressable onPress={() => setDraft((c) => ({ ...c, quantities: { ...c.quantities, [item.id]: Math.max(0, qty - 1) } }))}
+                      style={s.qtyBtn}>
+                      <Ionicons name="remove" size={16} color={T.primary} />
+                    </Pressable>
+                    <Text style={s.qtyValue}>{qty}</Text>
+                  </>
+                ) : null}
+                <Pressable onPress={() => setDraft((c) => ({ ...c, quantities: { ...c.quantities, [item.id]: qty + 1 } }))}
+                  style={[s.qtyBtn, { backgroundColor: qty === 0 ? T.primary : T.primaryLight }]}>
+                  <Ionicons name="add" size={16} color={qty === 0 ? '#fff' : T.primary} />
+                </Pressable>
+              </View>
+            </View>
+          );
+        })}
+      </View>
       <View style={s.card}>
         <Text style={s.cardTitle}>{_t('menu.deliveryType')}</Text>
         {/* Tab container */}
