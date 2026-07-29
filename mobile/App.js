@@ -23,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useStripe } from '@stripe/stripe-react-native';
 
 const STORAGE_KEY = 'menu-del-dia-session';
+const THEME_KEY = 'menu-del-dia-theme';
 const DEV_SKIP_PAYMENT = true; // Skip Stripe for testing
 const API_URL = process.env.EXPO_PUBLIC_API_URL || Platform.select({
   ios: 'http://localhost:3001/api',
@@ -48,6 +49,24 @@ const colors = {
   coffeeLight: '#f5ebe0',
 };
 
+const darkColors = {
+  bg: '#1c1917',
+  card: '#292524',
+  text: '#f5f5f4',
+  textSecondary: '#a8a29e',
+  muted: '#78716c',
+  primary: '#f97316',
+  primaryDark: '#ea580c',
+  primaryLight: '#3a2a1a',
+  border: '#44403c',
+  danger: '#f87171',
+  success: '#4ade80',
+  amber: '#fbbf24',
+  emerald: '#34d399',
+  purple: '#a78bfa',
+  coffeeLight: '#2a2725',
+};
+
 // ── i18n ────────────────────────────────────────────────────
 const LANG_KEY = 'menu-del-dia-lang';
 
@@ -67,7 +86,7 @@ const translations = {
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
-    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp' },
+    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp', darkMode: 'Modo oscuro' },
     cook: { dashboard: 'Panel', orders: 'Pedidos', ordersTitle: 'Pedidos recibidos', menus: 'Menús', myMenus: 'Mis menús', profile: 'Perfil', activeMenus: 'Menús activos', totalOrders: 'Total pedidos', pendingOrders: 'Pendientes', revenue: 'Ingresos', refreshNow: 'Actualizar', noOrders: 'Sin pedidos aún', noMenusYet: 'Aún no tienes menús', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', readyForPickupCook: 'Listo para recoger', createMenuBtn: 'Crear menú', menuTitle: 'Título del menú', description: 'Descripción', menuDate: 'Fecha del menú', orderStart: 'Hora inicio pedidos', orderEnd: 'Hora cierre pedidos', pickupLocation: 'Ubicación de recogida', pickupAvailable: 'Recoger disponible', deliveryAvailable: 'Envío disponible', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito' }
   },
   en: {
@@ -80,7 +99,7 @@ const translations = {
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
-    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings', phone: 'Phone', phonePlaceholder: 'Eg: +521234567890', phoneSaved: 'Phone saved', notifications: 'Notifications', notifyNewOrders: 'New orders via WhatsApp' },
+    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings', phone: 'Phone', phonePlaceholder: 'Eg: +521234567890', phoneSaved: 'Phone saved', notifications: 'Notifications', notifyNewOrders: 'New orders via WhatsApp', darkMode: 'Dark mode' },
     cook: { dashboard: 'Dashboard', orders: 'Orders', ordersTitle: 'Received orders', menus: 'Menus', myMenus: 'My menus', profile: 'Profile', activeMenus: 'Active menus', totalOrders: 'Total orders', pendingOrders: 'Pending', revenue: 'Revenue', refreshNow: 'Refresh', noOrders: 'No orders yet', noMenusYet: 'No menus yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', readyForPickupCook: 'Ready for pickup', createMenuBtn: 'Create menu', menuTitle: 'Menu title', description: 'Description', menuDate: 'Menu date', orderStart: 'Order start time', orderEnd: 'Order end time', pickupLocation: 'Pickup location', pickupAvailable: 'Pickup available', deliveryAvailable: 'Delivery available', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully' }
   }
 };
@@ -289,6 +308,8 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [phoneInput, setPhoneInput] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+  const T = darkMode ? darkColors : colors;
   const [screen, setScreen] = useState('splash');
   const [authMode, setAuthMode] = useState('login');
   const [lang, setLang] = useState('es-MX');
@@ -382,6 +403,8 @@ export default function App() {
         setPhoneInput(session.user?.phone || '');
         if (session.token) setScreen(session.user?.role === 'cook' ? 'cookDashboard' : 'market');
       }
+      const savedTheme = await AsyncStorage.getItem(THEME_KEY);
+      if (savedTheme === 'dark') setDarkMode(true);
       setLang('es-MX');
       await AsyncStorage.setItem(LANG_KEY, 'es-MX');
       setReady(true);
@@ -439,6 +462,12 @@ export default function App() {
     setUser(nextUser);
     setPhoneInput(nextUser?.phone || '');
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ token: nextToken, user: nextUser }));
+  };
+
+  const toggleDarkMode = async () => {
+    const next = !darkMode;
+    setDarkMode(next);
+    await AsyncStorage.setItem(THEME_KEY, next ? 'dark' : 'light');
   };
 
   const logout = async () => {
@@ -903,7 +932,7 @@ export default function App() {
   if (!ready || !fontsLoaded) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator color={colors.primary} />
+        <ActivityIndicator color={T.primary} />
       </View>
     );
   }
@@ -912,7 +941,7 @@ export default function App() {
     return (
       <ScrollView contentContainerStyle={styles.auth}>
         <View style={{ alignItems: 'center', marginBottom: 16 }}>
-          <Ionicons name="mail-unread-outline" size={48} color={colors.primary} />
+          <Ionicons name="mail-unread-outline" size={48} color={T.primary} />
         </View>
         <Text style={styles.sectionTitle}>{_t('auth.checkEmail')}</Text>
         <Text style={styles.body}>{_t('auth.verificationSent')}</Text>
@@ -962,11 +991,11 @@ export default function App() {
               ].map((item, i) => (
                 <View key={i} style={{
                   flexDirection: 'row', alignItems: 'flex-start', gap: 12,
-                  backgroundColor: colors.primaryLight, borderRadius: 14,
-                  padding: 14, borderWidth: 1, borderColor: colors.primary,
+                  backgroundColor: T.primaryLight, borderRadius: 14,
+                  padding: 14, borderWidth: 1, borderColor: T.primary,
                 }}>
                   <Text style={{ fontSize: 24 }}>{item.icon}</Text>
-                  <Text style={{ flex: 1, color: colors.textSecondary, fontSize: 13, lineHeight: 18, fontWeight: '500' }}>
+                  <Text style={{ flex: 1, color: T.textSecondary, fontSize: 13, lineHeight: 18, fontWeight: '500' }}>
                     {item.text}
                   </Text>
                 </View>
@@ -1047,7 +1076,7 @@ export default function App() {
         <View style={styles.top}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
-              <Ionicons name="menu" size={24} color={colors.text} />
+              <Ionicons name="menu" size={24} color={T.text} />
             </Pressable>
             <Text style={styles.brand}>{_t('app.name')}</Text>
             <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
@@ -1066,9 +1095,9 @@ export default function App() {
                 </View>
                 <DrawerItem icon="log-in" label={_t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); clearToast(); }} />
                 <DrawerItem icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); clearToast(); }} />
-                <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
+                <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: T.border, paddingTop: 16, paddingHorizontal: 16 }}>
                   <Pressable style={styles.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); clearToast(); }}>
-                    <Text style={{ color: colors.muted, fontWeight: '600', marginLeft: 12 }}>{_t('splash.home')}</Text>
+                    <Text style={{ color: T.muted, fontWeight: '600', marginLeft: 12 }}>{_t('splash.home')}</Text>
                   </Pressable>
                 </View>
               </Pressable>
@@ -1091,18 +1120,18 @@ export default function App() {
           {/* Tab switcher between login/register */}
           <View style={styles.segmentedControl}>
             <Pressable style={[styles.segment, authMode === 'login' && styles.segmentActive]} onPress={() => { setAuthMode('login'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); clearToast(); }}>
-              <Ionicons name="log-in" size={16} color={authMode === 'login' ? colors.primary : colors.muted} />
+              <Ionicons name="log-in" size={16} color={authMode === 'login' ? T.primary : T.muted} />
               <Text style={[styles.segmentText, authMode === 'login' && styles.segmentTextActive]}>{_t('auth.login')}</Text>
             </Pressable>
             <Pressable style={[styles.segment, authMode === 'register' && styles.segmentActive]} onPress={() => { setAuthMode('register'); setAuth({ email: '', password: '', confirmPassword: '', username: '', firstName: '', lastName: '', role: 'member' }); clearToast(); }}>
-              <Ionicons name="person-add" size={16} color={authMode === 'register' ? colors.primary : colors.muted} />
+              <Ionicons name="person-add" size={16} color={authMode === 'register' ? T.primary : T.muted} />
               <Text style={[styles.segmentText, authMode === 'register' && styles.segmentTextActive]}>{_t('auth.register')}</Text>
             </Pressable>
           </View>
 
           <FloatingField required label={_t('auth.email')} value={auth.email} autoCapitalize="none" onChangeText={(email) => { setAuth((c) => ({ ...c, email })); clearToast(); }} />
           {auth.email.length > 0 && !emailValid && (
-            <Text style={{ color: colors.danger, fontSize: 12, marginTop: -8 }}>{_t('auth.emailInvalid')}</Text>
+            <Text style={{ color: T.danger, fontSize: 12, marginTop: -8 }}>{_t('auth.emailInvalid')}</Text>
           )}
           <FloatingField required label={_t('auth.password')} value={auth.password} secureTextEntry onChangeText={(password) => setAuth((c) => ({ ...c, password }))} />
 
@@ -1115,10 +1144,10 @@ export default function App() {
                   setAuth((c) => ({ ...c, username: sanitized }));
                 }} />
                 {auth.username.length > 0 && !usernameValid && (
-                  <Text style={{ color: colors.amber, fontSize: 12, marginTop: -4 }}>{_t('auth.usernameRules')}</Text>
+                  <Text style={{ color: T.amber, fontSize: 12, marginTop: -4 }}>{_t('auth.usernameRules')}</Text>
                 )}
                 {auth.username.length >= 3 && (
-                  <Text style={{ color: colors.muted, fontSize: 11, marginTop: -4 }}>✓ @{auth.username}</Text>
+                  <Text style={{ color: T.muted, fontSize: 11, marginTop: -4 }}>✓ @{auth.username}</Text>
                 )}
               </View>
               <View style={styles.row}>
@@ -1127,11 +1156,11 @@ export default function App() {
               </View>
               <View style={styles.segmentedControl}>
                 <Pressable style={[styles.segment, auth.role === 'member' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'member' }))}>
-                  <Ionicons name="cart" size={16} color={auth.role === 'member' ? colors.primary : colors.muted} />
+                  <Ionicons name="cart" size={16} color={auth.role === 'member' ? T.primary : T.muted} />
                   <Text style={[styles.segmentText, auth.role === 'member' && styles.segmentTextActive]}>{_t('auth.member')}</Text>
                 </Pressable>
                 <Pressable style={[styles.segment, auth.role === 'cook' && styles.segmentActive]} onPress={() => setAuth((c) => ({ ...c, role: 'cook' }))}>
-                  <Ionicons name="restaurant" size={16} color={auth.role === 'cook' ? colors.primary : colors.muted} />
+                  <Ionicons name="restaurant" size={16} color={auth.role === 'cook' ? T.primary : T.muted} />
                   <Text style={[styles.segmentText, auth.role === 'cook' && styles.segmentTextActive]}>{_t('auth.cook')}</Text>
                 </Pressable>
               </View>
@@ -1145,7 +1174,7 @@ export default function App() {
           )}
 
           <Pressable
-            style={[styles.primary, (!auth.email.trim() || !auth.password) && { opacity: 0.4, backgroundColor: colors.muted }]}
+            style={[styles.primary, (!auth.email.trim() || !auth.password) && { opacity: 0.4, backgroundColor: T.muted }]}
             onPress={() => {
               if (!auth.email.trim() || !auth.password) {
                 showToast(authMode === 'login' ? _t('auth.enterCredentials') : _t('auth.completeFields'));
@@ -1171,24 +1200,24 @@ export default function App() {
       <View style={styles.headerRow}>
         <Text style={styles.sectionTitle}>{_t('market.title')}</Text>
         <Pressable onPress={loadMenus}>
-          <Ionicons name="refresh" size={20} color={colors.primary} />
+          <Ionicons name="refresh" size={20} color={T.primary} />
         </Pressable>
       </View>
 
       {/* Search bar */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 12 }}>
-          <Ionicons name="search" size={18} color={colors.muted} />
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: T.card, borderRadius: 14, borderWidth: 1, borderColor: T.border, paddingHorizontal: 12 }}>
+          <Ionicons name="search" size={18} color={T.muted} />
           <TextInput
-            style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 8, color: colors.text, fontSize: 15 }}
+            style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 8, color: T.text, fontSize: 15 }}
             placeholder={_t('search.placeholder')}
-            placeholderTextColor={colors.muted}
+            placeholderTextColor={T.muted}
             value={searchText}
             onChangeText={setSearchText}
           />
           {searchText ? (
             <Pressable onPress={() => setSearchText('')}>
-              <Ionicons name="close-circle" size={18} color={colors.muted} />
+              <Ionicons name="close-circle" size={18} color={T.muted} />
             </Pressable>
           ) : null}
         </View>
@@ -1196,12 +1225,12 @@ export default function App() {
 
       {/* Predictive suggestions */}
       {searchSuggestions.length > 0 && (
-        <View style={{ marginBottom: 8, backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, overflow: 'hidden' }}>
+        <View style={{ marginBottom: 8, backgroundColor: T.card, borderRadius: 14, borderWidth: 1, borderColor: T.border, overflow: 'hidden' }}>
           {searchSuggestions.map((s, i) => (
             <Pressable key={s} onPress={() => { setSearchText(s); }}
-              style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderBottomWidth: i < searchSuggestions.length - 1 ? 1 : 0, borderBottomColor: colors.border }}>
-              <Ionicons name="search-outline" size={16} color={colors.muted} />
-              <Text style={{ color: colors.text, fontSize: 14 }}>{s}</Text>
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderBottomWidth: i < searchSuggestions.length - 1 ? 1 : 0, borderBottomColor: T.border }}>
+              <Ionicons name="search-outline" size={16} color={T.muted} />
+              <Text style={{ color: T.text, fontSize: 14 }}>{s}</Text>
             </Pressable>
           ))}
         </View>
@@ -1216,31 +1245,31 @@ export default function App() {
             style={{
               flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
               paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10,
-              backgroundColor: sortBy !== 'balanced' ? colors.primaryLight : (colors.coffeeLight || '#f5ebe0'),
-              borderWidth: 1, borderColor: sortBy !== 'balanced' ? colors.primary : colors.border,
+              backgroundColor: sortBy !== 'balanced' ? T.primaryLight : (T.coffeeLight || '#f5ebe0'),
+              borderWidth: 1, borderColor: sortBy !== 'balanced' ? T.primary : T.border,
             }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-              <Ionicons name="swap-vertical" size={16} color={sortBy !== 'balanced' ? colors.primary : colors.text} />
-              <Text style={{ fontSize: 13, color: sortBy !== 'balanced' ? colors.primary : colors.text, fontWeight: '600' }}>
+              <Ionicons name="swap-vertical" size={16} color={sortBy !== 'balanced' ? T.primary : T.text} />
+              <Text style={{ fontSize: 13, color: sortBy !== 'balanced' ? T.primary : T.text, fontWeight: '600' }}>
                 {sortBy === 'balanced' ? 'Balanceado' :
                  sortBy === 'rating' ? 'Calificación' :
                  sortBy === 'price_asc' ? 'Precio ↑' :
                  sortBy === 'price_desc' ? 'Precio ↓' : 'Nombre'}
               </Text>
             </View>
-            <Ionicons name={showSortDropdown ? 'chevron-up' : 'chevron-down'} size={14} color={colors.muted} />
+            <Ionicons name={showSortDropdown ? 'chevron-up' : 'chevron-down'} size={14} color={T.muted} />
           </Pressable>
 
           {showSortDropdown && (
             <View style={{
               position: 'absolute', top: '100%', left: 0, right: 0,
-              backgroundColor: colors.card || '#fff', borderRadius: 8, marginTop: 4,
-              borderWidth: 1, borderColor: colors.border, overflow: 'hidden',
+              backgroundColor: T.card || '#fff', borderRadius: 8, marginTop: 4,
+              borderWidth: 1, borderColor: T.border, overflow: 'hidden',
               elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: 3 },
               shadowOpacity: 0.2, shadowRadius: 6,
             }}>
-              <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: colors.border, backgroundColor: colors.coffeeLight || '#f5ebe0' }}>
-                <Text style={{ fontSize: 11, color: colors.muted, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 }}>Ordenar por</Text>
+              <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: T.border, backgroundColor: T.coffeeLight || '#f5ebe0' }}>
+                <Text style={{ fontSize: 11, color: T.muted, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 0.5 }}>Ordenar por</Text>
               </View>
               {[
                 { key: 'balanced', label: '⚖️ Balanceado' },
@@ -1253,14 +1282,14 @@ export default function App() {
                   style={{
                     flexDirection: 'row', alignItems: 'center', gap: 8,
                     paddingHorizontal: 12, paddingVertical: 10,
-                    backgroundColor: sortBy === opt.key ? colors.primaryLight : 'transparent',
-                    borderBottomWidth: i < 4 ? 1 : 0, borderBottomColor: colors.border,
+                    backgroundColor: sortBy === opt.key ? T.primaryLight : 'transparent',
+                    borderBottomWidth: i < 4 ? 1 : 0, borderBottomColor: T.border,
                   }}>
-                  <Text style={{ fontSize: 14, color: colors.text, fontWeight: sortBy === opt.key ? '700' : '500', flex: 1 }}>
+                  <Text style={{ fontSize: 14, color: T.text, fontWeight: sortBy === opt.key ? '700' : '500', flex: 1 }}>
                     {opt.label}
                   </Text>
                   {sortBy === opt.key && (
-                    <Ionicons name="checkmark" size={18} color={colors.primary} />
+                    <Ionicons name="checkmark" size={18} color={T.primary} />
                   )}
                 </Pressable>
               ))}
@@ -1271,30 +1300,30 @@ export default function App() {
 
         {/* Filters button */}
         <Pressable onPress={() => setShowFilters((p) => !p)}
-          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10, backgroundColor: (() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? colors.primaryLight : (colors.coffeeLight || '#f5ebe0'); })(), borderWidth: 1, borderColor: (() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? colors.primary : colors.border; })() }}>
-          <Ionicons name="funnel-outline" size={16} color={(() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? colors.primary : colors.text; })()} />
-          <Text style={{ fontSize: 13, color: (() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? colors.primary : colors.text; })(), fontWeight: '600' }}>Filtros</Text>
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 14, paddingVertical: 8, borderRadius: 10, backgroundColor: (() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? T.primaryLight : (T.coffeeLight || '#f5ebe0'); })(), borderWidth: 1, borderColor: (() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? T.primary : T.border; })() }}>
+          <Ionicons name="funnel-outline" size={16} color={(() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? T.primary : T.text; })()} />
+          <Text style={{ fontSize: 13, color: (() => { const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0); return count > 0 ? T.primary : T.text; })(), fontWeight: '600' }}>Filtros</Text>
           {(() => {
             const count = (cuisineFilter.length > 0 ? 1 : 0) + (filterDelivery !== 'all' ? 1 : 0) + (minPrice ? 1 : 0) + (maxPrice ? 1 : 0) + (fusionLevel !== 50 ? 1 : 0) + (minRating > 0 ? 1 : 0);
-            return count > 0 ? <View style={{ backgroundColor: colors.primary, borderRadius: 8, paddingHorizontal: 6, paddingVertical: 1 }}><Text style={{ color: '#fff', fontSize: 11, fontWeight: '800' }}>{count}</Text></View> : null;
+            return count > 0 ? <View style={{ backgroundColor: T.primary, borderRadius: 8, paddingHorizontal: 6, paddingVertical: 1 }}><Text style={{ color: '#fff', fontSize: 11, fontWeight: '800' }}>{count}</Text></View> : null;
           })()}
         </Pressable>
       </View>
 
       {showFilters && (
-        <View style={{ marginBottom: 8, backgroundColor: colors.card, borderRadius: 16, borderWidth: 1, borderColor: colors.border }}>
+        <View style={{ marginBottom: 8, backgroundColor: T.card, borderRadius: 16, borderWidth: 1, borderColor: T.border }}>
           <ScrollView style={{ maxHeight: 360 }} nestedScrollEnabled>
           {/* Tipo de cocina */}
-          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tipo de cocina</Text>
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: T.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tipo de cocina</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
               {cuisines.filter((c) => c !== 'all').map((c) => {
                 const active = cuisineFilter.includes(c);
                 return (
                   <Pressable key={c} onPress={() => setCuisineFilter((prev) => active ? prev.filter((x) => x !== c) : [...prev, c])}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: active ? colors.primaryLight : colors.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
-                    <Ionicons name={active ? 'checkbox' : 'square-outline'} size={16} color={active ? colors.primary : colors.muted} />
-                    <Text style={{ fontSize: 13, color: active ? colors.primary : colors.text, fontWeight: active ? '700' : '500' }}>{c.charAt(0).toUpperCase() + c.slice(1)}</Text>
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: active ? T.primaryLight : T.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
+                    <Ionicons name={active ? 'checkbox' : 'square-outline'} size={16} color={active ? T.primary : T.muted} />
+                    <Text style={{ fontSize: 13, color: active ? T.primary : T.text, fontWeight: active ? '700' : '500' }}>{c.charAt(0).toUpperCase() + c.slice(1)}</Text>
                   </Pressable>
                 );
               })}
@@ -1302,70 +1331,70 @@ export default function App() {
           </View>
 
           {/* Precio y Calificación */}
-          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Precio</Text>
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: T.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Precio</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: colors.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
-                <Ionicons name="pricetag-outline" size={14} color={colors.muted} />
-                <TextInput style={{ width: 36, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ min" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
-                <Text style={{ color: colors.muted }}>—</Text>
-                <TextInput style={{ width: 36, padding: 0, fontSize: 13, color: colors.text }} placeholder="$ max" placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: T.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
+                <Ionicons name="pricetag-outline" size={14} color={T.muted} />
+                <TextInput style={{ width: 36, padding: 0, fontSize: 13, color: T.text }} placeholder="$ min" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
+                <Text style={{ color: T.muted }}>—</Text>
+                <TextInput style={{ width: 36, padding: 0, fontSize: 13, color: T.text }} placeholder="$ max" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
               </View>
             </ScrollView>
           </View>
 
           {/* Tradicional ↔ Fusión */}
-          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tradicional ← → Fusión</Text>
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: T.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Tradicional ← → Fusión</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-              <Text style={{ fontSize: 11, color: colors.muted }}>Tradicional</Text>
-              <View style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: colors.border, position: 'relative' }}>
+              <Text style={{ fontSize: 11, color: T.muted }}>Tradicional</Text>
+              <View style={{ flex: 1, height: 6, borderRadius: 3, backgroundColor: T.border, position: 'relative' }}>
                 <View style={{ position: 'absolute', left: `${fusionLevel}%`, marginLeft: -12, top: -7 }}>
                   <Pressable onPress={() => setFusionLevel(Math.max(0, fusionLevel - 10))} hitSlop={8}>
-                    <Ionicons name="remove" size={16} color={colors.muted} />
+                    <Ionicons name="remove" size={16} color={T.muted} />
                   </Pressable>
                 </View>
-                <View style={{ width: `${fusionLevel}%`, height: 6, borderRadius: 3, backgroundColor: colors.primary }} />
+                <View style={{ width: `${fusionLevel}%`, height: 6, borderRadius: 3, backgroundColor: T.primary }} />
               </View>
-              <Text style={{ fontSize: 11, color: colors.muted }}>Fusión</Text>
+              <Text style={{ fontSize: 11, color: T.muted }}>Fusión</Text>
               <Pressable onPress={() => setFusionLevel(Math.min(100, fusionLevel + 10))} hitSlop={8}>
-                <Ionicons name="add" size={16} color={colors.muted} />
+                <Ionicons name="add" size={16} color={T.muted} />
               </Pressable>
-              <Text style={{ fontSize: 12, fontWeight: '700', color: colors.primary, minWidth: 24, textAlign: 'center' }}>{fusionLevel}%</Text>
+              <Text style={{ fontSize: 12, fontWeight: '700', color: T.primary, minWidth: 24, textAlign: 'center' }}>{fusionLevel}%</Text>
             </View>
           </View>
 
           {/* Otros: Calificación + Orden */}
-          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Otros</Text>
+          <View style={{ padding: 12, borderBottomWidth: 1, borderBottomColor: T.border }}>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Otros</Text>
 
             {/* Calificación mínima */}
-            <Text style={{ fontSize: 11, color: colors.muted, marginBottom: 6 }}>Calificación mínima</Text>
+            <Text style={{ fontSize: 11, color: T.muted, marginBottom: 6 }}>Calificación mínima</Text>
 
             {/* Dropdown trigger */}
             <Pressable
               onPress={() => setShowRatingDropdown(!showRatingDropdown)}
               style={{
                 flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-                backgroundColor: colors.coffeeLight || '#f5ebe0', borderRadius: 8,
+                backgroundColor: T.coffeeLight || '#f5ebe0', borderRadius: 8,
                 paddingHorizontal: 12, paddingVertical: 10, marginBottom: showRatingDropdown ? 4 : 10,
               }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-                <Text style={{ fontSize: 16, color: minRating === 0 ? colors.muted : '#d97706' }}>
+                <Text style={{ fontSize: 16, color: minRating === 0 ? T.muted : '#d97706' }}>
                   {minRating === 0 ? '☆' : '★'}
                 </Text>
-                <Text style={{ fontSize: 14, color: colors.text, fontWeight: '600' }}>
+                <Text style={{ fontSize: 14, color: T.text, fontWeight: '600' }}>
                   {minRating === 0 ? 'Cualquiera' : `${minRating} ${minRating === 1 ? 'estrella' : 'estrellas'}`}
                 </Text>
               </View>
-              <Ionicons name={showRatingDropdown ? 'chevron-up' : 'chevron-down'} size={16} color={colors.muted} />
+              <Ionicons name={showRatingDropdown ? 'chevron-up' : 'chevron-down'} size={16} color={T.muted} />
             </Pressable>
 
             {/* Dropdown options */}
             {showRatingDropdown && (
               <View style={{
-                backgroundColor: colors.card || '#fff', borderRadius: 8,
-                borderWidth: 1, borderColor: colors.border, marginBottom: 10, overflow: 'hidden',
+                backgroundColor: T.card || '#fff', borderRadius: 8,
+                borderWidth: 1, borderColor: T.border, marginBottom: 10, overflow: 'hidden',
               }}>
                 {[0, 1, 2, 3, 4, 5].map((r, i) => (
                   <Pressable
@@ -1374,18 +1403,18 @@ export default function App() {
                     style={{
                       flexDirection: 'row', alignItems: 'center', gap: 8,
                       paddingHorizontal: 12, paddingVertical: 10,
-                      backgroundColor: minRating === r ? colors.primaryLight : 'transparent',
+                      backgroundColor: minRating === r ? T.primaryLight : 'transparent',
                       borderBottomWidth: i < 5 ? 1 : 0,
-                      borderBottomColor: colors.border,
+                      borderBottomColor: T.border,
                     }}>
-                    <Text style={{ fontSize: 16, color: r === 0 ? colors.muted : '#d97706' }}>
+                    <Text style={{ fontSize: 16, color: r === 0 ? T.muted : '#d97706' }}>
                       {r === 0 ? '☆' : Array(r).fill('★').join('')}
                     </Text>
-                    <Text style={{ fontSize: 14, color: colors.text, fontWeight: minRating === r ? '700' : '500', flex: 1 }}>
+                    <Text style={{ fontSize: 14, color: T.text, fontWeight: minRating === r ? '700' : '500', flex: 1 }}>
                       {r === 0 ? 'Cualquiera' : `${r} ${r === 1 ? 'estrella' : 'estrellas'}`}
                     </Text>
                     {minRating === r && (
-                      <Ionicons name="checkmark" size={18} color={colors.primary} />
+                      <Ionicons name="checkmark" size={18} color={T.primary} />
                     )}
                   </Pressable>
                 ))}
@@ -1395,15 +1424,15 @@ export default function App() {
 
           {/* Entrega */}
           <View style={{ padding: 12 }}>
-            <Text style={{ fontSize: 12, fontWeight: '700', color: colors.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Entrega</Text>
+            <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Entrega</Text>
             <View style={{ flexDirection: 'row', gap: 8, flexWrap: 'wrap' }}>
               {['all', 'pickup', 'delivery'].map((d) => {
                 const active = filterDelivery === d;
                 return (
                   <Pressable key={d} onPress={() => setFilterDelivery(d)}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: active ? colors.primaryLight : colors.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
-                    <Ionicons name={active ? 'checkbox' : 'square-outline'} size={16} color={active ? colors.primary : colors.muted} />
-                    <Text style={{ fontSize: 13, color: active ? colors.primary : colors.text, fontWeight: active ? '700' : '500' }}>
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: active ? T.primaryLight : T.coffeeLight || '#f5ebe0', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 6 }}>
+                    <Ionicons name={active ? 'checkbox' : 'square-outline'} size={16} color={active ? T.primary : T.muted} />
+                    <Text style={{ fontSize: 13, color: active ? T.primary : T.text, fontWeight: active ? '700' : '500' }}>
                       {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
                     </Text>
                   </Pressable>
@@ -1422,11 +1451,11 @@ export default function App() {
       ListEmptyComponent={
         loading ? (
           <View style={{ paddingVertical: 40, alignItems: 'center' }}>
-            <ActivityIndicator color={colors.primary} />
+            <ActivityIndicator color={T.primary} />
           </View>
         ) : (
           <View style={{ paddingVertical: 40, alignItems: 'center' }}>
-            <Ionicons name="search-outline" size={48} color={colors.border} />
+            <Ionicons name="search-outline" size={48} color={T.border} />
             <Text style={[styles.helper, { marginTop: 12 }]}>
               {searchText || cuisineFilter.length > 0 || filterDelivery !== 'all' || minPrice || maxPrice || fusionLevel !== 50 || minRating > 0
                 ? translateError('No hay resultados con esos filtros', lang)
@@ -1442,18 +1471,18 @@ export default function App() {
             <Pressable
               onPress={() => openMenu(item.id)}
               style={{
-                backgroundColor: colors.card, borderRadius: 20, marginBottom: 12,
-                borderWidth: 1, borderColor: colors.border, overflow: 'hidden',
+                backgroundColor: T.card, borderRadius: 20, marginBottom: 12,
+                borderWidth: 1, borderColor: T.border, overflow: 'hidden',
                 elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.08, shadowRadius: 8,
               }}>
               {/* Image */}
-              <View style={{ height: 160, backgroundColor: colors.coffeeLight }}>
+              <View style={{ height: 160, backgroundColor: T.coffeeLight }}>
                 {firstItem?.image_url ? (
                   <Image source={{ uri: firstItem.image_url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
                 ) : (
                   <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Ionicons name="restaurant-outline" size={48} color={colors.muted} />
+                    <Ionicons name="restaurant-outline" size={48} color={T.muted} />
                   </View>
                 )}
                 {/* Badge: cuisine type */}
@@ -1494,26 +1523,26 @@ export default function App() {
                     ) : null}
                   </View>
                   {/* Price badge */}
-                  <View style={{ backgroundColor: colors.primary, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 6, marginLeft: 8 }}>
+                  <View style={{ backgroundColor: T.primary, borderRadius: 10, paddingHorizontal: 10, paddingVertical: 6, marginLeft: 8 }}>
                     <Text style={{ color: '#fff', fontSize: 13, fontWeight: '800' }}>${minPrice2.toFixed(0)}+</Text>
                   </View>
                 </View>
 
                 {/* Cook profile - secondary */}
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8,
-                  backgroundColor: colors.coffeeLight, borderRadius: 10,
+                  backgroundColor: T.coffeeLight, borderRadius: 10,
                   paddingHorizontal: 10, paddingVertical: 8,
                 }}>
-                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: colors.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
-                    <Ionicons name="person" size={16} color={colors.primary} />
+                  <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: T.primaryLight, alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="person" size={16} color={T.primary} />
                   </View>
-                  <Text style={{ color: colors.textSecondary, fontWeight: '600', fontSize: 13, flex: 1 }} numberOfLines={1}>
+                  <Text style={{ color: T.textSecondary, fontWeight: '600', fontSize: 13, flex: 1 }} numberOfLines={1}>
                     {item.cook_first_name} {item.cook_last_name}
                   </Text>
                   {item.cook_rating ? (
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 2 }}>
                       <Text style={{ color: '#f59e0b', fontSize: 13 }}>★</Text>
-                      <Text style={{ color: colors.textSecondary, fontSize: 12, fontWeight: '700' }}>{item.cook_rating}</Text>
+                      <Text style={{ color: T.textSecondary, fontSize: 12, fontWeight: '700' }}>{item.cook_rating}</Text>
                     </View>
                   ) : null}
                 </View>
@@ -1544,17 +1573,17 @@ export default function App() {
       <View style={styles.headerRow}>
         <Text style={styles.sectionTitle}>{_t('orders.title')}</Text>
         <Pressable onPress={loadOrders}>
-          <Ionicons name="refresh" size={20} color={colors.primary} />
+          <Ionicons name="refresh" size={20} color={T.primary} />
         </Pressable>
       </View>
           </>
         }
         ListEmptyComponent={
           loading ? (
-            <ActivityIndicator color={colors.primary} />
+            <ActivityIndicator color={T.primary} />
           ) : (
             <View style={{ paddingVertical: 40, alignItems: 'center' }}>
-              <Ionicons name="receipt-outline" size={48} color={colors.border} />
+              <Ionicons name="receipt-outline" size={48} color={T.border} />
               <Text style={[styles.helper, { marginTop: 12 }]}>{_t('orders.noOrders')}</Text>
             </View>
           )
@@ -1602,7 +1631,7 @@ export default function App() {
 
             {/* Star rating for delivered orders */}
             {order.status === 'delivered' && !order.rated && (
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.border }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: T.border }}>
                 <Text style={[styles.muted, { fontSize: 12, marginRight: 4 }]}>Calificar:</Text>
                 {[1, 2, 3, 4, 5].map((star) => (
                   <Pressable
@@ -1616,12 +1645,12 @@ export default function App() {
                     <Ionicons
                       name={star <= (ratingState.orderId === order.id ? ratingState.value : 0) ? 'star' : 'star-outline'}
                       size={22}
-                      color={star <= (ratingState.orderId === order.id ? ratingState.value : 0) ? '#f59e0b' : colors.muted}
+                      color={star <= (ratingState.orderId === order.id ? ratingState.value : 0) ? '#f59e0b' : T.muted}
                     />
                   </Pressable>
                 ))}
                 {ratingState.submitting && ratingState.orderId === order.id && (
-                  <ActivityIndicator size="small" color={colors.primary} />
+                  <ActivityIndicator size="small" color={T.primary} />
                 )}
               </View>
             )}
@@ -1637,10 +1666,10 @@ export default function App() {
       {/* User info */}
       <View style={styles.card}>
         <View style={[styles.avatar, { alignSelf: 'center', marginBottom: 12 }]}>
-          <Ionicons name="person" size={32} color={colors.primary} />
+          <Ionicons name="person" size={32} color={T.primary} />
         </View>
         <Text style={[styles.cardTitle, { textAlign: 'center' }]}>@{user?.username || user?.first_name || user?.email}</Text>
-        <Text style={[styles.body, { textAlign: 'center', color: colors.muted }]}>{user?.email}</Text>
+        <Text style={[styles.body, { textAlign: 'center', color: T.muted }]}>{user?.email}</Text>
         <View style={[styles.row, { justifyContent: 'center', marginTop: 8 }]}>
           <View style={styles.roleBadge}>
             <Text style={styles.roleBadgeText}>{user?.role === 'cook' ? _t('profile.cook') : _t('profile.member')}</Text>
@@ -1658,7 +1687,7 @@ export default function App() {
           <TextInput
             style={[styles.input, { flex: 1 }]}
             placeholder={_t('profile.phonePlaceholder')}
-            placeholderTextColor={colors.muted}
+            placeholderTextColor={T.muted}
             value={phoneInput}
             onChangeText={setPhoneInput}
             keyboardType="phone-pad"
@@ -1682,7 +1711,7 @@ export default function App() {
               <Text style={styles.body}>{_t('profile.notifications')}</Text>
               <Text style={[styles.helper, { fontSize: 12 }]}>{_t('profile.notifyNewOrders')}</Text>
             </View>
-            <Ionicons name="logo-whatsapp" size={22} color={colors.emerald} />
+            <Ionicons name="logo-whatsapp" size={22} color={T.emerald} />
           </View>
         </View>
       )}
@@ -1690,10 +1719,10 @@ export default function App() {
       <Pressable style={styles.card} onPress={logout}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <Ionicons name="log-out-outline" size={20} color={colors.danger} />
-            <Text style={[styles.body, { color: colors.danger, fontWeight: '600' }]}>{_t('profile.logout')}</Text>
+            <Ionicons name="log-out-outline" size={20} color={T.danger} />
+            <Text style={[styles.body, { color: T.danger, fontWeight: '600' }]}>{_t('profile.logout')}</Text>
           </View>
-          <Ionicons name="chevron-forward" size={18} color={colors.muted} />
+          <Ionicons name="chevron-forward" size={18} color={T.muted} />
         </View>
       </Pressable>
     </ScrollView>
@@ -1731,16 +1760,16 @@ export default function App() {
               setCarouselIndex(idx);
             }}>
             {(menu.items || []).map((item) => (
-              <View key={item.id} style={{ width: 200, height: 140, borderRadius: 16, marginRight: 10, backgroundColor: colors.coffeeLight || '#f5ebe0', overflow: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
+              <View key={item.id} style={{ width: 200, height: 140, borderRadius: 16, marginRight: 10, backgroundColor: T.coffeeLight || '#f5ebe0', overflow: 'hidden', justifyContent: 'center', alignItems: 'center' }}>
                 {item.image_url ? (
                   <Image source={{ uri: item.image_url }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
                 ) : (
                   <>
-                    <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: colors.primaryLight, justifyContent: 'center', alignItems: 'center' }}>
-                      <Ionicons name="restaurant-outline" size={24} color={colors.primary} />
+                    <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: T.primaryLight, justifyContent: 'center', alignItems: 'center' }}>
+                      <Ionicons name="restaurant-outline" size={24} color={T.primary} />
                     </View>
-                    <Text style={{ marginTop: 6, fontWeight: '700', color: colors.text, fontSize: 13, letterSpacing: 0.3 }}>{item.name}</Text>
-                    <Text style={{ fontWeight: '700', color: colors.primary, fontSize: 14, marginTop: 2 }}>{money(item.price)}</Text>
+                    <Text style={{ marginTop: 6, fontWeight: '700', color: T.text, fontSize: 13, letterSpacing: 0.3 }}>{item.name}</Text>
+                    <Text style={{ fontWeight: '700', color: T.primary, fontSize: 14, marginTop: 2 }}>{money(item.price)}</Text>
                   </>
                 )}
               </View>
@@ -1751,7 +1780,7 @@ export default function App() {
             {(menu.items || []).map((_, i) => (
               <View key={i} style={{
                 width: carouselIndex === i ? 20 : 8, height: 8, borderRadius: 4,
-                backgroundColor: carouselIndex === i ? colors.primary : colors.border,
+                backgroundColor: carouselIndex === i ? T.primary : T.border,
               }} />
             ))}
           </View>
@@ -1760,11 +1789,11 @@ export default function App() {
 
       {/* Info card - destacado */}
       <View style={{ padding: 16, gap: 6 }}>
-        <Text style={{ fontSize: 22, fontWeight: '800', color: colors.text, letterSpacing: 0.3 }}>
+        <Text style={{ fontSize: 22, fontWeight: '800', color: T.text, letterSpacing: 0.3 }}>
           {menu?.title?.replace(/ - .*$/, '')}
         </Text>
         {menu?.description ? (
-          <Text style={{ color: colors.textSecondary, fontSize: 14, lineHeight: 20 }}>
+          <Text style={{ color: T.textSecondary, fontSize: 14, lineHeight: 20 }}>
             {menu.description}
           </Text>
         ) : null}
@@ -1773,22 +1802,22 @@ export default function App() {
       {/* Cook profile card */}
       {menu?.cook_first_name && (
         <View style={{
-          backgroundColor: colors.primaryLight, borderRadius: 16,
+          backgroundColor: T.primaryLight, borderRadius: 16,
           padding: 14, flexDirection: 'row', alignItems: 'center', gap: 12,
-          borderWidth: 1, borderColor: colors.primary,
+          borderWidth: 1, borderColor: T.primary,
         }}>
-          <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: colors.primary, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: T.primary, alignItems: 'center', justifyContent: 'center' }}>
             <Ionicons name="person" size={26} color="#fff" />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={{ color: colors.primaryDark, fontWeight: '800', fontSize: 16 }}>
+            <Text style={{ color: T.primaryDark, fontWeight: '800', fontSize: 16 }}>
               {menu.cook_first_name} {menu.cook_last_name}
             </Text>
-            <Text style={{ color: colors.primary, fontSize: 13, fontWeight: '600', marginTop: 2 }}>
+            <Text style={{ color: T.primary, fontSize: 13, fontWeight: '600', marginTop: 2 }}>
               {menu.cuisine_type ? menu.cuisine_type.charAt(0).toUpperCase() + menu.cuisine_type.slice(1) + ' · ' : ''}Cocina comunitaria
             </Text>
             {menu.cook_bio ? (
-              <Text style={{ color: colors.textSecondary, fontSize: 12, marginTop: 4 }} numberOfLines={2}>
+              <Text style={{ color: T.textSecondary, fontSize: 12, marginTop: 4 }} numberOfLines={2}>
                 {menu.cook_bio}
               </Text>
             ) : null}
@@ -1796,17 +1825,17 @@ export default function App() {
           {menu.cook_rating ? (
             <View style={{ alignItems: 'center', backgroundColor: '#fff', borderRadius: 10, paddingHorizontal: 10, paddingVertical: 6 }}>
               <Text style={{ color: '#f59e0b', fontSize: 18 }}>★</Text>
-              <Text style={{ color: colors.text, fontSize: 14, fontWeight: '800' }}>{menu.cook_rating}</Text>
+              <Text style={{ color: T.text, fontSize: 14, fontWeight: '800' }}>{menu.cook_rating}</Text>
             </View>
           ) : null}
         </View>
       )}
 
       {(menu?.items || []).map((item) => (
-        <View key={item.id} style={{ backgroundColor: colors.card, borderRadius: 14, borderWidth: 1, borderColor: colors.border, padding: 12, gap: 6 }}>
+        <View key={item.id} style={{ backgroundColor: T.card, borderRadius: 14, borderWidth: 1, borderColor: T.border, padding: 12, gap: 6 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text style={{ fontSize: 14, fontWeight: '600', color: colors.text, flex: 1 }}>{item.name}</Text>
-            <Text style={{ color: colors.primary, fontWeight: '800', fontSize: 14 }}>{money(item.price)}</Text>
+            <Text style={{ fontSize: 14, fontWeight: '600', color: T.text, flex: 1 }}>{item.name}</Text>
+            <Text style={{ color: T.primary, fontWeight: '800', fontSize: 14 }}>{money(item.price)}</Text>
           </View>
           <Text style={[styles.muted, { fontSize: 11 }]}>{item.quantity_available} disponibles</Text>
           <View style={styles.qtyRow}>
@@ -1819,19 +1848,19 @@ export default function App() {
       <View style={styles.card}>
         <Text style={styles.cardTitle}>{_t('menu.deliveryType')}</Text>
         {/* Tab container */}
-        <View style={{ flexDirection: 'row', backgroundColor: colors.coffeeLight, borderRadius: 12, padding: 3, marginTop: 4 }}>
+        <View style={{ flexDirection: 'row', backgroundColor: T.coffeeLight, borderRadius: 12, padding: 3, marginTop: 4 }}>
           <Pressable
             onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))}
             style={{
               flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10,
-              backgroundColor: draft.deliveryType === 'pickup' ? colors.card : 'transparent',
+              backgroundColor: draft.deliveryType === 'pickup' ? T.card : 'transparent',
               shadowColor: draft.deliveryType === 'pickup' ? '#000' : 'transparent',
               shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2,
               elevation: draft.deliveryType === 'pickup' ? 2 : 0,
             }}>
             <Text style={{
               fontSize: 13, fontWeight: '700',
-              color: draft.deliveryType === 'pickup' ? colors.primary : colors.muted,
+              color: draft.deliveryType === 'pickup' ? T.primary : T.muted,
             }}>{_t('menu.pickup')}</Text>
           </Pressable>
           <Pressable
@@ -1841,14 +1870,14 @@ export default function App() {
             }}
             style={{
               flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10,
-              backgroundColor: draft.deliveryType === 'delivery' ? colors.card : 'transparent',
+              backgroundColor: draft.deliveryType === 'delivery' ? T.card : 'transparent',
               shadowColor: draft.deliveryType === 'delivery' ? '#000' : 'transparent',
               shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2,
               elevation: draft.deliveryType === 'delivery' ? 2 : 0,
             }}>
             <Text style={{
               fontSize: 13, fontWeight: '700',
-              color: draft.deliveryType === 'delivery' ? colors.primary : colors.muted,
+              color: draft.deliveryType === 'delivery' ? T.primary : T.muted,
             }}>{_t('menu.delivery')}</Text>
           </Pressable>
         </View>
@@ -1857,7 +1886,7 @@ export default function App() {
         )}
         <FloatingField label={_t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} onFocus={() => scrollToField(900)} />
         <Pressable
-          style={[styles.primary, !canOrder && { opacity: 0.4, backgroundColor: colors.muted }]}
+          style={[styles.primary, !canOrder && { opacity: 0.4, backgroundColor: T.muted }]}
           onPress={() => {
             if (!canOrder) {
               if (!hasItems) showToast(_t('menu.selectItem'), 'warning');
@@ -1879,21 +1908,21 @@ export default function App() {
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{_t('cook.dashboard')}</Text>
       <View style={styles.row}>
-        <View style={[styles.statCard, { borderLeftColor: colors.primary }]}>
+        <View style={[styles.statCard, { borderLeftColor: T.primary }]}>
           <Text style={styles.statValue}>{cookStats.activeMenus}</Text>
           <Text style={styles.statLabel}>{_t('cook.activeMenus')}</Text>
         </View>
-        <View style={[styles.statCard, { borderLeftColor: colors.emerald }]}>
+        <View style={[styles.statCard, { borderLeftColor: T.emerald }]}>
           <Text style={styles.statValue}>{cookStats.totalOrders}</Text>
           <Text style={styles.statLabel}>{_t('cook.totalOrders')}</Text>
         </View>
       </View>
       <View style={styles.row}>
-        <View style={[styles.statCard, { borderLeftColor: colors.amber }]}>
+        <View style={[styles.statCard, { borderLeftColor: T.amber }]}>
           <Text style={styles.statValue}>{cookStats.pendingOrders}</Text>
           <Text style={styles.statLabel}>{_t('cook.pendingOrders')}</Text>
         </View>
-        <View style={[styles.statCard, { borderLeftColor: colors.purple }]}>
+        <View style={[styles.statCard, { borderLeftColor: T.purple }]}>
           <Text style={styles.statValue}>${cookStats.revenue}</Text>
           <Text style={styles.statLabel}>{_t('cook.revenue')}</Text>
         </View>
@@ -1925,12 +1954,12 @@ export default function App() {
               </View>
             )}
             {order.status === 'confirmed' && (
-              <Pressable style={[styles.primary, { backgroundColor: colors.emerald }]} onPress={() => updateOrderStatus(order.id, 'ready')}>
+              <Pressable style={[styles.primary, { backgroundColor: T.emerald }]} onPress={() => updateOrderStatus(order.id, 'ready')}>
                 <Text style={styles.primaryText}>🟢 {_t('cook.readyForPickupCook')}</Text>
               </Pressable>
             )}
             {order.status !== 'pending' && order.status !== 'confirmed' && (
-              <Text style={[styles.chipText, { color: colors.muted }]}>{order.status}</Text>
+              <Text style={[styles.chipText, { color: T.muted }]}>{order.status}</Text>
             )}
           </View>
         ))
@@ -1942,7 +1971,7 @@ export default function App() {
     <View style={styles.section}>
       <View style={styles.headerRow}>
         <Text style={styles.sectionTitle}>📋 {_t('cook.myMenus')}</Text>
-        <Pressable onPress={loadMyMenus}><Ionicons name="refresh" size={20} color={colors.primary} /></Pressable>
+        <Pressable onPress={loadMyMenus}><Ionicons name="refresh" size={20} color={T.primary} /></Pressable>
       </View>
 
       {/* Create new menu button */}
@@ -1956,12 +1985,12 @@ export default function App() {
         <ScrollView contentContainerStyle={{ gap: 12 }} keyboardShouldPersistTaps="handled">
           <View style={{ flexDirection: 'row', gap: 4, marginBottom: 4 }}>
             {[1, 2, 3].map((s) => (
-              <View key={s} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: menuStep >= s ? colors.primary : colors.border }} />
+              <View key={s} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: menuStep >= s ? T.primary : T.border }} />
             ))}
           </View>
           {menuStep === 1 && (
             <>
-              <Text style={{ fontWeight: '800', color: colors.text }}>Paso 1 — Información general</Text>
+              <Text style={{ fontWeight: '800', color: T.text }}>Paso 1 — Información general</Text>
               <FloatingField label={_t('cook.menuTitle')} value={menuForm.title} onChangeText={(v) => setMenuForm((c) => ({ ...c, title: v }))} />
               <FloatingField label={_t('cook.description')} value={menuForm.description} onChangeText={(v) => setMenuForm((c) => ({ ...c, description: v }))} />
               <FloatingField label={_t('cook.menuDate')} value={menuForm.menuDate} onChangeText={(v) => setMenuForm((c) => ({ ...c, menuDate: v }))} />
@@ -1984,18 +2013,18 @@ export default function App() {
           {menuStep === 2 && (
             <>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ fontWeight: '800', color: colors.text }}>Paso 2 — Platillos</Text>
+                <Text style={{ fontWeight: '800', color: T.text }}>Paso 2 — Platillos</Text>
                 <Pressable onPress={() => setMenuItems((prev) => [...prev, { name: '', price: '', quantity: '10', dietary: '' }])}>
-                  <Ionicons name="add-circle" size={28} color={colors.primary} />
+                  <Ionicons name="add-circle" size={28} color={T.primary} />
                 </Pressable>
               </View>
               {menuItems.length === 0 && <Text style={styles.helper}>Agrega al menos un platillo</Text>}
               {menuItems.map((item, idx) => (
                 <View key={idx} style={[styles.card, { gap: 6 }]}>
                   <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={{ fontWeight: '700', color: colors.text }}>Platillo #{idx + 1}</Text>
+                    <Text style={{ fontWeight: '700', color: T.text }}>Platillo #{idx + 1}</Text>
                     <Pressable onPress={() => setMenuItems((prev) => prev.filter((_, i) => i !== idx))}>
-                      <Ionicons name="trash-outline" size={18} color={colors.danger} />
+                      <Ionicons name="trash-outline" size={18} color={T.danger} />
                     </Pressable>
                   </View>
                   <FloatingField label="Nombre del platillo *" value={item.name} onChangeText={(v) => setMenuItems((prev) => prev.map((p, i) => i === idx ? { ...p, name: v } : p))} />
@@ -2018,7 +2047,7 @@ export default function App() {
           )}
           {menuStep === 3 && (
             <>
-              <Text style={{ fontWeight: '800', color: colors.text }}>Paso 3 — Revisar y publicar</Text>
+              <Text style={{ fontWeight: '800', color: T.text }}>Paso 3 — Revisar y publicar</Text>
               <View style={styles.card}>
                 <Text style={styles.cardTitle}>{menuForm.title || 'Sin título'}</Text>
                 <Text style={styles.body}>{menuForm.description || 'Sin descripción'}</Text>
@@ -2036,7 +2065,7 @@ export default function App() {
                   {menuItems.map((item, idx) => (
                     <View key={idx} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 4 }}>
                       <Text style={styles.body}>{item.name}</Text>
-                      <Text style={{ fontWeight: '700', color: colors.text }}>${parseFloat(item.price || 0).toFixed(2)}</Text>
+                      <Text style={{ fontWeight: '700', color: T.text }}>${parseFloat(item.price || 0).toFixed(2)}</Text>
                     </View>
                   ))}
                   <Text style={styles.muted}>Total: ${menuItems.reduce((s, i) => s + parseFloat(i.price || 0) * parseInt(i.quantity || 1), 0).toFixed(2)}</Text>
@@ -2070,7 +2099,7 @@ export default function App() {
         </ScrollView>
       ) : (
         <>
-          {loading ? <ActivityIndicator color={colors.primary} /> : null}
+          {loading ? <ActivityIndicator color={T.primary} /> : null}
           <FlatList
             data={myMenus}
             keyExtractor={(item) => String(item.id)}
@@ -2079,7 +2108,7 @@ export default function App() {
               <View style={styles.card}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                   <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={[styles.chipText, { fontSize: 12, color: item.status === 'published' ? colors.success : colors.amber }]}>{item.status}</Text>
+                  <Text style={[styles.chipText, { fontSize: 12, color: item.status === 'published' ? T.success : T.amber }]}>{item.status}</Text>
                 </View>
                 <Text style={styles.muted}>📅 {item.menu_date ? new Date(item.menu_date).toLocaleDateString() : ''}</Text>
                 <Text style={styles.muted}>📦 {item.order_count || 0} pedidos</Text>
@@ -2125,7 +2154,7 @@ export default function App() {
 
         {mealPlanResult && (
           <View style={{ gap: 12, marginTop: 8 }}>
-            <Text style={{ fontWeight: "800", color: colors.text, fontSize: 18 }}>{_t("mealPlanner.planTitle")}</Text>
+            <Text style={{ fontWeight: "800", color: T.text, fontSize: 18 }}>{_t("mealPlanner.planTitle")}</Text>
             <View style={styles.card}>
               <Text style={styles.muted}>{_t("mealPlanner.totalCost")}: ${money(mealPlanResult.summary.totalCost)}</Text>
               <Text style={styles.muted}>{_t("mealPlanner.remaining")}: ${money(mealPlanResult.summary.remaining)}</Text>
@@ -2142,7 +2171,7 @@ export default function App() {
                 <Text style={styles.muted}>👨‍🍳 {s.cookName}</Text>
                 <Text style={styles.muted}>📅 {s.menuDate ? new Date(s.menuDate).toLocaleDateString() : ""}</Text>
                 <Text style={styles.muted}>{s.cuisineType ? s.cuisineType + " •" : ""} ⭐ {s.cookRating || "—"}</Text>
-                <Text style={{ fontWeight: "700", color: colors.text }}>${money(s.item.price)} {_t("mealPlanner.perMeal")} x {s.item.quantity} = ${s.total}</Text>
+                <Text style={{ fontWeight: "700", color: T.text }}>${money(s.item.price)} {_t("mealPlanner.perMeal")} x {s.item.quantity} = ${s.total}</Text>
                 {s.item.dietaryTags ? <Text style={[styles.muted, { fontSize: 12 }]}>🏷️ {s.item.dietaryTags}</Text> : null}
               </View>
             ))}
@@ -2166,11 +2195,11 @@ const loggedSplashView = (
         <Text style={styles.subtitle}>{_t('app.tagline')}</Text>
         <View style={[styles.card, { width: '100%', alignItems: 'center', gap: 8 }]}>
           <View style={styles.avatar}>
-            <Ionicons name="person" size={28} color={colors.primary} />
+            <Ionicons name="person" size={28} color={T.primary} />
           </View>
           <View style={{ alignItems: 'center' }}>
             <Text style={styles.cardTitle}>@{user?.username || user?.first_name || user?.email}</Text>
-            <Text style={[styles.body, { color: colors.muted }]}>{user?.email}</Text>
+            <Text style={[styles.body, { color: T.muted }]}>{user?.email}</Text>
           </View>
           <View style={styles.row}>
             <View style={styles.roleBadge}>
@@ -2181,16 +2210,16 @@ const loggedSplashView = (
         </View>
         <View style={[styles.card, { width: '100%', gap: 4 }]}>
           <Pressable style={styles.drawerItem} onPress={() => { setScreen(user?.role === 'cook' ? 'cookDashboard' : 'market'); }}>
-            <Ionicons name={user?.role === 'cook' ? 'grid' : 'cart'} size={20} color={colors.text} />
+            <Ionicons name={user?.role === 'cook' ? 'grid' : 'cart'} size={20} color={T.text} />
             <Text style={styles.drawerItemText}>{user?.role === 'cook' ? _t('cook.dashboard') : _t('market.title')}</Text>
           </Pressable>
           <Pressable style={styles.drawerItem} onPress={() => { setScreen('profile'); }}>
-            <Ionicons name="person" size={20} color={colors.text} />
+            <Ionicons name="person" size={20} color={T.text} />
             <Text style={styles.drawerItemText}>{_t('profile.title')}</Text>
           </Pressable>
           <Pressable style={styles.drawerItem} onPress={logout}>
-            <Ionicons name="log-out-outline" size={20} color={colors.danger} />
-            <Text style={[styles.drawerItemText, { color: colors.danger }]}>{_t('profile.logout')}</Text>
+            <Ionicons name="log-out-outline" size={20} color={T.danger} />
+            <Text style={[styles.drawerItemText, { color: T.danger }]}>{_t('profile.logout')}</Text>
           </Pressable>
         </View>
       </View>
@@ -2204,7 +2233,7 @@ const loggedSplashView = (
       <View style={styles.top}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <Pressable onPress={() => setDrawerOpen(true)} style={{ padding: 4 }}>
-            <Ionicons name="menu" size={24} color={colors.text} />
+            <Ionicons name="menu" size={24} color={T.text} />
           </Pressable>
           {screen !== 'splash' && <Text style={styles.brand}>{_t('app.name')}</Text>}
           <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={styles.langBtn}>
@@ -2222,10 +2251,10 @@ const loggedSplashView = (
       <Animated.View style={[styles.drawer, { transform: [{ translateX: slideAnim }] }]}>
         <View style={{ paddingHorizontal: 16, paddingTop: 16 }}>
           <View style={styles.avatar}>
-            <Ionicons name="person" size={28} color={colors.primary} />
+            <Ionicons name="person" size={28} color={T.primary} />
           </View>
           <Text style={[styles.cardTitle, { marginTop: 8 }]}>@{user?.username || user?.first_name || user?.email}</Text>
-          <Text style={[styles.body, { color: colors.muted, marginBottom: 16 }]}>{user?.email}</Text>
+          <Text style={[styles.body, { color: T.muted, marginBottom: 16 }]}>{user?.email}</Text>
         </View>
 
         {user?.role === 'cook' ? (
@@ -2244,10 +2273,16 @@ const loggedSplashView = (
         <DrawerItem icon="person" label={_t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
         <DrawerItem icon="home" label={_t('splash.home')} onPress={() => { setScreen('splash'); closeDrawer(); }} />
 
-        <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: colors.border, paddingTop: 16, paddingHorizontal: 16 }}>
-          <Pressable style={styles.drawerLogout} onPress={logout}>
-            <Ionicons name="log-out-outline" size={18} color={colors.danger} />
-            <Text style={{ color: colors.danger, fontWeight: '600', marginLeft: 12 }}>{_t('profile.logout')}</Text>
+        <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: T.border, paddingTop: 16, paddingHorizontal: 16 }}>
+          <Pressable style={styles.drawerLogout} onPress={toggleDarkMode}>
+            <Ionicons name={darkMode ? 'sunny-outline' : 'moon-outline'} size={18} color={T.text} />
+            <Text style={{ color: T.text, fontWeight: '600', marginLeft: 12 }}>
+              {darkMode ? '☀️ ' : '🌙 '}{_t('profile.darkMode')}
+            </Text>
+          </Pressable>
+          <Pressable style={[styles.drawerLogout, { marginTop: 8 }]} onPress={logout}>
+            <Ionicons name="log-out-outline" size={18} color={T.danger} />
+            <Text style={{ color: T.danger, fontWeight: '600', marginLeft: 12 }}>{_t('profile.logout')}</Text>
           </Pressable>
         </View>
       </Animated.View>
