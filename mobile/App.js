@@ -1326,12 +1326,10 @@ export default function App() {
         </View>
       )}
 
-      <View style={{ flexDirection: 'row', gap: 8, marginBottom: 8 }}>
-        {/* Sort button */}
-        <View style={{ flex: 1 }}>
-          <View style={{ position: 'relative', zIndex: 10 }}>
-          <Pressable
-            onPress={() => setShowSortDropdown(!showSortDropdown)}
+      {/* Delivery + Filter row */}
+      <View style={{ flexDirection: 'row', gap: 6, marginBottom: 8, alignItems: 'center' }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
+          {['all', 'pickup', 'delivery'].map((d) => {
             style={{
               flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
               paddingHorizontal: 12, paddingVertical: 8, borderRadius: 10,
