@@ -1391,6 +1391,7 @@ export default function App() {
       </View>
       </>
     }
+      data={publishedMenus}
       keyExtractor={(item) => String(item.id)}
       ListEmptyComponent={
         loading ? (
