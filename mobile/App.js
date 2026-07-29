@@ -53,12 +53,12 @@ const darkColors = {
   bg: '#1c1917',
   card: '#292524',
   text: '#f5f5f4',
-  textSecondary: '#a8a29e',
-  muted: '#78716c',
-  primary: '#f97316',
+  textSecondary: '#d6d3d1',
+  muted: '#a8a29e',
+  primary: '#fb923c',
   primaryDark: '#ea580c',
   primaryLight: '#3a2a1a',
-  border: '#44403c',
+  border: '#57534e',
   danger: '#f87171',
   success: '#4ade80',
   amber: '#fbbf24',
@@ -244,11 +244,12 @@ function getResponsiveBorder(width) {
   return 1;                          // 50%  — móviles
 }
 
-function DrawerItem({ icon, label, active, onPress, iconColor, labelColor }) {
+function DrawerItem({ icon, label, active, onPress, T: theme }) {
+  const t = theme || colors;
   return (
     <Pressable onPress={onPress} style={[styles.drawerItem, active && styles.drawerItemActive]}>
-      <Ionicons name={icon} size={20} color={iconColor || (active ? colors.primary : colors.muted)} />
-      <Text style={[styles.drawerItemText, active && styles.drawerItemTextActive, labelColor ? { color: labelColor } : null]}>{label}</Text>
+      <Ionicons name={icon} size={20} color={active ? t.primary : t.muted} />
+      <Text style={[styles.drawerItemText, active && styles.drawerItemTextActive, { color: active ? t.primary : t.text }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -1182,8 +1183,8 @@ export default function App() {
                 <View style={{ paddingHorizontal: 16, paddingTop: 56 }}>
                   <Text style={s.brand}>{_t('app.name')}</Text>
                 </View>
-                <DrawerItem icon="log-in" label={_t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); clearToast(); }} />
-                <DrawerItem icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); clearToast(); }} />
+                <DrawerItem T={T} icon="log-in" label={_t('auth.login')} active={authMode === 'login'} onPress={() => { setAuthMode('login'); closeDrawer(); clearToast(); }} />
+                <DrawerItem T={T} icon="person-add" label={_t('auth.register')} active={authMode === 'register'} onPress={() => { setAuthMode('register'); closeDrawer(); clearToast(); }} />
                 <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: T.border, paddingTop: 16, paddingHorizontal: 16 }}>
                   <Pressable style={s.drawerLogout} onPress={() => { setScreen('splash'); closeDrawer(); clearToast(); }}>
                     <Text style={{ color: T.muted, fontWeight: '600', marginLeft: 12 }}>{_t('splash.home')}</Text>
@@ -2360,19 +2361,19 @@ const loggedSplashView = (
 
         {user?.role === 'cook' ? (
           <>
-            <DrawerItem icon="grid" label={_t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); closeDrawer(); }} />
-            <DrawerItem icon="document-text" label={_t('cook.myMenus')} active={screen === 'cookMenus'} onPress={() => { setScreen('cookMenus'); closeDrawer(); loadMyMenus(); }} />
-            <DrawerItem icon="list" label={_t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); closeDrawer(); }} />
+            <DrawerItem T={T} icon="grid" label={_t('cook.dashboard')} active={screen === 'cookDashboard'} onPress={() => { setScreen('cookDashboard'); closeDrawer(); }} />
+            <DrawerItem T={T} icon="document-text" label={_t('cook.myMenus')} active={screen === 'cookMenus'} onPress={() => { setScreen('cookMenus'); closeDrawer(); loadMyMenus(); }} />
+            <DrawerItem T={T} icon="list" label={_t('cook.orders')} active={screen === 'cookOrders'} onPress={() => { setScreen('cookOrders'); closeDrawer(); }} />
           </>
         ) : (
           <>
-            <DrawerItem icon="cart" label={_t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); closeDrawer(); }} />
-            <DrawerItem icon="receipt" label={_t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); closeDrawer(); }} />
-            <DrawerItem icon="calendar" label={_t('mealPlanner.title')} active={screen === 'mealPlanner'} onPress={() => { setScreen('mealPlanner'); closeDrawer(); }} />
+            <DrawerItem T={T} icon="cart" label={_t('market.title')} active={screen === 'market'} onPress={() => { setScreen('market'); closeDrawer(); }} />
+            <DrawerItem T={T} icon="receipt" label={_t('orders.title')} active={screen === 'orders'} onPress={() => { setScreen('orders'); closeDrawer(); }} />
+            <DrawerItem T={T} icon="calendar" label={_t('mealPlanner.title')} active={screen === 'mealPlanner'} onPress={() => { setScreen('mealPlanner'); closeDrawer(); }} />
           </>
         )}
-        <DrawerItem icon="person" label={_t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
-        <DrawerItem icon="home" label={_t('splash.home')} onPress={() => { setScreen('splash'); closeDrawer(); }} />
+        <DrawerItem T={T} icon="person" label={_t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
+        <DrawerItem T={T} icon="home" label={_t('splash.home')} onPress={() => { setScreen('splash'); closeDrawer(); }} />
 
         <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: T.border, paddingTop: 8, paddingHorizontal: 0 }}>
           <Pressable style={s.drawerItem} onPress={toggleDarkMode}>
