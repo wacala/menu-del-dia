@@ -14,6 +14,8 @@
     "db:migrate:email": "node scripts/add-email-verification.js",
     "db:clear-users": "node scripts/clear-users.js",
     "db:seed-cooks": "node scripts/seed-cooks.js",
+    "db:seed-members": "node scripts/seed-members.js",
+    "db:seed-all": "node scripts/seed-cooks.js && node scripts/seed-members.js",
     "db:backup": "node scripts/backup-db.js"
   },
   "keywords": [
