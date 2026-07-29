@@ -133,6 +133,27 @@ router.post(
   },
 );
 
+// DELETE /api/menus/:id/items - remove all items from a menu (for editing)
+router.delete('/:id/items', authenticate, authorize(['cook']), async (req, res, next) => {
+  try {
+    // Verify ownership
+    const ownerCheck = await db.query(
+      `SELECT id FROM menus m
+       JOIN cook_profiles cp ON cp.id = m.cook_id
+       WHERE m.id = $1 AND cp.user_id = $2`,
+      [req.params.id, req.user.userId],
+    );
+    if (ownerCheck.rows.length === 0) {
+      return res.status(403).json({ message: 'Not your menu' });
+    }
+
+    await db.query('DELETE FROM menu_items WHERE menu_id = $1', [req.params.id]);
+    return res.json({ message: 'Items removed' });
+  } catch (error) {
+    return next(error);
+  }
+});
+
 // POST /api/menus/:id/items - add item to menu
 router.post(
   '/:id/items',
@@ -180,6 +201,65 @@ router.post(
       );
 
       return res.status(201).json({ item: result.rows[0] });
+    } catch (error) {
+      return next(error);
+    }
+  },
+);
+
+// PUT /api/menus/:id - cook updates their menu
+router.put(
+  '/:id',
+  authenticate,
+  authorize(['cook']),
+  [
+    body('title').optional().trim().notEmpty(),
+    body('description').optional().trim(),
+    body('menuDate').optional().isDate(),
+    body('orderStartTime').optional().isISO8601(),
+    body('orderEndTime').optional().isISO8601(),
+    body('pickupAvailable').optional().isBoolean(),
+    body('deliveryAvailable').optional().isBoolean(),
+    body('pickupLocation').optional().trim(),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+      }
+
+      const {
+        title, description, menuDate,
+        orderStartTime, orderEndTime,
+        pickupAvailable, deliveryAvailable, deliveryFee, pickupLocation,
+      } = req.body;
+
+      const result = await db.query(
+        `UPDATE menus SET
+          title = COALESCE($1, title),
+          description = COALESCE($2, description),
+          menu_date = COALESCE($3, menu_date),
+          order_start_time = COALESCE($4, order_start_time),
+          order_end_time = COALESCE($5, order_end_time),
+          pickup_available = COALESCE($6, pickup_available),
+          delivery_available = COALESCE($7, delivery_available),
+          delivery_fee = COALESCE($8, delivery_fee),
+          pickup_location = COALESCE($9, pickup_location),
+          updated_at = CURRENT_TIMESTAMP
+         WHERE id = $10
+           AND cook_id = (SELECT id FROM cook_profiles WHERE user_id = $11)
+         RETURNING *`,
+        [title, description, menuDate, orderStartTime, orderEndTime,
+          pickupAvailable, deliveryAvailable, deliveryFee, pickupLocation,
+          req.params.id, req.user.userId],
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ message: 'Menu not found or not yours' });
+      }
+
+      return res.json({ menu: result.rows[0] });
     } catch (error) {
       return next(error);
     }

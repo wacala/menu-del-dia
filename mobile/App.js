@@ -87,7 +87,7 @@ const translations = {
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
     profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp', darkMode: 'Modo oscuro' },
-    cook: { dashboard: 'Panel', orders: 'Pedidos', ordersTitle: 'Pedidos recibidos', menus: 'Menús', myMenus: 'Mis menús', profile: 'Perfil', activeMenus: 'Menús activos', totalOrders: 'Total pedidos', pendingOrders: 'Pendientes', revenue: 'Ingresos', refreshNow: 'Actualizar', noOrders: 'Sin pedidos aún', noMenusYet: 'Aún no tienes menús', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', readyForPickupCook: 'Listo para recoger', createMenuBtn: 'Crear menú', menuTitle: 'Título del menú', description: 'Descripción', menuDate: 'Fecha del menú', orderStart: 'Hora inicio pedidos', orderEnd: 'Hora cierre pedidos', pickupLocation: 'Ubicación de recogida', pickupAvailable: 'Recoger disponible', deliveryAvailable: 'Envío disponible', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito' }
+    cook: { dashboard: 'Panel', orders: 'Pedidos', ordersTitle: 'Pedidos recibidos', menus: 'Menús', myMenus: 'Mis menús', profile: 'Perfil', activeMenus: 'Menús activos', totalOrders: 'Total pedidos', pendingOrders: 'Pendientes', revenue: 'Ingresos', refreshNow: 'Actualizar', noOrders: 'Sin pedidos aún', noMenusYet: 'Aún no tienes menús', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', readyForPickupCook: 'Listo para recoger', createMenuBtn: 'Crear menú', editMenu: 'Editar', publishBtn: 'Publicar', menuTitle: 'Título del menú', description: 'Descripción', menuDate: 'Fecha del menú', orderStart: 'Hora inicio pedidos', orderEnd: 'Hora cierre pedidos', pickupLocation: 'Ubicación de recogida', pickupAvailable: 'Recoger disponible', deliveryAvailable: 'Envío disponible', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito', menuUpdated: 'Menú actualizado con éxito' }
   },
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
@@ -100,7 +100,7 @@ const translations = {
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
     profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings', phone: 'Phone', phonePlaceholder: 'Eg: +521234567890', phoneSaved: 'Phone saved', notifications: 'Notifications', notifyNewOrders: 'New orders via WhatsApp', darkMode: 'Dark mode' },
-    cook: { dashboard: 'Dashboard', orders: 'Orders', ordersTitle: 'Received orders', menus: 'Menus', myMenus: 'My menus', profile: 'Profile', activeMenus: 'Active menus', totalOrders: 'Total orders', pendingOrders: 'Pending', revenue: 'Revenue', refreshNow: 'Refresh', noOrders: 'No orders yet', noMenusYet: 'No menus yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', readyForPickupCook: 'Ready for pickup', createMenuBtn: 'Create menu', menuTitle: 'Menu title', description: 'Description', menuDate: 'Menu date', orderStart: 'Order start time', orderEnd: 'Order end time', pickupLocation: 'Pickup location', pickupAvailable: 'Pickup available', deliveryAvailable: 'Delivery available', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully' }
+    cook: { dashboard: 'Dashboard', orders: 'Orders', ordersTitle: 'Received orders', menus: 'Menus', myMenus: 'My menus', profile: 'Profile', activeMenus: 'Active menus', totalOrders: 'Total orders', pendingOrders: 'Pending', revenue: 'Revenue', refreshNow: 'Refresh', noOrders: 'No orders yet', noMenusYet: 'No menus yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', readyForPickupCook: 'Ready for pickup', createMenuBtn: 'Create menu', editMenu: 'Edit', publishBtn: 'Publish', menuTitle: 'Menu title', description: 'Description', menuDate: 'Menu date', orderStart: 'Order start time', orderEnd: 'Order end time', pickupLocation: 'Pickup location', pickupAvailable: 'Pickup available', deliveryAvailable: 'Delivery available', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully', menuUpdated: 'Menu updated successfully' }
   }
 };
 
@@ -553,6 +553,33 @@ export default function App() {
     try {
       const data = await api('/menus/my/menus', { token });
       setMyMenus(data.menus || []);
+    } catch (e) { showToast(translateError(e.message, lang)); }
+    finally { setLoading(false); }
+  };
+
+  const startEditMenu = async (id) => {
+    setLoading(true); clearToast();
+    try {
+      const data = await api(`/menus/${id}`, { token });
+      const m = data.menu;
+      setCookMenuId(String(id));
+      setMenuStep(1);
+      setMenuForm({
+        title: m.title || '',
+        description: m.description || '',
+        menuDate: m.menu_date ? m.menu_date.split('T')[0] : new Date().toISOString().split('T')[0],
+        orderStartTime: m.order_start_time || '',
+        orderEndTime: m.order_end_time || '',
+        pickupAvailable: m.pickup_available ?? true,
+        deliveryAvailable: m.delivery_available ?? false,
+        pickupLocation: m.pickup_location || '',
+      });
+      setMenuItems((m.items || []).map((item) => ({
+        name: item.name || '',
+        price: String(item.price || ''),
+        quantity: String(item.quantity_available || ''),
+        dietary: item.dietary_tags || '',
+      })));
     } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
@@ -2078,15 +2105,22 @@ export default function App() {
                 <Pressable style={[styles.primary, { flex: 1 }]} onPress={async () => {
                   setLoading(true); clearToast();
                   try {
-                    const data = await api('/menus', { method: 'POST', token, body: menuForm });
-                    const mid = data.menu?.id;
-                    if (mid && menuItems.length > 0) {
+                    const isEdit = cookMenuId && cookMenuId !== 'new';
+                    const method = isEdit ? 'PUT' : 'POST';
+                    const url = isEdit ? `/menus/${cookMenuId}` : '/menus';
+                    const data = await api(url, { method, token, body: menuForm });
+                    const mid = isEdit ? Number(cookMenuId) : data.menu?.id;
+                    if (mid) {
+                      if (isEdit) {
+                        // Replace all items when editing
+                        await api(`/menus/${mid}/items`, { method: 'DELETE', token });
+                      }
                       for (const item of menuItems) {
                         await api(`/menus/${mid}/items`, { method: 'POST', token, body: { name: item.name, price: parseFloat(item.price || 0), quantityAvailable: parseInt(item.quantity || 1), dietaryTags: item.dietary } });
                       }
                     }
                     setCookMenuId(null); setMenuStep(1); setMenuItems([]);
-                    showToast(_t('cook.menuCreated'), 'success');
+                    showToast(isEdit ? _t('cook.menuUpdated') : _t('cook.menuCreated'), 'success');
                     loadMyMenus(); loadCookStats();
                   } catch (e) { showToast(translateError(e.message, lang)); }
                   finally { setLoading(false); }
@@ -2112,14 +2146,19 @@ export default function App() {
                 </View>
                 <Text style={styles.muted}>📅 {item.menu_date ? new Date(item.menu_date).toLocaleDateString() : ''}</Text>
                 <Text style={styles.muted}>📦 {item.order_count || 0} pedidos</Text>
-                {item.status === 'draft' && (
-                  <Pressable style={[styles.primary, { marginTop: 8 }]} onPress={async () => {
-                    try { await api(`/menus/${item.id}/publish`, { method: 'PUT', token }); loadMyMenus(); }
-                    catch (e) { showToast(translateError(e.message, lang)); }
-                  }}>
-                    <Text style={styles.primaryText}>📢 Publicar</Text>
+                <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
+                  <Pressable style={[styles.secondary, { flex: 1 }]} onPress={() => startEditMenu(item.id)}>
+                    <Text style={styles.secondaryText}>✏️ {_t('cook.editMenu')}</Text>
                   </Pressable>
-                )}
+                  {item.status === 'draft' && (
+                    <Pressable style={[styles.primary, { flex: 1 }]} onPress={async () => {
+                      try { await api(`/menus/${item.id}/publish`, { method: 'PUT', token }); loadMyMenus(); }
+                      catch (e) { showToast(translateError(e.message, lang)); }
+                    }}>
+                      <Text style={styles.primaryText}>📢 {_t('cook.publishBtn')}</Text>
+                    </Pressable>
+                  )}
+                </View>
               </View>
             )}
             ListFooterComponent={<View style={{ height: 100 }} />}
