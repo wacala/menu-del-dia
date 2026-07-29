@@ -420,6 +420,7 @@ export default function App() {
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [minRating, setMinRating] = useState(0);
+  const [showFilterModal, setShowFilterModal] = useState(false);
   const [showRatingDropdown, setShowRatingDropdown] = useState(false);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [mealPlanForm, setMealPlanForm] = useState({ people: '2', meals: '3', budget: '50', restrictions: '', cuisine: '' });
