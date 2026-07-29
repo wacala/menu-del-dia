@@ -244,11 +244,11 @@ function getResponsiveBorder(width) {
   return 1;                          // 50%  — móviles
 }
 
-function DrawerItem({ icon, label, active, onPress }) {
+function DrawerItem({ icon, label, active, onPress, iconColor, labelColor }) {
   return (
     <Pressable onPress={onPress} style={[styles.drawerItem, active && styles.drawerItemActive]}>
-      <Ionicons name={icon} size={20} color={active ? colors.primary : colors.muted} />
-      <Text style={[styles.drawerItemText, active && styles.drawerItemTextActive]}>{label}</Text>
+      <Ionicons name={icon} size={20} color={iconColor || (active ? colors.primary : colors.muted)} />
+      <Text style={[styles.drawerItemText, active && styles.drawerItemTextActive, labelColor ? { color: labelColor } : null]}>{label}</Text>
     </Pressable>
   );
 }
@@ -2312,16 +2312,14 @@ const loggedSplashView = (
         <DrawerItem icon="person" label={_t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
         <DrawerItem icon="home" label={_t('splash.home')} onPress={() => { setScreen('splash'); closeDrawer(); }} />
 
-        <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: T.border, paddingTop: 16, paddingHorizontal: 16 }}>
-          <Pressable style={styles.drawerLogout} onPress={toggleDarkMode}>
-            <Ionicons name={darkMode ? 'sunny-outline' : 'moon-outline'} size={18} color={T.text} />
-            <Text style={{ color: T.text, fontWeight: '600', marginLeft: 12 }}>
-              {darkMode ? '☀️ ' : '🌙 '}{_t('profile.darkMode')}
-            </Text>
+        <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: T.border, paddingTop: 8, paddingHorizontal: 0 }}>
+          <Pressable style={styles.drawerItem} onPress={toggleDarkMode}>
+            <Ionicons name={darkMode ? 'sunny-outline' : 'moon-outline'} size={20} color={T.text} />
+            <Text style={[styles.drawerItemText, { color: T.text }]}>{_t('profile.darkMode')}</Text>
           </Pressable>
-          <Pressable style={[styles.drawerLogout, { marginTop: 8 }]} onPress={logout}>
-            <Ionicons name="log-out-outline" size={18} color={T.danger} />
-            <Text style={{ color: T.danger, fontWeight: '600', marginLeft: 12 }}>{_t('profile.logout')}</Text>
+          <Pressable style={styles.drawerItem} onPress={logout}>
+            <Ionicons name="log-out-outline" size={20} color={T.danger} />
+            <Text style={[styles.drawerItemText, { color: T.danger }]}>{_t('profile.logout')}</Text>
           </Pressable>
         </View>
       </Animated.View>
