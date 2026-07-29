@@ -59,6 +59,7 @@ const t = (key, lng) => {
 const translations = {
   'es-MX': {
     app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
+    common: { save: 'Guardar' },
     splash: { description: 'Compra y vende comida casera en tu comunidad.', tagline: 'Cocina comunitaria para tu comunidad', mission1: 'Ayudamos a cocineras y cocineros comunitarios a comercializar sus menús sin intermediarios abusivos', mission2: 'Impulsamos el talento culinario de tu comunidad — hecha en México, para México', mission3: 'Emprende tu propio negocio de cocina, sin ataduras a plataformas monopólicas', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
     auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.', usernameRules: 'Solo letras, números y guión bajo. Mínimo 3 caracteres.', usernameTaken: 'Este usuario ya está registrado', enterCredentials: 'Ingresa tu correo y contraseña', completeFields: 'Completa todos los campos' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
@@ -66,11 +67,12 @@ const translations = {
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
-    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración' },
+    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp' },
     cook: { dashboard: 'Panel', orders: 'Pedidos', menus: 'Menús', profile: 'Perfil', noOrders: 'Sin pedidos aún', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito' }
   },
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
+    common: { save: 'Save' },
     splash: { description: 'Buy and sell homemade food in your community.', tagline: 'Community kitchen for your community', mission1: 'We help community cooks commercialize their menus without abusive intermediaries', mission2: 'Empowering your community\'s culinary talent — made in Mexico, for Mexico', mission3: 'Start your own kitchen business, free from monopolistic platforms', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
     auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.', usernameRules: 'Only letters, numbers, and underscores. Min 3 characters.', usernameTaken: 'This username is already taken', enterCredentials: 'Enter your email and password', completeFields: 'Complete all fields' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
@@ -78,7 +80,7 @@ const translations = {
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
-    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings' },
+    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings', phone: 'Phone', phonePlaceholder: 'Eg: +521234567890', phoneSaved: 'Phone saved', notifications: 'Notifications', notifyNewOrders: 'New orders via WhatsApp' },
     cook: { dashboard: 'Dashboard', orders: 'Orders', menus: 'Menus', profile: 'Profile', noOrders: 'No orders yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully' }
   }
 };
@@ -285,6 +287,8 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [phoneInput, setPhoneInput] = useState('');
+  const [savingPhone, setSavingPhone] = useState(false);
   const [screen, setScreen] = useState('splash');
   const [authMode, setAuthMode] = useState('login');
   const [lang, setLang] = useState('es-MX');
@@ -375,6 +379,7 @@ export default function App() {
         const session = JSON.parse(stored);
         setToken(session.token);
         setUser(session.user);
+        setPhoneInput(session.user?.phone || '');
         if (session.token) setScreen(session.user?.role === 'cook' ? 'cookDashboard' : 'market');
       }
       setLang('es-MX');
@@ -432,6 +437,7 @@ export default function App() {
   const saveSession = async (nextToken, nextUser) => {
     setToken(nextToken);
     setUser(nextUser);
+    setPhoneInput(nextUser?.phone || '');
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify({ token: nextToken, user: nextUser }));
   };
 
@@ -439,6 +445,7 @@ export default function App() {
     await AsyncStorage.removeItem(STORAGE_KEY);
     setToken(null);
     setUser(null);
+    setPhoneInput('');
     setMenus([]);
     setMenu(null);
     setOrders([]);
@@ -481,6 +488,17 @@ export default function App() {
       setCookOrders(data.orders || []);
     } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setLoading(false); }
+  };
+
+  const savePhone = async () => {
+    if (!phoneInput.trim()) return;
+    setSavingPhone(true);
+    try {
+      const data = await api('/users/me', { method: 'PUT', token, body: { phone: phoneInput.trim() } });
+      setUser((prev) => ({ ...prev, phone: data.user?.phone || phoneInput.trim() }));
+      showToast(_t('profile.phoneSaved'), 'success');
+    } catch (e) { showToast(translateError(e.message, lang)); }
+    finally { setSavingPhone(false); }
   };
 
   const loadCookStats = async () => {
@@ -1632,6 +1650,43 @@ export default function App() {
 
       {/* Settings */}
       <Text style={[styles.sectionTitle, { marginTop: 8 }]}>{_t('profile.settings')}</Text>
+
+      {/* Phone number */}
+      <View style={styles.card}>
+        <Text style={styles.body}>{_t('profile.phone')}</Text>
+        <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
+          <TextInput
+            style={[styles.input, { flex: 1 }]}
+            placeholder={_t('profile.phonePlaceholder')}
+            placeholderTextColor={colors.muted}
+            value={phoneInput}
+            onChangeText={setPhoneInput}
+            keyboardType="phone-pad"
+            autoCapitalize="none"
+          />
+          <Pressable
+            style={[styles.primary, { paddingHorizontal: 16, justifyContent: 'center' }]}
+            onPress={savePhone}
+            disabled={savingPhone}
+          >
+            <Text style={styles.primaryText}>{savingPhone ? '...' : _t('common.save')}</Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {/* Notifications toggle */}
+      {user?.role === 'cook' && (
+        <View style={styles.card}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.body}>{_t('profile.notifications')}</Text>
+              <Text style={[styles.helper, { fontSize: 12 }]}>{_t('profile.notifyNewOrders')}</Text>
+            </View>
+            <Ionicons name="logo-whatsapp" size={22} color={colors.emerald} />
+          </View>
+        </View>
+      )}
+
       <Pressable style={styles.card} onPress={logout}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>

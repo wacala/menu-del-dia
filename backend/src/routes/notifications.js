@@ -29,6 +29,7 @@ const orderStatusMessages = {
   delivered: (order) => `🎉 *Menú del Día* — Tu pedido #${order.order_number} ha sido entregado. Gracias por tu compra.`,
   cancelled: (order) => `❌ *Menú del Día* — Tu pedido #${order.order_number} ha sido cancelado. Disculpa los inconvenientes.`,
   placed: (order) => `⏳ *Menú del Día* — Hemos recibido tu pedido #${order.order_number} por $${order.total_amount}. Espera confirmación del cocinero.`,
+  new_order: (order) => `🆕 *Nuevo pedido* — #${order.order_number} por $${order.total_amount} de ${order.member_name}. Revisa y confirma en la app.`,
 };
 
 // POST /api/notifications/order/:id - manually trigger notification (cook or admin)
@@ -95,5 +96,32 @@ const notifyOrderStatus = async (orderId, status) => {
   }
 };
 
+// Internal helper: notify cook when a new order arrives
+const notifyCookNewOrder = async (orderId) => {
+  try {
+    const result = await db.query(
+      `SELECT o.order_number, o.total_amount,
+              cu.phone AS cook_phone, cu.first_name AS cook_name,
+              mu.first_name AS member_name
+       FROM orders o
+       JOIN cook_profiles cp ON cp.id = o.cook_id
+       JOIN users cu ON cu.id = cp.user_id
+       JOIN member_profiles mp ON mp.id = o.member_id
+       JOIN users mu ON mu.id = mp.user_id
+       WHERE o.id = $1`,
+      [orderId],
+    );
+
+    if (result.rows.length === 0 || !result.rows[0].cook_phone) return;
+
+    const order = result.rows[0];
+    const message = orderStatusMessages.new_order(order);
+    await sendWhatsApp(order.cook_phone, message);
+  } catch (err) {
+    console.error('WhatsApp new-order notification error:', err.message);
+  }
+};
+
 module.exports = router;
 module.exports.notifyOrderStatus = notifyOrderStatus;
+module.exports.notifyCookNewOrder = notifyCookNewOrder;

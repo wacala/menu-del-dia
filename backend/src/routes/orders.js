@@ -3,7 +3,7 @@ const { body, validationResult } = require('express-validator');
 
 const db = require('../config/database');
 const { authenticate, authorize } = require('../middleware/auth');
-const { notifyOrderStatus } = require('./notifications');
+const { notifyOrderStatus, notifyCookNewOrder } = require('./notifications');
 
 const router = express.Router();
 
@@ -123,6 +123,9 @@ router.post(
           ),
         ])),
       );
+
+      // Notify cook about new order (fire-and-forget)
+      notifyCookNewOrder(order.id).catch(() => {});
 
       return res.status(201).json({
         message: 'Order placed successfully',
