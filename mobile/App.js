@@ -1865,11 +1865,12 @@ export default function App() {
           {/* Sort */}
           <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Ordenar por</Text>
           <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
-            {[['balanced', '⚖️ Balanceado'], ['rating', '⭐ Calificación'], ['price_asc', '💰 Precio ↑'], ['price_desc', '💰 Precio ↓'], ['name', '🔤 A-Z']].map(([val, lab]) => (
+            {[['balanced', 'swap-vertical', 'Balanceado'], ['rating', 'star', 'Calificación'], ['price_asc', 'trending-up', 'Precio ↑'], ['price_desc', 'trending-down', 'Precio ↓'], ['name', 'text', 'A-Z']].map(([val, icon, lab]) => (
               <Pressable key={val} onPress={() => setSortBy(val)}
-                style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
                   backgroundColor: sortBy === val ? T.primary : T.card,
                   borderWidth: 1, borderColor: sortBy === val ? T.primary : T.border }}>
+                <Ionicons name={icon} size={14} color={sortBy === val ? '#fff' : T.text} />
                 <Text style={{ fontSize: 12, fontWeight: '700', color: sortBy === val ? '#fff' : T.text }}>{lab}</Text>
               </Pressable>
             ))}
