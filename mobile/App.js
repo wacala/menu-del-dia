@@ -1350,7 +1350,6 @@ export default function App() {
           <Ionicons name="options-outline" size={18} color={T.text} />
         </Pressable>
       </View>
-              flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
       {/* Cuisine scrollable chips */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, marginBottom: 8 }}>
         {cuisines.filter((c) => c !== 'all').map((c) => {
