@@ -85,7 +85,7 @@ const translations = {
     menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', selectItem: 'Selecciona al menos un platillo', enterAddress: 'Ingresa una dirección de entrega', orderPlaced: 'Pedido realizado con éxito', couldNotCreate: 'No se pudo crear el pedido', paymentCancelled: 'Pago cancelado', paymentLabel: 'Método de pago', cash: 'Efectivo', spei: 'Transferencia SPEI', card: 'Tarjeta' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
-    search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
+    search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Envío', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
     profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp', darkMode: 'Modo oscuro', deleteAccount: 'Eliminar cuenta', deleteConfirmTitle: '¿Eliminar tu cuenta?', deleteConfirmMessage: 'Esta acción es permanente. Se eliminarán tus pedidos, menús y datos. No podrás recuperarlos.', accountDeleted: 'Cuenta eliminada' },
     cook: { dashboard: 'Panel', orders: 'Pedidos', ordersTitle: 'Pedidos recibidos', menus: 'Menús', myMenus: 'Mis menús', profile: 'Perfil', activeMenus: 'Menús activos', totalOrders: 'Total pedidos', pendingOrders: 'Pendientes', revenue: 'Ingresos', refreshNow: 'Actualizar', noOrders: 'Sin pedidos aún', noMenusYet: 'Aún no tienes menús', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', readyForPickupCook: 'Listo para recoger', createMenuBtn: 'Crear menú', editMenu: 'Editar', publishBtn: 'Publicar', menuTitle: 'Título del menú', description: 'Descripción', menuDate: 'Fecha del menú', orderStart: 'Hora inicio pedidos', orderEnd: 'Hora cierre pedidos', pickupLocation: 'Ubicación de recogida', pickupAvailable: 'Recoger disponible', deliveryAvailable: 'Envío disponible', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito', menuUpdated: 'Menú actualizado con éxito' }
   },
@@ -1441,29 +1441,33 @@ export default function App() {
                     <Ionicons name="restaurant-outline" size={48} color={T.muted} />
                   </View>
                 )}
-                {/* Badge: cuisine type */}
+                {/* Badge: cuisine type — estilo distintivo */}
                 {item.cuisine_type ? (
                   <View style={{
                     position: 'absolute', top: 12, left: 12,
-                    backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 8,
-                    paddingHorizontal: 10, paddingVertical: 4,
+                    backgroundColor: T.primary, borderRadius: 10,
+                    paddingHorizontal: 12, paddingVertical: 5,
+                    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.3, shadowRadius: 3, elevation: 3,
                   }}>
-                    <Text style={{ color: '#fff', fontSize: 12, fontWeight: '700' }}>{item.cuisine_type}</Text>
+                    <Text style={{ color: '#fff', fontSize: 12, fontWeight: '800', letterSpacing: 0.3, textTransform: 'capitalize' }}>
+                      {item.cuisine_type}
+                    </Text>
                   </View>
                 ) : null}
-                {/* Badge: delivery/pickup */}
+                {/* Badge: delivery/pickup — iconos */}
                 <View style={{
                   position: 'absolute', bottom: 12, left: 12,
-                  flexDirection: 'row', gap: 4,
+                  flexDirection: 'row', gap: 6,
                 }}>
                   {item.delivery_available ? (
-                    <View style={{ backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
-                      <Text style={{ color: '#fff', fontSize: 10, fontWeight: '600' }}>Delivery</Text>
+                    <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center' }}>
+                      <Ionicons name="bicycle-outline" size={16} color="#fff" />
                     </View>
                   ) : null}
                   {item.pickup_available ? (
-                    <View style={{ backgroundColor: 'rgba(0,0,0,0.6)', borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 }}>
-                      <Text style={{ color: '#fff', fontSize: 10, fontWeight: '600' }}>Recoger</Text>
+                    <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: 'rgba(0,0,0,0.6)', alignItems: 'center', justifyContent: 'center' }}>
+                      <Ionicons name="storefront-outline" size={16} color="#fff" />
                     </View>
                   ) : null}
                 </View>
