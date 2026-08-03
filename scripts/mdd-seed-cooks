@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")/../backend"
-export DATABASE_URL="postgresql://postgres:fODeYoHJAgEMlOMdWDGpgrxtgtKfsPVi@hayabusa.proxy.rlwy.net:38901/railway"
-export NODE_ENV=production
+export NODE_ENV=development
 npm run db:seed-cooks
