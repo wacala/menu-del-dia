@@ -105,6 +105,52 @@ router.put(
   },
 );
 
+// DELETE /api/users/me - delete account and all associated data
+router.delete('/me', authenticate, async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+
+    await db.query('BEGIN');
+
+    // Delete payments linked to user's orders
+    await db.query(
+      `DELETE FROM payments
+       WHERE order_id IN (
+         SELECT id FROM orders
+         WHERE member_id = (SELECT id FROM member_profiles WHERE user_id = $1)
+            OR cook_id = (SELECT id FROM cook_profiles WHERE user_id = $1)
+       )`,
+      [userId],
+    );
+
+    // Delete orders (member and cook)
+    await db.query(
+      `DELETE FROM orders
+       WHERE member_id = (SELECT id FROM member_profiles WHERE user_id = $1)
+          OR cook_id = (SELECT id FROM cook_profiles WHERE user_id = $1)`,
+      [userId],
+    );
+
+    // Delete cook menus
+    await db.query(
+      'DELETE FROM menus WHERE cook_id = (SELECT id FROM cook_profiles WHERE user_id = $1)',
+      [userId],
+    );
+
+    // Delete ratings/reviews authored by this user
+    await db.query('DELETE FROM ratings_reviews WHERE reviewer_id = $1', [userId]);
+
+    // Delete user (cascades to cook_profiles/member_profiles and their children)
+    await db.query('DELETE FROM users WHERE id = $1', [userId]);
+
+    await db.query('COMMIT');
+    return res.json({ message: 'Account deleted successfully' });
+  } catch (error) {
+    await db.query('ROLLBACK');
+    return next(error);
+  }
+});
+
 // GET /api/users/cooks - list all approved cooks (public)
 router.get('/cooks', async (req, res, next) => {
   try {

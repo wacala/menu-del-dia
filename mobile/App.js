@@ -78,7 +78,7 @@ const t = (key, lng) => {
 const translations = {
   'es-MX': {
     app: { name: 'Menú del Día', tagline: 'Comida casera en tu comunidad' },
-    common: { save: 'Guardar' },
+    common: { save: 'Guardar', cancel: 'Cancelar' },
     splash: { description: 'Compra y vende comida casera en tu comunidad.', tagline: 'Cocina comunitaria para tu comunidad', mission1: 'Ayudamos a cocineras y cocineros comunitarios a comercializar sus menús sin intermediarios abusivos', mission2: 'Impulsamos el talento culinario de tu comunidad — hecha en México, para México', mission3: 'Emprende tu propio negocio de cocina, sin ataduras a plataformas monopólicas', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
     auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.', usernameRules: 'Solo letras, números y guión bajo. Mínimo 3 caracteres.', usernameTaken: 'Este usuario ya está registrado', enterCredentials: 'Ingresa tu correo y contraseña', completeFields: 'Completa todos los campos' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
@@ -86,12 +86,12 @@ const translations = {
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Delivery', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
-    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp', darkMode: 'Modo oscuro' },
+    profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp', darkMode: 'Modo oscuro', deleteAccount: 'Eliminar cuenta', deleteConfirmTitle: '¿Eliminar tu cuenta?', deleteConfirmMessage: 'Esta acción es permanente. Se eliminarán tus pedidos, menús y datos. No podrás recuperarlos.', accountDeleted: 'Cuenta eliminada' },
     cook: { dashboard: 'Panel', orders: 'Pedidos', ordersTitle: 'Pedidos recibidos', menus: 'Menús', myMenus: 'Mis menús', profile: 'Perfil', activeMenus: 'Menús activos', totalOrders: 'Total pedidos', pendingOrders: 'Pendientes', revenue: 'Ingresos', refreshNow: 'Actualizar', noOrders: 'Sin pedidos aún', noMenusYet: 'Aún no tienes menús', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', readyForPickupCook: 'Listo para recoger', createMenuBtn: 'Crear menú', editMenu: 'Editar', publishBtn: 'Publicar', menuTitle: 'Título del menú', description: 'Descripción', menuDate: 'Fecha del menú', orderStart: 'Hora inicio pedidos', orderEnd: 'Hora cierre pedidos', pickupLocation: 'Ubicación de recogida', pickupAvailable: 'Recoger disponible', deliveryAvailable: 'Envío disponible', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito', menuUpdated: 'Menú actualizado con éxito' }
   },
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
-    common: { save: 'Save' },
+    common: { save: 'Save', cancel: 'Cancel' },
     splash: { description: 'Buy and sell homemade food in your community.', tagline: 'Community kitchen for your community', mission1: 'We help community cooks commercialize their menus without abusive intermediaries', mission2: 'Empowering your community\'s culinary talent — made in Mexico, for Mexico', mission3: 'Start your own kitchen business, free from monopolistic platforms', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
     auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.', usernameRules: 'Only letters, numbers, and underscores. Min 3 characters.', usernameTaken: 'This username is already taken', enterCredentials: 'Enter your email and password', completeFields: 'Complete all fields' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
@@ -99,7 +99,7 @@ const translations = {
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
-    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings', phone: 'Phone', phonePlaceholder: 'Eg: +521234567890', phoneSaved: 'Phone saved', notifications: 'Notifications', notifyNewOrders: 'New orders via WhatsApp', darkMode: 'Dark mode' },
+    profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings', phone: 'Phone', phonePlaceholder: 'Eg: +521234567890', phoneSaved: 'Phone saved', notifications: 'Notifications', notifyNewOrders: 'New orders via WhatsApp', darkMode: 'Dark mode', deleteAccount: 'Delete account', deleteConfirmTitle: 'Delete your account?', deleteConfirmMessage: 'This action is permanent. Your orders, menus and data will be deleted. This cannot be undone.', accountDeleted: 'Account deleted' },
     cook: { dashboard: 'Dashboard', orders: 'Orders', ordersTitle: 'Received orders', menus: 'Menus', myMenus: 'My menus', profile: 'Profile', activeMenus: 'Active menus', totalOrders: 'Total orders', pendingOrders: 'Pending', revenue: 'Revenue', refreshNow: 'Refresh', noOrders: 'No orders yet', noMenusYet: 'No menus yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', readyForPickupCook: 'Ready for pickup', createMenuBtn: 'Create menu', editMenu: 'Edit', publishBtn: 'Publish', menuTitle: 'Menu title', description: 'Description', menuDate: 'Menu date', orderStart: 'Order start time', orderEnd: 'Order end time', pickupLocation: 'Pickup location', pickupAvailable: 'Pickup available', deliveryAvailable: 'Delivery available', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully', menuUpdated: 'Menu updated successfully' }
   }
 };
@@ -309,6 +309,8 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [phoneInput, setPhoneInput] = useState('');
   const [savingPhone, setSavingPhone] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deletingAccount, setDeletingAccount] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const T = darkMode ? darkColors : colors;
   const s = useMemo(() => StyleSheet.create({
@@ -593,6 +595,17 @@ export default function App() {
       showToast(_t('profile.phoneSaved'), 'success');
     } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setSavingPhone(false); }
+  };
+
+  const deleteAccount = async () => {
+    setDeletingAccount(true);
+    try {
+      await api('/users/me', { method: 'DELETE', token });
+      setShowDeleteConfirm(false);
+      await logout();
+      showToast(_t('profile.accountDeleted'), 'success');
+    } catch (e) { showToast(translateError(e.message, lang)); }
+    finally { setDeletingAccount(false); }
   };
 
   const loadCookStats = async () => {
@@ -1732,6 +1745,16 @@ export default function App() {
           <Ionicons name="chevron-forward" size={18} color={T.muted} />
         </View>
       </Pressable>
+
+      <Pressable style={[s.card, { borderColor: T.danger, borderWidth: 1 }]} onPress={() => setShowDeleteConfirm(true)}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+            <Ionicons name="trash-outline" size={20} color={T.danger} />
+            <Text style={[s.body, { color: T.danger, fontWeight: '600' }]}>{_t('profile.deleteAccount')}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color={T.danger} />
+        </View>
+      </Pressable>
     </ScrollView>
   );
 
@@ -2328,6 +2351,7 @@ const loggedSplashView = (
           </>
         )}
         <DrawerItem T={T} icon="person" label={_t('profile.title')} active={screen === 'profile'} onPress={() => { setScreen('profile'); closeDrawer(); }} />
+        <DrawerItem T={T} icon="settings-outline" label={_t('profile.settings')} active={screen === 'profile' && false} onPress={() => { setScreen('profile'); closeDrawer(); }} />
         <DrawerItem T={T} icon="home" label={_t('splash.home')} onPress={() => { setScreen('splash'); closeDrawer(); }} />
 
         <View style={{ marginTop: 16, borderTopWidth: 1, borderTopColor: T.border, paddingTop: 8, paddingHorizontal: 0 }}>
@@ -2352,6 +2376,34 @@ const loggedSplashView = (
       {screen === 'cookOrders' && cookOrdersView}
       {screen === 'splash' && loggedSplashView}
       <Toast message={toast.message} type={toast.type} onClose={clearToast} />
+
+      {showDeleteConfirm && (
+        <Modal transparent animationType="fade" visible={showDeleteConfirm} onRequestClose={() => setShowDeleteConfirm(false)}>
+          <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 24 }}>
+            <View style={{ backgroundColor: T.card, borderRadius: 20, padding: 24, gap: 12 }}>
+              <View style={{ alignItems: 'center', marginBottom: 8 }}>
+                <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: '#fef2f2', alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="warning" size={28} color={T.danger} />
+                </View>
+              </View>
+              <Text style={{ fontSize: 18, fontWeight: '800', color: T.text, textAlign: 'center' }}>
+                {_t('profile.deleteConfirmTitle')}
+              </Text>
+              <Text style={{ color: T.textSecondary, fontSize: 14, textAlign: 'center', lineHeight: 20 }}>
+                {_t('profile.deleteConfirmMessage')}
+              </Text>
+              <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
+                <Pressable style={[s.secondary, { flex: 1 }]} onPress={() => setShowDeleteConfirm(false)} disabled={deletingAccount}>
+                  <Text style={s.secondaryText}>{_t('common.cancel')}</Text>
+                </Pressable>
+                <Pressable style={[s.primary, { flex: 1, backgroundColor: T.danger }]} onPress={deleteAccount} disabled={deletingAccount}>
+                  <Text style={s.primaryText}>{deletingAccount ? '...' : _t('profile.deleteAccount')}</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      )}
       </Animated.View>
     </View>
   );
