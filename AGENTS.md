@@ -133,6 +133,34 @@ La app móvil es un solo archivo `App.js` (~1300 líneas) que contiene:
 | 3 | 🟡 Media | **Testing** — Pruebas de flujos críticos (registro, pago, creación menú) |
 | 4 | 🟢 Futuro | **Community Manager Agent** — AI para redes sociales y comunicación |
 | 5 | 🟢 Futuro | **Framework** — Extraer base reutilizable del proyecto |
+| 6 | 🟢 Futuro | **Trueque** — Mecanismo para intercambiar alimentos/platillos con equivalencias justas |
+| 7 | 🟢 Futuro | **Promoción de cocinas** — Sistema de destacados, banners y posicionamiento (tipo "pagar para aparecer arriba") |
+| 8 | 🟢 Futuro | **Incentivos para compradores** — Recompensas, niveles, descuentos por fidelidad |
+| 9 | 🟢 Futuro | **Premios para cocineros** — Badges, niveles, visibilidad, herramientas avanzadas |
+
+---
+
+### 🆕 Visión — Trueque y Promoción
+
+**Trueque (intercambio):**
+- Sistema de equivalencias: 1 platillo = N platillos / 1 ración = N raciones
+- Vales de trueque acumulables
+- Un cocinero puede aceptar trueque como forma de pago parcial
+
+**Promoción de cocinas:**
+- Cocinero puede "destacar" su cocina por un periodo (similar a banners pagados)
+- Niveles de visibilidad: estándar → destacado → recomendado
+- Los ingresos de promoción financian la plataforma
+
+**Incentivos compradores:**
+- Puntos por pedido que se canjean por descuentos
+- Niveles de cliente frecuente con beneficios
+- Ofertas exclusivas por fidelidad
+
+**Premios cocineros:**
+- Badges por logros (100 pedidos, 5★, etc.)
+- Mayor visibilidad para cocineros con mejor rating
+- Herramientas avanzadas de planificación como recompensa
 
 ## ⚙️ Configuración Local
 
