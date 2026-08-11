@@ -87,7 +87,7 @@ const translations = {
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Envío', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
     profile: { title: 'Perfil', logout: 'Cerrar sesión', role: 'Rol', member: 'Miembro', cook: 'Cocinero', settings: 'Configuración', phone: 'Teléfono', phonePlaceholder: 'Ej: +521234567890', phoneSaved: 'Teléfono guardado', notifications: 'Notificaciones', notifyNewOrders: 'Nuevos pedidos por WhatsApp', darkMode: 'Modo oscuro', deleteAccount: 'Eliminar cuenta', deleteConfirmTitle: '¿Eliminar tu cuenta?', deleteConfirmMessage: 'Esta acción es permanente. Se eliminarán tus pedidos, menús y datos. No podrás recuperarlos.', accountDeleted: 'Cuenta eliminada' },
-    cook: { dashboard: 'Panel', orders: 'Pedidos', ordersTitle: 'Pedidos recibidos', menus: 'Menús', myMenus: 'Mis menús', profile: 'Perfil', activeMenus: 'Menús activos', totalOrders: 'Total pedidos', pendingOrders: 'Pendientes', revenue: 'Ingresos', refreshNow: 'Actualizar', noOrders: 'Sin pedidos aún', noMenusYet: 'Aún no tienes menús', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', readyForPickupCook: 'Listo para recoger', createMenuBtn: 'Crear menú', editMenu: 'Editar', publishBtn: 'Publicar', menuTitle: 'Título del menú', description: 'Descripción', menuDate: 'Fecha del menú', orderStart: 'Hora inicio pedidos', orderEnd: 'Hora cierre pedidos', pickupLocation: 'Ubicación de recogida', pickupAvailable: 'Recoger disponible', deliveryAvailable: 'Envío disponible', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito', menuUpdated: 'Menú actualizado con éxito' }
+    cook: { dashboard: 'Panel', orders: 'Pedidos', ordersTitle: 'Pedidos recibidos', menus: 'Menús', myMenus: 'Mis menús', profile: 'Perfil', activeMenus: 'Menús activos', totalOrders: 'Total pedidos', pendingOrders: 'Pendientes', revenue: 'Ingresos', refreshNow: 'Actualizar', noOrders: 'Sin pedidos aún', noMenusYet: 'Aún no tienes menús', totalAmount: 'Total:', deliveryType: 'Entrega:', itemsToPrepare: 'Por preparar:', specialRequests: 'Peticiones especiales:', readyForPickupCook: 'Listo para recoger', createMenuBtn: 'Crear menú', editMenu: 'Editar', publishBtn: 'Publicar', renewMenu: 'Renovar', menuRenewed: 'Menú renovado', menuTitle: 'Título del menú', description: 'Descripción', menuDate: 'Fecha del menú', orderStart: 'Hora inicio pedidos', orderEnd: 'Hora cierre pedidos', pickupLocation: 'Ubicación de recogida', pickupAvailable: 'Recoger disponible', deliveryAvailable: 'Envío disponible', titleRequired: 'El título es obligatorio', itemNameRequired: 'Agrega al menos un platillo con nombre', menuCreated: 'Menú creado con éxito', menuUpdated: 'Menú actualizado con éxito' }
   },
   en: {
     app: { name: 'Menú del Día', tagline: 'Community food, made simple' },
@@ -100,7 +100,7 @@ const translations = {
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
     profile: { title: 'Profile', logout: 'Logout', role: 'Role', member: 'Member', cook: 'Cook', settings: 'Settings', phone: 'Phone', phonePlaceholder: 'Eg: +521234567890', phoneSaved: 'Phone saved', notifications: 'Notifications', notifyNewOrders: 'New orders via WhatsApp', darkMode: 'Dark mode', deleteAccount: 'Delete account', deleteConfirmTitle: 'Delete your account?', deleteConfirmMessage: 'This action is permanent. Your orders, menus and data will be deleted. This cannot be undone.', accountDeleted: 'Account deleted' },
-    cook: { dashboard: 'Dashboard', orders: 'Orders', ordersTitle: 'Received orders', menus: 'Menus', myMenus: 'My menus', profile: 'Profile', activeMenus: 'Active menus', totalOrders: 'Total orders', pendingOrders: 'Pending', revenue: 'Revenue', refreshNow: 'Refresh', noOrders: 'No orders yet', noMenusYet: 'No menus yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', readyForPickupCook: 'Ready for pickup', createMenuBtn: 'Create menu', editMenu: 'Edit', publishBtn: 'Publish', menuTitle: 'Menu title', description: 'Description', menuDate: 'Menu date', orderStart: 'Order start time', orderEnd: 'Order end time', pickupLocation: 'Pickup location', pickupAvailable: 'Pickup available', deliveryAvailable: 'Delivery available', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully', menuUpdated: 'Menu updated successfully' }
+    cook: { dashboard: 'Dashboard', orders: 'Orders', ordersTitle: 'Received orders', menus: 'Menus', myMenus: 'My menus', profile: 'Profile', activeMenus: 'Active menus', totalOrders: 'Total orders', pendingOrders: 'Pending', revenue: 'Revenue', refreshNow: 'Refresh', noOrders: 'No orders yet', noMenusYet: 'No menus yet', totalAmount: 'Total:', deliveryType: 'Delivery:', itemsToPrepare: 'To prepare:', specialRequests: 'Special requests:', readyForPickupCook: 'Ready for pickup', createMenuBtn: 'Create menu', editMenu: 'Edit', publishBtn: 'Publish', renewMenu: 'Renew', menuRenewed: 'Menu renewed', menuTitle: 'Menu title', description: 'Description', menuDate: 'Menu date', orderStart: 'Order start time', orderEnd: 'Order end time', pickupLocation: 'Pickup location', pickupAvailable: 'Pickup available', deliveryAvailable: 'Delivery available', titleRequired: 'Title is required', itemNameRequired: 'Add at least one item with a name', menuCreated: 'Menu created successfully', menuUpdated: 'Menu updated successfully' }
   }
 };
 
@@ -631,6 +631,16 @@ export default function App() {
     try {
       const data = await api('/menus/my/menus', { token });
       setMyMenus(data.menus || []);
+    } catch (e) { showToast(translateError(e.message, lang)); }
+    finally { setLoading(false); }
+  };
+
+  const renewMenu = async (id) => {
+    setLoading(true);
+    try {
+      const data = await api(`/menus/${id}/renew`, { method: 'POST', token });
+      showToast(_t('cook.menuRenewed'), 'success');
+      loadMyMenus();
     } catch (e) { showToast(translateError(e.message, lang)); }
     finally { setLoading(false); }
   };
@@ -1341,13 +1351,14 @@ export default function App() {
       {/* Delivery + Filter row */}
       <View style={{ flexDirection: 'row', gap: 6, marginBottom: 8, alignItems: 'center' }}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6 }}>
-          {['all', 'pickup', 'delivery'].map((d) => {
+          {[['all', null], ['pickup', 'storefront-outline'], ['delivery', 'bicycle-outline']].map(([d, icon]) => {
             const active = filterDelivery === d;
             return (
               <Pressable key={d} onPress={() => setFilterDelivery(d)}
-                style={{ paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20,
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20,
                   backgroundColor: active ? T.primary : T.card,
                   borderWidth: 1, borderColor: active ? T.primary : T.border }}>
+                {icon ? <Ionicons name={icon} size={13} color={active ? '#fff' : T.textSecondary} /> : null}
                 <Text style={{ fontSize: 12, fontWeight: '700', color: active ? '#fff' : T.text }}>
                   {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
                 </Text>
@@ -1902,20 +1913,19 @@ export default function App() {
       </View>
       <View style={s.card}>
         <Text style={s.cardTitle}>{_t('menu.deliveryType')}</Text>
-        {/* Tab container */}
-        <View style={{ flexDirection: 'row', backgroundColor: T.coffeeLight, borderRadius: 12, padding: 3, marginTop: 4 }}>
+        {/* Segmented tabs - alta jerarquía */}
+        <View style={{ flexDirection: 'row', backgroundColor: T.border, borderRadius: 12, padding: 4, marginTop: 4 }}>
           <Pressable
             onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))}
             style={{
-              flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10,
-              backgroundColor: draft.deliveryType === 'pickup' ? T.card : 'transparent',
-              shadowColor: draft.deliveryType === 'pickup' ? '#000' : 'transparent',
-              shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2,
-              elevation: draft.deliveryType === 'pickup' ? 2 : 0,
+              flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+              paddingVertical: 10, borderRadius: 9,
+              backgroundColor: draft.deliveryType === 'pickup' ? T.primary : 'transparent',
             }}>
+            <Ionicons name="storefront-outline" size={16} color={draft.deliveryType === 'pickup' ? '#fff' : T.muted} />
             <Text style={{
               fontSize: 13, fontWeight: '700',
-              color: draft.deliveryType === 'pickup' ? T.primary : T.muted,
+              color: draft.deliveryType === 'pickup' ? '#fff' : T.textSecondary,
             }}>{_t('menu.pickup')}</Text>
           </Pressable>
           <Pressable
@@ -1924,15 +1934,14 @@ export default function App() {
               setTimeout(() => addressRef.current?.focus(), 200);
             }}
             style={{
-              flex: 1, alignItems: 'center', paddingVertical: 10, borderRadius: 10,
-              backgroundColor: draft.deliveryType === 'delivery' ? T.card : 'transparent',
-              shadowColor: draft.deliveryType === 'delivery' ? '#000' : 'transparent',
-              shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2,
-              elevation: draft.deliveryType === 'delivery' ? 2 : 0,
+              flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
+              paddingVertical: 10, borderRadius: 9,
+              backgroundColor: draft.deliveryType === 'delivery' ? T.primary : 'transparent',
             }}>
+            <Ionicons name="bicycle-outline" size={16} color={draft.deliveryType === 'delivery' ? '#fff' : T.muted} />
             <Text style={{
               fontSize: 13, fontWeight: '700',
-              color: draft.deliveryType === 'delivery' ? T.primary : T.muted,
+              color: draft.deliveryType === 'delivery' ? '#fff' : T.textSecondary,
             }}>{_t('menu.delivery')}</Text>
           </Pressable>
         </View>
@@ -1941,15 +1950,15 @@ export default function App() {
         )}
         <Text style={[s.cardTitle, { marginTop: 8 }]}>{_t('menu.paymentLabel')}</Text>
         <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
-          {['cash', 'spei', 'stripe'].map((m) => {
+          {[['cash', 'cash-outline'], ['spei', 'business-outline'], ['stripe', 'card-outline']].map(([m, icon]) => {
             const active = draft.paymentMethod === m;
             return (
               <Pressable key={m} onPress={() => setDraft((c) => ({ ...c, paymentMethod: m }))}
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 7, borderRadius: 16,
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16,
                   backgroundColor: active ? T.primary : T.card,
                   borderWidth: 1, borderColor: active ? T.primary : T.border }}>
+                <Ionicons name={icon} size={15} color={active ? '#fff' : T.textSecondary} />
                 <Text style={{ fontSize: 12, fontWeight: '700', color: active ? '#fff' : T.text }}>
-                  {m === 'cash' ? '💵 ' : m === 'spei' ? '🏦 ' : '💳 '}
                   {m === 'cash' ? _t('menu.cash') : m === 'spei' ? _t('menu.spei') : _t('menu.card')}
                 </Text>
               </Pressable>
@@ -2179,15 +2188,55 @@ export default function App() {
       ) : (
         <>
           {loading ? <ActivityIndicator color={T.primary} /> : null}
+
+          {/* Expiration alert banner */}
+          {(() => {
+            const expired = myMenus.filter((m) => m.is_expired).length;
+            const expiring = myMenus.filter((m) => !m.is_expired && m.days_remaining !== null && m.days_remaining <= 1 && m.days_remaining >= 0).length;
+            if (expired === 0 && expiring === 0) return null;
+            return (
+              <View style={{
+                backgroundColor: expired > 0 ? '#fef2f2' : '#fffbeb',
+                borderColor: expired > 0 ? T.danger : T.amber,
+                borderWidth: 1, borderRadius: 12, padding: 12, marginBottom: 12,
+              }}>
+                <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                  <Ionicons name={expired > 0 ? 'alert-circle' : 'time-outline'} size={20} color={expired > 0 ? T.danger : T.amber} />
+                  <Text style={{ color: expired > 0 ? T.danger : '#92400e', fontWeight: '700', fontSize: 13, flex: 1 }}>
+                    {expired > 0
+                      ? `${expired} menú${expired > 1 ? 's' : ''} vencido${expired > 1 ? 's' : ''}. Renueva para ofrecerlos de nuevo.`
+                      : `${expiring} menú${expiring > 1 ? 's' : ''} por caducar hoy. Renueva o edita la fecha.`}
+                  </Text>
+                </View>
+              </View>
+            );
+          })()}
+
           <FlatList
             data={myMenus}
             keyExtractor={(item) => String(item.id)}
             ListEmptyComponent={<Text style={s.helper}>{_t('cook.noMenusYet')}</Text>}
             renderItem={({ item }) => (
               <View style={s.card}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={s.cardTitle}>{item.title}</Text>
-                  <Text style={[s.chipText, { fontSize: 12, color: item.status === 'published' ? T.success : T.amber }]}>{item.status}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Text style={[s.cardTitle, { flex: 1 }]} numberOfLines={1}>{item.title}</Text>
+                  {item.is_expired ? (
+                    <View style={{ backgroundColor: '#fef2f2', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3, marginLeft: 8 }}>
+                      <Text style={{ color: T.danger, fontSize: 11, fontWeight: '800' }}>VENCIDO</Text>
+                    </View>
+                  ) : item.expires_today ? (
+                    <View style={{ backgroundColor: '#fffbeb', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3, marginLeft: 8 }}>
+                      <Text style={{ color: '#92400e', fontSize: 11, fontWeight: '800' }}>HOY</Text>
+                    </View>
+                  ) : item.status === 'draft' ? (
+                    <View style={{ backgroundColor: '#fffbeb', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3, marginLeft: 8 }}>
+                      <Text style={{ color: '#92400e', fontSize: 11, fontWeight: '800' }}>BORRADOR</Text>
+                    </View>
+                  ) : (
+                    <View style={{ backgroundColor: '#ecfdf5', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3, marginLeft: 8 }}>
+                      <Text style={{ color: T.success, fontSize: 11, fontWeight: '800' }}>ACTIVO</Text>
+                    </View>
+                  )}
                 </View>
                 <Text style={s.muted}>📅 {item.menu_date ? new Date(item.menu_date).toLocaleDateString() : ''}</Text>
                 <Text style={s.muted}>📦 {item.order_count || 0} pedidos</Text>
@@ -2195,14 +2244,22 @@ export default function App() {
                   <Pressable style={[s.secondary, { flex: 1 }]} onPress={() => startEditMenu(item.id)}>
                     <Text style={s.secondaryText}>✏️ {_t('cook.editMenu')}</Text>
                   </Pressable>
-                  {item.status === 'draft' && (
+                  {item.is_expired ? (
+                    <Pressable style={[s.primary, { flex: 1 }]} onPress={() => renewMenu(item.id)} disabled={loading}>
+                      <Text style={s.primaryText}>🔄 {_t('cook.renewMenu')}</Text>
+                    </Pressable>
+                  ) : item.status === 'draft' ? (
                     <Pressable style={[s.primary, { flex: 1 }]} onPress={async () => {
                       try { await api(`/menus/${item.id}/publish`, { method: 'PUT', token }); loadMyMenus(); }
                       catch (e) { showToast(translateError(e.message, lang)); }
                     }}>
                       <Text style={s.primaryText}>📢 {_t('cook.publishBtn')}</Text>
                     </Pressable>
-                  )}
+                  ) : item.expires_today ? (
+                    <Pressable style={[s.secondary, { flex: 1 }]} onPress={() => renewMenu(item.id)} disabled={loading}>
+                      <Text style={s.secondaryText}>🔄 {_t('cook.renewMenu')}</Text>
+                    </Pressable>
+                  ) : null}
                 </View>
               </View>
             )}

@@ -287,11 +287,14 @@ router.put('/:id/publish', authenticate, authorize(['cook']), async (req, res, n
   }
 });
 
-// GET /api/menus/my/menus - cook sees their own menus
+// GET /api/menus/my/menus - cook sees their own menus with expiration status
 router.get('/my/menus', authenticate, authorize(['cook']), async (req, res, next) => {
   try {
     const result = await db.query(
-      `SELECT m.*, COUNT(o.id) AS order_count
+      `SELECT m.*, COUNT(o.id) AS order_count,
+              (m.menu_date::date < CURRENT_DATE) AS is_expired,
+              (m.menu_date::date = CURRENT_DATE) AS expires_today,
+              (m.menu_date::date - CURRENT_DATE) AS days_remaining
        FROM menus m
        LEFT JOIN orders o ON o.menu_id = m.id
        WHERE m.cook_id = (SELECT id FROM cook_profiles WHERE user_id = $1)
@@ -302,6 +305,75 @@ router.get('/my/menus', authenticate, authorize(['cook']), async (req, res, next
     );
 
     return res.json({ menus: result.rows });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+// POST /api/menus/:id/renew - duplicate a menu for the next available date
+router.post('/:id/renew', authenticate, authorize(['cook']), async (req, res, next) => {
+  try {
+    // Verify ownership and fetch the source menu with its items
+    const menuResult = await db.query(
+      `SELECT * FROM menus
+       WHERE id = $1
+         AND cook_id = (SELECT id FROM cook_profiles WHERE user_id = $2)`,
+      [req.params.id, req.user.userId],
+    );
+
+    if (menuResult.rows.length === 0) {
+      return res.status(404).json({ message: 'Menu not found or not yours' });
+    }
+
+    const source = menuResult.rows[0];
+
+    // Determine next date: if the menu is expired, use today; else use the next day
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const sourceDate = new Date(source.menu_date);
+    const nextDate = sourceDate < today ? today : new Date(sourceDate.getTime() + 86400000);
+    const nextDateStr = nextDate.toISOString().split('T')[0];
+
+    // Check no menu already exists for that date (avoid duplicates)
+    const existing = await db.query(
+      `SELECT id FROM menus
+       WHERE cook_id = (SELECT id FROM cook_profiles WHERE user_id = $1)
+         AND menu_date::date = $2::date`,
+      [req.user.userId, nextDateStr],
+    );
+    if (existing.rows.length > 0) {
+      return res.status(409).json({ message: 'You already have a menu for that date' });
+    }
+
+    // Copy menu with new date
+    const newMenuResult = await db.query(
+      `INSERT INTO menus
+         (cook_id, title, description, menu_date, order_start_time, order_end_time,
+          pickup_available, delivery_available, delivery_fee, pickup_location, status)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,'draft')
+       RETURNING *`,
+      [source.cook_id, source.title, source.description, nextDateStr,
+        source.order_start_time, source.order_end_time,
+        source.pickup_available, source.delivery_available, source.delivery_fee,
+        source.pickup_location],
+    );
+    const newMenu = newMenuResult.rows[0];
+
+    // Copy items
+    const itemsResult = await db.query('SELECT * FROM menu_items WHERE menu_id = $1', [source.id]);
+    for (const item of itemsResult.rows) {
+      await db.query(
+        `INSERT INTO menu_items
+           (menu_id, name, description, price, quantity_available, quantity_sold,
+            ingredients, allergens, dietary_tags, image_url)
+         VALUES ($1,$2,$3,$4,$5,0,$6,$7,$8,$9)`,
+        [newMenu.id, item.name, item.description, item.price,
+          item.quantity_available, item.ingredients, item.allergens,
+          item.dietary_tags, item.image_url],
+      );
+    }
+
+    return res.status(201).json({ menu: newMenu, date: nextDateStr });
   } catch (error) {
     return next(error);
   }
