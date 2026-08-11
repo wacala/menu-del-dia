@@ -82,7 +82,7 @@ const translations = {
     splash: { description: 'Compra y vende comida casera en tu comunidad.', tagline: 'Cocina comunitaria para tu comunidad', mission1: 'Ayudamos a cocineras y cocineros comunitarios a comercializar sus menús sin intermediarios abusivos', mission2: 'Impulsamos el talento culinario de tu comunidad — hecha en México, para México', mission3: 'Emprende tu propio negocio de cocina, sin ataduras a plataformas monopólicas', login: 'Iniciar sesión', register: 'Crear cuenta', home: 'Inicio', goToPanel: 'Ir al panel' },
     auth: { login: 'Iniciar sesión', register: 'Registrarse', email: 'Correo', password: 'Contraseña', confirmPassword: 'Confirmar contraseña', firstName: 'Nombre', lastName: 'Apellido', username: 'Usuario', signIn: 'Iniciar sesión', createAccount: 'Crear cuenta', member: 'Miembro', cook: 'Cocinero', checkEmail: 'Revisa tu correo', verificationSent: 'Te mandamos un enlace a:', verificationInstructions: 'Dale clic al enlace para activar tu cuenta.', backToLogin: 'Volver a inicio de sesión', passwordsMatch: 'Las contraseñas no coinciden', passwordLength: 'Mínimo 6 caracteres', forgotPassword: '¿Olvidaste tu contraseña?', recoverPassword: 'Recuperar contraseña', sendResetLink: 'Enviar enlace', resetLinkSent: 'Si ese correo existe, recibirás un enlace para restablecer tu contraseña.', emailInvalid: 'Formato de correo inválido', emailVerified: '¡Email verificado! Ya puedes iniciar sesión.', usernameRules: 'Solo letras, números y guión bajo. Mínimo 3 caracteres.', usernameTaken: 'Este usuario ya está registrado', enterCredentials: 'Ingresa tu correo y contraseña', completeFields: 'Completa todos los campos' },
     market: { title: 'Marketplace', loading: 'Cargando...', noMenus: 'No hay menús disponibles', until: 'Hasta', viewMenu: 'Ver menú' },
-    menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', selectItem: 'Selecciona al menos un platillo', enterAddress: 'Ingresa una dirección de entrega', orderPlaced: 'Pedido realizado con éxito', couldNotCreate: 'No se pudo crear el pedido', paymentCancelled: 'Pago cancelado', paymentLabel: 'Método de pago', cash: 'Efectivo', spei: 'Transferencia SPEI', card: 'Tarjeta' },
+    menu: { back: '← Volver', items: 'Platillos', quantity: 'Cantidad', deliveryType: 'Tipo de entrega', pickup: 'Recoger', delivery: 'A domicilio', notes: 'Notas', notesPlaceholder: 'Peticiones especiales', deliveryAddress: 'Dirección', total: 'Total', placeOrder: 'Hacer pedido', selectItem: 'Selecciona al menos un platillo', enterAddress: 'Ingresa una dirección de entrega', orderPlaced: 'Pedido realizado con éxito', couldNotCreate: 'No se pudo crear el pedido', paymentCancelled: 'Pago cancelado', paymentLabel: 'Método de pago', cash: 'Efectivo', spei: 'Transferencia SPEI', card: 'Tarjeta', viewCart: 'Ver carrito', yourOrder: 'Tu pedido' },
     orders: { title: 'Mis pedidos', noOrders: 'Sin pedidos aún', from: 'de', deliveryType: 'Entrega:', total: 'Total:' },
     mealPlanner: { title: 'Planificador', subtitle: 'Organiza tus comidas de la semana', people: 'Personas', meals: 'Comidas', budget: 'Presupuesto', restrictions: 'Restricciones', cuisine: 'Cocina preferida', suggest: 'Sugerir plan', suggesting: 'Buscando...', planTitle: 'Tu plan sugerido', totalCost: 'Costo total', remaining: 'Restante', noSuggestions: 'No encontramos suficientes platillos. Ajusta los criterios.', orderAll: 'Ordenar todo', ordering: 'Ordenando...', ordered: 'Pedidos realizados', perMeal: 'por comida', menuDate: 'Fecha' },
     search: { placeholder: 'Buscar menús, platillos...', all: 'Todas', allDelivery: 'Todos', pickup: 'Recoger', delivery: 'Envío', sortBalanced: 'Balanceado', sortRating: 'Mejor calif.', sortPriceAsc: 'Menor', sortPriceDesc: 'Mayor', sortName: 'A-Z', items: '{{count}} platillo', items_plural: '{{count}} platillos', perItem: 'por unidad' },
@@ -95,7 +95,7 @@ const translations = {
     splash: { description: 'Buy and sell homemade food in your community.', tagline: 'Community kitchen for your community', mission1: 'We help community cooks commercialize their menus without abusive intermediaries', mission2: 'Empowering your community\'s culinary talent — made in Mexico, for Mexico', mission3: 'Start your own kitchen business, free from monopolistic platforms', login: 'Sign in', register: 'Create account', home: 'Home', goToPanel: 'Go to dashboard' },
     auth: { login: 'Login', register: 'Register', email: 'Email', password: 'Password', confirmPassword: 'Confirm password', firstName: 'First name', lastName: 'Last name', username: 'Username', signIn: 'Sign in', createAccount: 'Create account', member: 'Member', cook: 'Cook', checkEmail: 'Check your email', verificationSent: 'We sent a verification link to:', verificationInstructions: 'Click the link to activate your account.', backToLogin: 'Back to Login', passwordsMatch: 'Passwords do not match', passwordLength: 'Password must be at least 6 characters', forgotPassword: 'Forgot password?', recoverPassword: 'Recover password', sendResetLink: 'Send reset link', resetLinkSent: 'If that email exists, you will receive a reset link.', emailInvalid: 'Invalid email format', emailVerified: 'Email verified! You can now log in.', usernameRules: 'Only letters, numbers, and underscores. Min 3 characters.', usernameTaken: 'This username is already taken', enterCredentials: 'Enter your email and password', completeFields: 'Complete all fields' },
     market: { title: 'Marketplace', loading: 'Loading...', noMenus: 'No menus available', until: 'Until', viewMenu: 'View menu' },
-    menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', deliveryAddress: 'Address', total: 'Total', placeOrder: 'Place order', selectItem: 'Select at least one item', enterAddress: 'Enter a delivery address', orderPlaced: 'Order placed successfully', couldNotCreate: 'Could not create order', paymentCancelled: 'Payment cancelled', paymentLabel: 'Payment method', cash: 'Cash', spei: 'SPEI Transfer', card: 'Card' },
+    menu: { back: '← Back', items: 'Items', quantity: 'Qty', deliveryType: 'Delivery type', pickup: 'Pickup', delivery: 'Delivery', notes: 'Notes', notesPlaceholder: 'Special requests', deliveryAddress: 'Address', total: 'Total', placeOrder: 'Place order', selectItem: 'Select at least one item', enterAddress: 'Enter a delivery address', orderPlaced: 'Order placed successfully', couldNotCreate: 'Could not create order', paymentCancelled: 'Payment cancelled', paymentLabel: 'Payment method', cash: 'Cash', spei: 'SPEI Transfer', card: 'Card', viewCart: 'View cart', yourOrder: 'Your order' },
     orders: { title: 'My orders', noOrders: 'No orders yet', from: 'from', deliveryType: 'Delivery:', total: 'Total:' },
     mealPlanner: { title: 'Meal Planner', subtitle: 'Plan your weekly meals', people: 'People', meals: 'Meals', budget: 'Budget', restrictions: 'Restrictions', cuisine: 'Preferred cuisine', suggest: 'Suggest plan', suggesting: 'Searching...', planTitle: 'Your suggested plan', totalCost: 'Total cost', remaining: 'Remaining', noSuggestions: 'Could not find enough items. Adjust your criteria.', orderAll: 'Order all', ordering: 'Ordering...', ordered: 'Orders placed', perMeal: 'per meal', menuDate: 'Date' },
     search: { placeholder: 'Search menus, items...', all: 'All', allDelivery: 'All', pickup: 'Pick up', delivery: 'Delivery', sortBalanced: 'Balanced', sortRating: 'Best rated', sortPriceAsc: 'Cheapest', sortPriceDesc: 'Most Exp.', sortName: 'A-Z', items: '{{count}} item', items_plural: '{{count}} items', perItem: 'per unit' },
@@ -1818,6 +1818,12 @@ export default function App() {
 
   const hasItems = (menu?.items || []).some((item) => Number(draft.quantities[item.id] || 0) > 0);
   const canOrder = hasItems && (draft.deliveryType !== 'delivery' || draft.deliveryAddress.trim());
+  const cartItems = (menu?.items || []).filter((item) => Number(draft.quantities[item.id] || 0) > 0);
+  const cartCount = cartItems.reduce((sum, item) => sum + Number(draft.quantities[item.id] || 0), 0);
+  const cartTotal = cartItems.reduce(
+    (sum, item) => sum + parseFloat(item.price || 0) * Number(draft.quantities[item.id] || 0),
+    0,
+  ).toFixed(2);
 
   const menuView = (
     <View style={{ flex: 1 }}>
@@ -1954,99 +1960,155 @@ export default function App() {
           );
         })}
       </View>
-      <View style={s.card}>
-        <Text style={s.cardTitle}>{_t('menu.deliveryType')}</Text>
-        {/* Radio options - modificador claro */}
-        <View style={{ gap: 6, marginTop: 4 }}>
-          <Pressable
-            onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))}
-            style={{
-              flexDirection: 'row', alignItems: 'center', gap: 10,
-              paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
-              backgroundColor: draft.deliveryType === 'pickup' ? T.primaryLight : 'transparent',
-              borderWidth: 1, borderColor: draft.deliveryType === 'pickup' ? T.primary : T.border,
-            }}>
-            <View style={{
-              width: 18, height: 18, borderRadius: 9,
-              borderWidth: 2, borderColor: draft.deliveryType === 'pickup' ? T.primary : T.muted,
-              alignItems: 'center', justifyContent: 'center',
-            }}>
-              {draft.deliveryType === 'pickup' ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
-            </View>
-            <Ionicons name="storefront-outline" size={16} color={draft.deliveryType === 'pickup' ? T.primary : T.textSecondary} />
-            <Text style={{
-              fontSize: 13, fontWeight: draft.deliveryType === 'pickup' ? '700' : '500',
-              color: draft.deliveryType === 'pickup' ? T.primary : T.text,
-            }}>{_t('menu.pickup')}</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              setDraft((c) => ({ ...c, deliveryType: 'delivery' }));
-              setTimeout(() => addressRef.current?.focus(), 200);
-            }}
-            style={{
-              flexDirection: 'row', alignItems: 'center', gap: 10,
-              paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
-              backgroundColor: draft.deliveryType === 'delivery' ? T.primaryLight : 'transparent',
-              borderWidth: 1, borderColor: draft.deliveryType === 'delivery' ? T.primary : T.border,
-            }}>
-            <View style={{
-              width: 18, height: 18, borderRadius: 9,
-              borderWidth: 2, borderColor: draft.deliveryType === 'delivery' ? T.primary : T.muted,
-              alignItems: 'center', justifyContent: 'center',
-            }}>
-              {draft.deliveryType === 'delivery' ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
-            </View>
-            <Ionicons name="bicycle-outline" size={16} color={draft.deliveryType === 'delivery' ? T.primary : T.textSecondary} />
-            <Text style={{
-              fontSize: 13, fontWeight: draft.deliveryType === 'delivery' ? '700' : '500',
-              color: draft.deliveryType === 'delivery' ? T.primary : T.text,
-            }}>{_t('menu.delivery')}</Text>
+      </ScrollView>
+
+      {/* Floating cart bar */}
+      {hasItems && (
+        <View style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          backgroundColor: T.card, borderTopWidth: 1, borderTopColor: T.border,
+          paddingHorizontal: 16, paddingVertical: 12,
+          flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+          gap: 12, elevation: 8, shadowColor: '#000', shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1, shadowRadius: 6,
+        }}>
+          <View>
+            <Text style={{ fontSize: 12, color: T.muted, fontWeight: '600' }}>
+              {cartCount} {cartCount === 1 ? 'item' : 'items'}
+            </Text>
+            <Text style={{ fontSize: 18, fontWeight: '800', color: T.primary }}>${cartTotal}</Text>
+          </View>
+          <Pressable style={[s.primary, { flex: 1, maxWidth: 180 }]} onPress={() => setScreen('cart')}>
+            <Text style={s.primaryText}>{_t('menu.viewCart')}</Text>
           </Pressable>
         </View>
-        {draft.deliveryType === 'delivery' && (
-          <FloatingField ref={addressRef} label={_t('menu.deliveryAddress')} value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} onFocus={() => scrollToField(800)} />
-        )}
-        <Text style={[s.cardTitle, { marginTop: 8 }]}>{_t('menu.paymentLabel')}</Text>
-        <View style={{ gap: 6 }}>
-          {[['cash', 'cash-outline'], ['spei', 'business-outline'], ['stripe', 'card-outline']].map(([m, icon]) => {
-            const active = draft.paymentMethod === m;
-            return (
-              <Pressable key={m} onPress={() => setDraft((c) => ({ ...c, paymentMethod: m }))}
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
-                  backgroundColor: active ? T.primaryLight : 'transparent',
-                  borderWidth: 1, borderColor: active ? T.primary : T.border }}>
-                {/* Radio indicator */}
-                <View style={{
-                  width: 18, height: 18, borderRadius: 9,
-                  borderWidth: 2, borderColor: active ? T.primary : T.muted,
-                  alignItems: 'center', justifyContent: 'center',
+      )}
+      </KeyboardAvoidingView>
+    </View>
+  );
+
+  // ── Cart / Checkout view ───────────────────────────────────
+  const cartView = (
+    <View style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 130 : 130}>
+        <ScrollView contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 100 }} keyboardShouldPersistTaps="handled">
+          <Pressable onPress={() => setScreen('menu')}>
+            <Text style={s.link}>← {_t('menu.back')}</Text>
+          </Pressable>
+
+          {/* Cart items */}
+          <Text style={s.sectionTitle}>{_t('menu.yourOrder')}</Text>
+          <View style={{ backgroundColor: T.card, borderRadius: 16, borderWidth: 1, borderColor: T.border, overflow: 'hidden' }}>
+            {cartItems.map((item, idx) => {
+              const qty = Number(draft.quantities[item.id] || 0);
+              return (
+                <View key={item.id} style={{
+                  flexDirection: 'row', alignItems: 'center', padding: 14,
+                  borderBottomWidth: idx < cartItems.length - 1 ? 1 : 0,
+                  borderBottomColor: T.border,
                 }}>
-                  {active ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 14, fontWeight: '600', color: T.text }}>{item.name}</Text>
+                    <Text style={{ color: T.primary, fontWeight: '800', fontSize: 13, marginTop: 2 }}>
+                      {money(item.price)} × {qty}
+                    </Text>
+                  </View>
+                  <Text style={{ fontWeight: '800', color: T.text, fontSize: 14 }}>
+                    ${(parseFloat(item.price || 0) * qty).toFixed(2)}
+                  </Text>
                 </View>
-                <Ionicons name={icon} size={16} color={active ? T.primary : T.textSecondary} />
-                <Text style={{ fontSize: 13, fontWeight: active ? '700' : '500', color: active ? T.primary : T.text }}>
-                  {m === 'cash' ? _t('menu.cash') : m === 'spei' ? _t('menu.spei') : _t('menu.card')}
+              );
+            })}
+            <View style={{ padding: 14, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: T.primaryLight }}>
+              <Text style={{ fontWeight: '800', color: T.text, fontSize: 15 }}>{_t('menu.total')}</Text>
+              <Text style={{ fontWeight: '800', color: T.primary, fontSize: 18 }}>${cartTotal}</Text>
+            </View>
+          </View>
+
+          {/* Delivery type */}
+          <View style={s.card}>
+            <Text style={s.cardTitle}>{_t('menu.deliveryType')}</Text>
+            <View style={{ gap: 6, marginTop: 4 }}>
+              <Pressable
+                onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
+                  backgroundColor: draft.deliveryType === 'pickup' ? T.primaryLight : 'transparent',
+                  borderWidth: 1, borderColor: draft.deliveryType === 'pickup' ? T.primary : T.border }}>
+                <View style={{ width: 18, height: 18, borderRadius: 9, borderWidth: 2,
+                  borderColor: draft.deliveryType === 'pickup' ? T.primary : T.muted,
+                  alignItems: 'center', justifyContent: 'center' }}>
+                  {draft.deliveryType === 'pickup' ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+                </View>
+                <Ionicons name="storefront-outline" size={16} color={draft.deliveryType === 'pickup' ? T.primary : T.textSecondary} />
+                <Text style={{ fontSize: 13, fontWeight: draft.deliveryType === 'pickup' ? '700' : '500', color: draft.deliveryType === 'pickup' ? T.primary : T.text }}>
+                  {_t('menu.pickup')}
                 </Text>
               </Pressable>
-            );
-          })}
-        </View>
-        <FloatingField label={_t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} onFocus={() => scrollToField(900)} />
-        <Pressable
-          style={[s.primary, !canOrder && { opacity: 0.4, backgroundColor: T.muted }]}
-          onPress={() => {
-            if (!canOrder) {
-              if (!hasItems) showToast(_t('menu.selectItem'), 'warning');
-              else if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) showToast(_t('menu.enterAddress'), 'warning');
-              return;
-            }
-            placeOrder();
-          }}>
-          <Text style={s.primaryText}>{_t('menu.placeOrder')}</Text>
-        </Pressable>
-      </View>
-      </ScrollView>
+              <Pressable
+                onPress={() => { setDraft((c) => ({ ...c, deliveryType: 'delivery' })); }}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
+                  backgroundColor: draft.deliveryType === 'delivery' ? T.primaryLight : 'transparent',
+                  borderWidth: 1, borderColor: draft.deliveryType === 'delivery' ? T.primary : T.border }}>
+                <View style={{ width: 18, height: 18, borderRadius: 9, borderWidth: 2,
+                  borderColor: draft.deliveryType === 'delivery' ? T.primary : T.muted,
+                  alignItems: 'center', justifyContent: 'center' }}>
+                  {draft.deliveryType === 'delivery' ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+                </View>
+                <Ionicons name="bicycle-outline" size={16} color={draft.deliveryType === 'delivery' ? T.primary : T.textSecondary} />
+                <Text style={{ fontSize: 13, fontWeight: draft.deliveryType === 'delivery' ? '700' : '500', color: draft.deliveryType === 'delivery' ? T.primary : T.text }}>
+                  {_t('menu.delivery')}
+                </Text>
+              </Pressable>
+            </View>
+            {draft.deliveryType === 'delivery' && (
+              <FloatingField ref={addressRef} label={_t('menu.deliveryAddress')} value={draft.deliveryAddress}
+                onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} />
+            )}
+          </View>
+
+          {/* Payment method */}
+          <View style={s.card}>
+            <Text style={s.cardTitle}>{_t('menu.paymentLabel')}</Text>
+            <View style={{ gap: 6 }}>
+              {[['cash', 'cash-outline'], ['spei', 'business-outline'], ['stripe', 'card-outline']].map(([m, icon]) => {
+                const active = draft.paymentMethod === m;
+                return (
+                  <Pressable key={m} onPress={() => setDraft((c) => ({ ...c, paymentMethod: m }))}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
+                      backgroundColor: active ? T.primaryLight : 'transparent',
+                      borderWidth: 1, borderColor: active ? T.primary : T.border }}>
+                    <View style={{ width: 18, height: 18, borderRadius: 9, borderWidth: 2,
+                      borderColor: active ? T.primary : T.muted, alignItems: 'center', justifyContent: 'center' }}>
+                      {active ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+                    </View>
+                    <Ionicons name={icon} size={16} color={active ? T.primary : T.textSecondary} />
+                    <Text style={{ fontSize: 13, fontWeight: active ? '700' : '500', color: active ? T.primary : T.text }}>
+                      {m === 'cash' ? _t('menu.cash') : m === 'spei' ? _t('menu.spei') : _t('menu.card')}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+          </View>
+
+          {/* Notes */}
+          <FloatingField label={_t('menu.notesPlaceholder')} value={draft.specialInstructions} multiline
+            onChangeText={(v) => setDraft((c) => ({ ...c, specialInstructions: v }))} />
+
+          {/* Place order */}
+          <Pressable
+            style={[s.primary, !canOrder && { opacity: 0.4, backgroundColor: T.muted }]}
+            onPress={() => {
+              if (!canOrder) {
+                if (!hasItems) showToast(_t('menu.selectItem'), 'warning');
+                else if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) showToast(_t('menu.enterAddress'), 'warning');
+                return;
+              }
+              placeOrder();
+            }}>
+            <Text style={s.primaryText}>{_t('menu.placeOrder')} · ${cartTotal}</Text>
+          </Pressable>
+        </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
@@ -2499,6 +2561,7 @@ const loggedSplashView = (
       {screen === 'orders' && ordersView}
       {screen === 'profile' && profileView}
       {screen === 'menu' && menuView}
+      {screen === 'cart' && cartView}
       {screen === 'cookDashboard' && cookDashboardView}
       {screen === 'cookMenus' && cookMenusView}
       {screen === 'cookOrders' && cookOrdersView}
