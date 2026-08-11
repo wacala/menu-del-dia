@@ -255,7 +255,30 @@ function DrawerItem({ icon, label, active, onPress, T: theme }) {
 }
 
 function Field(props) {
-  return <TextInput placeholderTextColor={colors.muted} style={styles.input} {...props} />;
+  const [focused, setFocused] = React.useState(false);
+  return (
+    <TextInput
+      placeholderTextColor={colors.muted}
+      style={[styles.input, focused && { borderColor: colors.primary, borderWidth: 1.5 }]}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      {...props}
+    />
+  );
+}
+
+// Reusable focused TextInput — border turns primary when focused
+function FocusInput({ style, ...props }) {
+  const [focused, setFocused] = React.useState(false);
+  return (
+    <TextInput
+      style={[style, focused && { borderColor: colors.primary, borderWidth: 1.5 }]}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      placeholderTextColor={colors.muted}
+      {...props}
+    />
+  );
 }
 
 const FloatingField = React.forwardRef(({ label, value, onChangeText, secureTextEntry, autoCapitalize, required, ...props }, ref) => {
@@ -286,7 +309,10 @@ const FloatingField = React.forwardRef(({ label, value, onChangeText, secureText
       </Animated.Text>
       <TextInput
         ref={ref}
-        style={styles.floatInput}
+        style={[
+          styles.floatInput,
+          focused && { borderColor: colors.primary, borderWidth: 1.5 },
+        ]}
         value={value}
         onChangeText={onChangeText}
         onFocus={() => setFocused(true)}
@@ -417,6 +443,7 @@ export default function App() {
   const [forgotEmail, setForgotEmail] = useState('');
   // Smart search
   const [searchText, setSearchText] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
   const [filterDelivery, setFilterDelivery] = useState('all');
   const [sortBy, setSortBy] = useState('balanced');
   const [cuisineFilter, setCuisineFilter] = useState([]);
@@ -1318,7 +1345,7 @@ export default function App() {
 
       {/* Search bar */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: T.card, borderRadius: 14, borderWidth: 1, borderColor: T.border, paddingHorizontal: 12 }}>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', backgroundColor: T.card, borderRadius: 14, borderWidth: searchFocused ? 1.5 : 1, borderColor: searchFocused ? T.primary : T.border, paddingHorizontal: 12 }}>
           <Ionicons name="search" size={18} color={T.muted} />
           <TextInput
             style={{ flex: 1, paddingVertical: 10, paddingHorizontal: 8, color: T.text, fontSize: 15 }}
@@ -1326,6 +1353,8 @@ export default function App() {
             placeholderTextColor={T.muted}
             value={searchText}
             onChangeText={setSearchText}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
           />
           {searchText ? (
             <Pressable onPress={() => setSearchText('')}>
@@ -1564,9 +1593,9 @@ export default function App() {
               </View>
               <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Precio</Text>
               <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center', marginBottom: 20 }}>
-                <TextInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Mín" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
+                <FocusInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Mín" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={minPrice} onChangeText={setMinPrice} />
                 <Text style={{ color: T.muted }}>—</Text>
-                <TextInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Máx" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
+                <FocusInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Máx" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
               </View>
               <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Calificación mínima</Text>
               <View style={{ gap: 4, marginBottom: 20 }}>
@@ -1733,7 +1762,7 @@ export default function App() {
       <View style={s.card}>
         <Text style={s.body}>{_t('profile.phone')}</Text>
         <View style={{ flexDirection: 'row', gap: 8, marginTop: 8 }}>
-          <TextInput
+          <FocusInput
             style={[s.input, { flex: 1 }]}
             placeholder={_t('profile.phonePlaceholder')}
             placeholderTextColor={T.muted}
