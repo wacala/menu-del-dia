@@ -1355,11 +1355,12 @@ export default function App() {
             const active = filterDelivery === d;
             return (
               <Pressable key={d} onPress={() => setFilterDelivery(d)}
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20,
-                  backgroundColor: active ? T.primary : T.card,
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
+                  backgroundColor: active ? T.primaryLight : T.card,
                   borderWidth: 1, borderColor: active ? T.primary : T.border }}>
-                {icon ? <Ionicons name={icon} size={13} color={active ? '#fff' : T.textSecondary} /> : null}
-                <Text style={{ fontSize: 12, fontWeight: '700', color: active ? '#fff' : T.text }}>
+                <Ionicons name={active ? 'radio-button-on' : 'radio-button-off'} size={14} color={active ? T.primary : T.muted} />
+                {icon ? <Ionicons name={icon} size={13} color={active ? T.primary : T.textSecondary} /> : null}
+                <Text style={{ fontSize: 12, fontWeight: active ? '700' : '500', color: active ? T.primary : T.text }}>
                   {d === 'all' ? _t('search.allDelivery') : d === 'pickup' ? _t('search.pickup') : _t('search.delivery')}
                 </Text>
               </Pressable>
@@ -1372,16 +1373,17 @@ export default function App() {
           <Ionicons name="options-outline" size={18} color={T.text} />
         </Pressable>
       </View>
-      {/* Cuisine scrollable chips */}
+      {/* Cuisine chips — checkbox style (multi-select) */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 6, marginBottom: 8 }}>
         {cuisines.filter((c) => c !== 'all').map((c) => {
           const active = cuisineFilter.includes(c);
           return (
             <Pressable key={c} onPress={() => setCuisineFilter((prev) => active ? prev.filter((x) => x !== c) : [...prev, c])}
-              style={{ paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20,
-                backgroundColor: active ? T.primary : T.card,
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 5, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 16,
+                backgroundColor: active ? T.primaryLight : T.card,
                 borderWidth: 1, borderColor: active ? T.primary : T.border }}>
-              <Text style={{ fontSize: 12, fontWeight: '700', color: active ? '#fff' : T.text }}>
+              <Ionicons name={active ? 'checkbox' : 'square-outline'} size={14} color={active ? T.primary : T.muted} />
+              <Text style={{ fontSize: 12, fontWeight: active ? '700' : '500', color: active ? T.primary : T.text }}>
                 {c.charAt(0).toUpperCase() + c.slice(1)}
               </Text>
             </Pressable>
@@ -1543,14 +1545,20 @@ export default function App() {
             </View>
             <ScrollView style={{ padding: 16 }} nestedScrollEnabled>
               <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Ordenar por</Text>
-              <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
+              <View style={{ gap: 4, marginBottom: 20 }}>
                 {[['balanced', 'swap-vertical', 'Balanceado'], ['rating', 'star', 'Calificación'], ['price_asc', 'trending-up', 'Precio ↑'], ['price_desc', 'trending-down', 'Precio ↓'], ['name', 'text', 'A-Z']].map(([val, icon, lab]) => (
                   <Pressable key={val} onPress={() => setSortBy(val)}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
-                      backgroundColor: sortBy === val ? T.primary : T.card,
-                      borderWidth: 1, borderColor: sortBy === val ? T.primary : T.border }}>
-                    <Ionicons name={icon} size={14} color={sortBy === val ? '#fff' : T.text} />
-                    <Text style={{ fontSize: 12, fontWeight: '700', color: sortBy === val ? '#fff' : T.text }}>{lab}</Text>
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8,
+                      backgroundColor: sortBy === val ? T.primaryLight : 'transparent' }}>
+                    <View style={{
+                      width: 18, height: 18, borderRadius: 9,
+                      borderWidth: 2, borderColor: sortBy === val ? T.primary : T.muted,
+                      alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {sortBy === val ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+                    </View>
+                    <Ionicons name={icon} size={14} color={sortBy === val ? T.primary : T.textSecondary} />
+                    <Text style={{ fontSize: 13, fontWeight: sortBy === val ? '700' : '500', color: sortBy === val ? T.primary : T.text }}>{lab}</Text>
                   </Pressable>
                 ))}
               </View>
@@ -1561,13 +1569,19 @@ export default function App() {
                 <TextInput style={{ flex: 1, borderWidth: 1, borderColor: T.border, borderRadius: 10, padding: 10, color: T.text, fontSize: 14 }} placeholder="$ Máx" placeholderTextColor={T.muted} keyboardType="decimal-pad" value={maxPrice} onChangeText={setMaxPrice} />
               </View>
               <Text style={{ fontSize: 12, fontWeight: '700', color: T.muted, letterSpacing: 0.5, marginBottom: 8, textTransform: 'uppercase' }}>Calificación mínima</Text>
-              <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap', marginBottom: 20 }}>
+              <View style={{ gap: 4, marginBottom: 20 }}>
                 {[0, 1, 2, 3, 4, 5].map((r) => (
                   <Pressable key={r} onPress={() => setMinRating(r)}
-                    style={{ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16,
-                      backgroundColor: minRating === r ? T.primary : T.card,
-                      borderWidth: 1, borderColor: minRating === r ? T.primary : T.border }}>
-                    <Text style={{ fontSize: 12, fontWeight: '700', color: minRating === r ? '#fff' : T.text }}>
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8,
+                      backgroundColor: minRating === r ? T.primaryLight : 'transparent' }}>
+                    <View style={{
+                      width: 18, height: 18, borderRadius: 9,
+                      borderWidth: 2, borderColor: minRating === r ? T.primary : T.muted,
+                      alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      {minRating === r ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+                    </View>
+                    <Text style={{ fontSize: 13, fontWeight: minRating === r ? '700' : '500', color: minRating === r ? T.primary : T.text }}>
                       {r === 0 ? 'Cualquiera' : `${'★'.repeat(r)}${'☆'.repeat(5 - r)}`}
                     </Text>
                   </Pressable>
@@ -1913,19 +1927,27 @@ export default function App() {
       </View>
       <View style={s.card}>
         <Text style={s.cardTitle}>{_t('menu.deliveryType')}</Text>
-        {/* Segmented tabs - alta jerarquía */}
-        <View style={{ flexDirection: 'row', backgroundColor: T.border, borderRadius: 12, padding: 4, marginTop: 4 }}>
+        {/* Radio options - modificador claro */}
+        <View style={{ gap: 6, marginTop: 4 }}>
           <Pressable
             onPress={() => setDraft((c) => ({ ...c, deliveryType: 'pickup' }))}
             style={{
-              flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-              paddingVertical: 10, borderRadius: 9,
-              backgroundColor: draft.deliveryType === 'pickup' ? T.primary : 'transparent',
+              flexDirection: 'row', alignItems: 'center', gap: 10,
+              paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
+              backgroundColor: draft.deliveryType === 'pickup' ? T.primaryLight : 'transparent',
+              borderWidth: 1, borderColor: draft.deliveryType === 'pickup' ? T.primary : T.border,
             }}>
-            <Ionicons name="storefront-outline" size={16} color={draft.deliveryType === 'pickup' ? '#fff' : T.muted} />
+            <View style={{
+              width: 18, height: 18, borderRadius: 9,
+              borderWidth: 2, borderColor: draft.deliveryType === 'pickup' ? T.primary : T.muted,
+              alignItems: 'center', justifyContent: 'center',
+            }}>
+              {draft.deliveryType === 'pickup' ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+            </View>
+            <Ionicons name="storefront-outline" size={16} color={draft.deliveryType === 'pickup' ? T.primary : T.textSecondary} />
             <Text style={{
-              fontSize: 13, fontWeight: '700',
-              color: draft.deliveryType === 'pickup' ? '#fff' : T.textSecondary,
+              fontSize: 13, fontWeight: draft.deliveryType === 'pickup' ? '700' : '500',
+              color: draft.deliveryType === 'pickup' ? T.primary : T.text,
             }}>{_t('menu.pickup')}</Text>
           </Pressable>
           <Pressable
@@ -1934,14 +1956,22 @@ export default function App() {
               setTimeout(() => addressRef.current?.focus(), 200);
             }}
             style={{
-              flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-              paddingVertical: 10, borderRadius: 9,
-              backgroundColor: draft.deliveryType === 'delivery' ? T.primary : 'transparent',
+              flexDirection: 'row', alignItems: 'center', gap: 10,
+              paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
+              backgroundColor: draft.deliveryType === 'delivery' ? T.primaryLight : 'transparent',
+              borderWidth: 1, borderColor: draft.deliveryType === 'delivery' ? T.primary : T.border,
             }}>
-            <Ionicons name="bicycle-outline" size={16} color={draft.deliveryType === 'delivery' ? '#fff' : T.muted} />
+            <View style={{
+              width: 18, height: 18, borderRadius: 9,
+              borderWidth: 2, borderColor: draft.deliveryType === 'delivery' ? T.primary : T.muted,
+              alignItems: 'center', justifyContent: 'center',
+            }}>
+              {draft.deliveryType === 'delivery' ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+            </View>
+            <Ionicons name="bicycle-outline" size={16} color={draft.deliveryType === 'delivery' ? T.primary : T.textSecondary} />
             <Text style={{
-              fontSize: 13, fontWeight: '700',
-              color: draft.deliveryType === 'delivery' ? '#fff' : T.textSecondary,
+              fontSize: 13, fontWeight: draft.deliveryType === 'delivery' ? '700' : '500',
+              color: draft.deliveryType === 'delivery' ? T.primary : T.text,
             }}>{_t('menu.delivery')}</Text>
           </Pressable>
         </View>
@@ -1949,16 +1979,24 @@ export default function App() {
           <FloatingField ref={addressRef} label={_t('menu.deliveryAddress')} value={draft.deliveryAddress} onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} onFocus={() => scrollToField(800)} />
         )}
         <Text style={[s.cardTitle, { marginTop: 8 }]}>{_t('menu.paymentLabel')}</Text>
-        <View style={{ flexDirection: 'row', gap: 6, flexWrap: 'wrap' }}>
+        <View style={{ gap: 6 }}>
           {[['cash', 'cash-outline'], ['spei', 'business-outline'], ['stripe', 'card-outline']].map(([m, icon]) => {
             const active = draft.paymentMethod === m;
             return (
               <Pressable key={m} onPress={() => setDraft((c) => ({ ...c, paymentMethod: m }))}
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 16,
-                  backgroundColor: active ? T.primary : T.card,
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingVertical: 10, borderRadius: 10,
+                  backgroundColor: active ? T.primaryLight : 'transparent',
                   borderWidth: 1, borderColor: active ? T.primary : T.border }}>
-                <Ionicons name={icon} size={15} color={active ? '#fff' : T.textSecondary} />
-                <Text style={{ fontSize: 12, fontWeight: '700', color: active ? '#fff' : T.text }}>
+                {/* Radio indicator */}
+                <View style={{
+                  width: 18, height: 18, borderRadius: 9,
+                  borderWidth: 2, borderColor: active ? T.primary : T.muted,
+                  alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {active ? <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: T.primary }} /> : null}
+                </View>
+                <Ionicons name={icon} size={16} color={active ? T.primary : T.textSecondary} />
+                <Text style={{ fontSize: 13, fontWeight: active ? '700' : '500', color: active ? T.primary : T.text }}>
                   {m === 'cash' ? _t('menu.cash') : m === 'spei' ? _t('menu.spei') : _t('menu.card')}
                 </Text>
               </Pressable>
