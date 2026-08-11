@@ -21,6 +21,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useStripe } from '@stripe/stripe-react-native';
+import { COLONIAS } from './colonias';
 
 const STORAGE_KEY = 'menu-del-dia-session';
 const THEME_KEY = 'menu-del-dia-theme';
@@ -281,6 +282,136 @@ function FocusInput({ style, ...props }) {
   );
 }
 
+// Address form with predictive colonia search (CDMX)
+function AddressForm({ draft, setDraft, theme }) {
+  const [coloniaQuery, setColoniaQuery] = React.useState('');
+  const [showSuggestions, setShowSuggestions] = React.useState(false);
+  const T = theme || colors;
+
+  const coloniaSuggestions = React.useMemo(() => {
+    const q = coloniaQuery.trim().toLowerCase();
+    if (!q) return [];
+    return COLONIAS
+      .filter((c) => c.colonia.toLowerCase().includes(q) || c.alcaldia.toLowerCase().includes(q))
+      .slice(0, 6);
+  }, [coloniaQuery]);
+
+  const selectColonia = (c) => {
+    setColoniaQuery(c.colonia);
+    setShowSuggestions(false);
+    setDraft((prev) => ({
+      ...prev,
+      addressColonia: c.colonia,
+      addressAlcaldia: c.alcaldia,
+      addressCp: c.cp,
+    }));
+  };
+
+  const clearColonia = () => {
+    setColoniaQuery('');
+    setShowSuggestions(false);
+    setDraft((prev) => ({
+      ...prev,
+      addressColonia: '',
+      addressAlcaldia: '',
+      addressCp: '',
+    }));
+  };
+
+  const fieldStyle = {
+    borderWidth: 1,
+    borderColor: T.border,
+    backgroundColor: T.card,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    color: T.text,
+    fontSize: 14,
+  };
+
+  return (
+    <View style={{ gap: 10 }}>
+      <Text style={{ fontSize: 14, fontWeight: '700', color: T.text }}>Dirección de entrega</Text>
+
+      {/* Calle */}
+      <FocusInput
+        style={fieldStyle}
+        placeholder="Calle"
+        placeholderTextColor={T.muted}
+        value={draft.addressStreet}
+        onChangeText={(v) => setDraft((prev) => ({ ...prev, addressStreet: v }))}
+      />
+
+      {/* Número exterior / interior */}
+      <View style={{ flexDirection: 'row', gap: 8 }}>
+        <FocusInput
+          style={[fieldStyle, { flex: 1 }]}
+          placeholder="N° Exterior"
+          placeholderTextColor={T.muted}
+          value={draft.addressExt}
+          onChangeText={(v) => setDraft((prev) => ({ ...prev, addressExt: v }))}
+          keyboardType="default"
+        />
+        <FocusInput
+          style={[fieldStyle, { flex: 1 }]}
+          placeholder="N° Interior (opcional)"
+          placeholderTextColor={T.muted}
+          value={draft.addressInt}
+          onChangeText={(v) => setDraft((prev) => ({ ...prev, addressInt: v }))}
+        />
+      </View>
+
+      {/* Colonia predictiva */}
+      <View>
+        <FocusInput
+          style={fieldStyle}
+          placeholder="Colonia"
+          placeholderTextColor={T.muted}
+          value={coloniaQuery}
+          onChangeText={(v) => { setColoniaQuery(v); setShowSuggestions(true); if (!v) clearColonia(); }}
+          onFocus={() => setShowSuggestions(true)}
+        />
+        {showSuggestions && coloniaSuggestions.length > 0 && (
+          <View style={{
+            marginTop: 4, borderRadius: 10, borderWidth: 1, borderColor: T.border,
+            backgroundColor: T.card, overflow: 'hidden', zIndex: 20, elevation: 4,
+          }}>
+            {coloniaSuggestions.map((c, i) => (
+              <Pressable key={c.colonia + c.cp} onPress={() => selectColonia(c)}
+                style={{
+                  paddingHorizontal: 12, paddingVertical: 10,
+                  borderBottomWidth: i < coloniaSuggestions.length - 1 ? 1 : 0,
+                  borderBottomColor: T.border,
+                }}>
+                <Text style={{ fontSize: 14, fontWeight: '600', color: T.text }}>{c.colonia}</Text>
+                <Text style={{ fontSize: 11, color: T.muted }}>
+                  {c.alcaldia} · CP {c.cp}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        )}
+      </View>
+
+      {/* Alcaldía + CP — auto-llenados */}
+      <View style={{ flexDirection: 'row', gap: 8 }}>
+        <View style={[fieldStyle, { flex: 1, opacity: 0.7, backgroundColor: T.coffeeLight || T.card }]}>
+          <Text style={{ fontSize: 11, color: T.muted, marginBottom: 2 }}>Alcaldía</Text>
+          <Text style={{ fontSize: 14, color: T.text, fontWeight: '600' }}>
+            {draft.addressAlcaldia || '—'}
+          </Text>
+        </View>
+        <View style={[fieldStyle, { width: 100, opacity: 0.7, backgroundColor: T.coffeeLight || T.card }]}>
+          <Text style={{ fontSize: 11, color: T.muted, marginBottom: 2 }}>C.P.</Text>
+          <Text style={{ fontSize: 14, color: T.text, fontWeight: '600' }}>
+            {draft.addressCp || '—'}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
 const FloatingField = React.forwardRef(({ label, value, onChangeText, secureTextEntry, autoCapitalize, required, ...props }, ref) => {
   const [focused, setFocused] = useState(false);
   const anim = useRef(new Animated.Value(value ? 1 : 0)).current;
@@ -420,6 +551,12 @@ export default function App() {
     deliveryType: 'pickup',
     paymentMethod: 'cash',
     deliveryAddress: '',
+    addressStreet: '',
+    addressExt: '',
+    addressInt: '',
+    addressColonia: '',
+    addressAlcaldia: '',
+    addressCp: '',
     specialInstructions: '',
     quantities: {},
   });
@@ -861,7 +998,7 @@ export default function App() {
       return;
     }
 
-    if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) {
+    if (draft.deliveryType === 'delivery' && !addressValid) {
       showToast(_t('menu.enterAddress'), 'warning');
       return;
     }
@@ -869,6 +1006,18 @@ export default function App() {
     setLoading(true);
     clearToast();
     try {
+      // Compose full delivery address
+      const fullAddress = draft.deliveryType === 'delivery'
+        ? [
+          draft.addressStreet.trim(),
+          draft.addressExt.trim() ? `#${draft.addressExt.trim()}` : '',
+          draft.addressInt.trim() ? `Int ${draft.addressInt.trim()}` : '',
+          draft.addressColonia.trim(),
+          draft.addressAlcaldia.trim(),
+          `CP ${draft.addressCp.trim()}`,
+        ].filter(Boolean).join(', ')
+        : undefined;
+
       const orderData = await api('/orders', {
         method: 'POST',
         token,
@@ -877,7 +1026,7 @@ export default function App() {
           items,
           paymentMethod: draft.paymentMethod,
           deliveryType: draft.deliveryType,
-          deliveryAddress: draft.deliveryAddress.trim() || undefined,
+          deliveryAddress: fullAddress,
           specialInstructions: draft.specialInstructions.trim() || undefined,
         },
       });
@@ -1817,7 +1966,14 @@ export default function App() {
   );
 
   const hasItems = (menu?.items || []).some((item) => Number(draft.quantities[item.id] || 0) > 0);
-  const canOrder = hasItems && (draft.deliveryType !== 'delivery' || draft.deliveryAddress.trim());
+  const addressValid = (
+    draft.addressStreet.trim()
+    && draft.addressExt.trim()
+    && draft.addressColonia.trim()
+    && draft.addressAlcaldia.trim()
+    && draft.addressCp.trim()
+  );
+  const canOrder = hasItems && (draft.deliveryType !== 'delivery' || addressValid);
   const cartItems = (menu?.items || []).filter((item) => Number(draft.quantities[item.id] || 0) > 0);
   const cartCount = cartItems.reduce((sum, item) => sum + Number(draft.quantities[item.id] || 0), 0);
   const cartTotal = cartItems.reduce(
@@ -2061,8 +2217,7 @@ export default function App() {
               </Pressable>
             </View>
             {draft.deliveryType === 'delivery' && (
-              <FloatingField ref={addressRef} label={_t('menu.deliveryAddress')} value={draft.deliveryAddress}
-                onChangeText={(v) => setDraft((c) => ({ ...c, deliveryAddress: v }))} />
+              <AddressForm draft={draft} setDraft={setDraft} theme={T} />
             )}
           </View>
 
@@ -2101,7 +2256,7 @@ export default function App() {
             onPress={() => {
               if (!canOrder) {
                 if (!hasItems) showToast(_t('menu.selectItem'), 'warning');
-                else if (draft.deliveryType === 'delivery' && !draft.deliveryAddress.trim()) showToast(_t('menu.enterAddress'), 'warning');
+                else if (draft.deliveryType === 'delivery' && !addressValid) showToast(_t('menu.enterAddress'), 'warning');
                 return;
               }
               placeOrder();
