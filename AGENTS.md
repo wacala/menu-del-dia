@@ -137,6 +137,7 @@ La app móvil es un solo archivo `App.js` (~1300 líneas) que contiene:
 | 7 | 🟢 Futuro | **Promoción de cocinas** — Sistema de destacados, banners y posicionamiento (tipo "pagar para aparecer arriba") |
 | 8 | 🟢 Futuro | **Incentivos para compradores** — Recompensas, niveles, descuentos por fidelidad |
 | 9 | 🟢 Futuro | **Premios para cocineros** — Badges, niveles, visibilidad, herramientas avanzadas |
+| 10 | 🟡 Media | **Ampliar dataset de colonias** — Abarcar todas las colonias de CDMX (actualmente ~105 en `mobile/colonias.js`) |
 
 ---
 
