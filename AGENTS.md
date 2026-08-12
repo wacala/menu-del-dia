@@ -128,7 +128,7 @@ La app móvil es un solo archivo `App.js` (~1300 líneas) que contiene:
 
 | # | Prioridad | Tarea |
 |---|-----------|-------|
-| 1 | 🔴 Alta | **Sistema de cobros** — Stripe: integrar frontend móvil/web, solo pago por plataforma |
+| 1 | 🔴 Alta | **Sistema de cobros** — Stripe: integrar frontend móvil/web, solo pago por plataforma. **Estado actual:** modo simulado (`DEV_SKIP_PAYMENT=true`). Falta: keys reales de Stripe, `EXPO_PUBLIC_STRIPE_KEY`, desactivar simulación, webhook |
 | 2 | 🟡 Media | **Replicar a Web** — Buscador inteligente + creador menús desde mobile a web |
 | 3 | 🟡 Media | **Testing** — Pruebas de flujos críticos (registro, pago, creación menú) |
 | 4 | 🟢 Futuro | **Community Manager Agent** — AI para redes sociales y comunicación |
