@@ -882,11 +882,14 @@ export default function App() {
     try {
       const data = await api(`/menus/${id}`);
       setMenu(data.menu);
-      const quantities = {};
-      (data.menu.items || []).forEach((item) => {
-        quantities[item.id] = 1;
+      // Preserve the cart — items already added stay; new menu items start at 0.
+      setDraft((current) => {
+        const quantities = { ...(current.quantities || {}) };
+        (data.menu.items || []).forEach((item) => {
+          if (quantities[item.id] === undefined) quantities[item.id] = 0;
+        });
+        return { ...current, quantities };
       });
-      setDraft((current) => ({ ...current, quantities }));
       setScreen('menu');
     } catch (e) {
       showToast(translateError(e.message, lang));
@@ -894,6 +897,52 @@ export default function App() {
       setLoading(false);
     }
   };
+
+  // Global cart — persists across menus, so the badge, menu view, and checkout
+  // always reflect every item the buyer has added, no matter which menu is open.
+  const allMenuItems = useMemo(() =>
+    (menus || []).flatMap((m) =>
+      (m.items || []).map((it) => ({
+        ...it,
+        menuId: m.id,
+        menuTitle: m.title,
+        cookName: `${m.cook_first_name || ''} ${m.cook_last_name || ''}`.trim(),
+      })),
+    ),
+  [menus]);
+  const globalCartItems = useMemo(() =>
+    allMenuItems.filter((it) => Number(draft.quantities[it.id] || 0) > 0),
+  [allMenuItems, draft.quantities]);
+  const cartItems = globalCartItems;
+  const cartCount = globalCartItems.reduce((sum, item) => sum + Number(draft.quantities[item.id] || 0), 0);
+  const cartTotal = globalCartItems.reduce(
+    (sum, item) => sum + parseFloat(item.price || 0) * Number(draft.quantities[item.id] || 0),
+    0,
+  ).toFixed(2);
+  const hasItems = cartItems.length > 0;
+  const addressValid = (
+    draft.addressStreet.trim()
+    && draft.addressExt.trim()
+    && draft.addressColonia.trim()
+    && draft.addressAlcaldia.trim()
+    && draft.addressCp.trim()
+  );
+  const canOrder = hasItems && (draft.deliveryType !== 'delivery' || addressValid);
+  const cartIcon = (
+    <Pressable onPress={() => setScreen('cart')} style={{ position: 'relative' }}>
+      <Ionicons name="cart-outline" size={22} color={T.primary} />
+      {cartCount > 0 && (
+        <View style={{
+          position: 'absolute', top: -5, right: -7,
+          backgroundColor: T.primary, borderRadius: 8,
+          minWidth: 16, height: 16, paddingHorizontal: 3,
+          alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Text style={{ color: '#fff', fontSize: 9, fontWeight: '800' }}>{cartCount > 99 ? '99+' : cartCount}</Text>
+        </View>
+      )}
+    </Pressable>
+  );
 
   const submitAuth = async () => {
     clearToast();
@@ -989,14 +1038,15 @@ export default function App() {
   };
 
   const placeOrder = async () => {
-    const items = (menu?.items || [])
-      .map((item) => ({ menuItemId: item.id, quantity: Number(draft.quantities[item.id] || 0) }))
-      .filter((item) => item.quantity > 0);
+      const items = globalCartItems
+      .map((item) => ({ menuItemId: item.id, quantity: Number(draft.quantities[item.id] || 0) }));
 
     if (items.length === 0) {
       showToast(_t('menu.selectItem'), 'warning');
       return;
     }
+
+    const orderMenuId = globalCartItems[0]?.menuId || menu?.id;
 
     if (draft.deliveryType === 'delivery' && !addressValid) {
       showToast(_t('menu.enterAddress'), 'warning');
@@ -1022,7 +1072,7 @@ export default function App() {
         method: 'POST',
         token,
         body: {
-          menuId: menu.id,
+          menuId: orderMenuId,
           items,
           paymentMethod: draft.paymentMethod,
           deliveryType: draft.deliveryType,
@@ -1059,6 +1109,8 @@ export default function App() {
         await api(`/orders/${orderId}/status`, { method: 'PUT', token, body: { status: 'delivered', skip_auth: true } });
       }
       showToast(_t('menu.orderPlaced'), 'success');
+      // Clear the cart after a successful order
+      setDraft((c) => ({ ...c, quantities: {}, deliveryType: 'pickup', paymentMethod: 'cash', specialInstructions: '' }));
       setScreen('orders');
       await loadOrders();
     } catch (e) {
@@ -1965,22 +2017,6 @@ export default function App() {
     </ScrollView>
   );
 
-  const hasItems = (menu?.items || []).some((item) => Number(draft.quantities[item.id] || 0) > 0);
-  const addressValid = (
-    draft.addressStreet.trim()
-    && draft.addressExt.trim()
-    && draft.addressColonia.trim()
-    && draft.addressAlcaldia.trim()
-    && draft.addressCp.trim()
-  );
-  const canOrder = hasItems && (draft.deliveryType !== 'delivery' || addressValid);
-  const cartItems = (menu?.items || []).filter((item) => Number(draft.quantities[item.id] || 0) > 0);
-  const cartCount = cartItems.reduce((sum, item) => sum + Number(draft.quantities[item.id] || 0), 0);
-  const cartTotal = cartItems.reduce(
-    (sum, item) => sum + parseFloat(item.price || 0) * Number(draft.quantities[item.id] || 0),
-    0,
-  ).toFixed(2);
-
   const menuView = (
     <View style={{ flex: 1 }}>
       <KeyboardAvoidingView
@@ -2148,12 +2184,18 @@ export default function App() {
     <View style={{ flex: 1 }}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 130 : 130}>
         <ScrollView contentContainerStyle={{ padding: 16, gap: 12, paddingBottom: 100 }} keyboardShouldPersistTaps="handled">
-          <Pressable onPress={() => setScreen('menu')}>
+          <Pressable onPress={() => setScreen(menu ? 'menu' : 'market')}>
             <Text style={s.link}>← {_t('menu.back')}</Text>
           </Pressable>
 
-          {/* Cart items */}
+          {/* Cart items — global, shows every item added across menus */}
           <Text style={s.sectionTitle}>{_t('menu.yourOrder')}</Text>
+          {cartItems.length === 0 ? (
+            <View style={{ paddingVertical: 24, alignItems: 'center', backgroundColor: T.card, borderRadius: 16, borderWidth: 1, borderColor: T.border }}>
+              <Ionicons name="cart-outline" size={40} color={T.border} />
+              <Text style={[s.helper, { marginTop: 8 }]}>Tu carrito está vacío</Text>
+            </View>
+          ) : (
           <View style={{ backgroundColor: T.card, borderRadius: 16, borderWidth: 1, borderColor: T.border, overflow: 'hidden' }}>
             {cartItems.map((item, idx) => {
               const qty = Number(draft.quantities[item.id] || 0);
@@ -2165,6 +2207,11 @@ export default function App() {
                 }}>
                   <View style={{ flex: 1 }}>
                     <Text style={{ fontSize: 14, fontWeight: '600', color: T.text }}>{item.name}</Text>
+                    {item.cookName ? (
+                      <Text style={{ fontSize: 11, color: T.muted, marginTop: 1 }}>
+                        👨‍🍳 {item.cookName}
+                      </Text>
+                    ) : null}
                     <Text style={{ color: T.primary, fontWeight: '800', fontSize: 13, marginTop: 2 }}>
                       {money(item.price)} × {qty}
                     </Text>
@@ -2180,6 +2227,7 @@ export default function App() {
               <Text style={{ fontWeight: '800', color: T.primary, fontSize: 18 }}>${cartTotal}</Text>
             </View>
           </View>
+          )}
 
           {/* Delivery type */}
           <View style={s.card}>
@@ -2661,9 +2709,13 @@ const loggedSplashView = (
             <Ionicons name="menu" size={24} color={T.text} />
           </Pressable>
           {screen !== 'splash' && <Text style={s.brand}>{_t('app.name')}</Text>}
-          <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={s.langBtn}>
-            <Text style={s.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
-          </Pressable>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+            {/* Cart icon — always visible for the buyer across all screens */}
+            {user?.role !== 'cook' && cartIcon}
+            <Pressable onPress={() => changeLang(lang === 'es-MX' ? 'en' : 'es-MX')} style={s.langBtn}>
+              <Text style={s.langText}>{lang === 'es-MX' ? '🇲🇽' : '🇺🇸'}</Text>
+            </Pressable>
+          </View>
         </View>
       </View>
 

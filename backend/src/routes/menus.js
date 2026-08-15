@@ -361,17 +361,15 @@ router.post('/:id/renew', authenticate, authorize(['cook']), async (req, res, ne
 
     // Copy items
     const itemsResult = await db.query('SELECT * FROM menu_items WHERE menu_id = $1', [source.id]);
-    for (const item of itemsResult.rows) {
-      await db.query(
-        `INSERT INTO menu_items
-           (menu_id, name, description, price, quantity_available, quantity_sold,
-            ingredients, allergens, dietary_tags, image_url)
-         VALUES ($1,$2,$3,$4,$5,0,$6,$7,$8,$9)`,
-        [newMenu.id, item.name, item.description, item.price,
-          item.quantity_available, item.ingredients, item.allergens,
-          item.dietary_tags, item.image_url],
-      );
-    }
+    await Promise.all(itemsResult.rows.map((item) => db.query(
+      `INSERT INTO menu_items
+         (menu_id, name, description, price, quantity_available, quantity_sold,
+          ingredients, allergens, dietary_tags, image_url)
+       VALUES ($1,$2,$3,$4,$5,0,$6,$7,$8,$9)`,
+      [newMenu.id, item.name, item.description, item.price,
+        item.quantity_available, item.ingredients, item.allergens,
+        item.dietary_tags, item.image_url],
+    )));
 
     return res.status(201).json({ menu: newMenu, date: nextDateStr });
   } catch (error) {

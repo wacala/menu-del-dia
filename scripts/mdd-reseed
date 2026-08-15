@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Re-seeds the LOCAL development database: clear all user data, then seed cooks + members.
+set -e
+
+cd "$(dirname "$0")/.."
+ROOT="$(pwd)"
+
+echo "🗑️  Clearing user data (local db)..."
+cd "$ROOT/backend"
+NODE_ENV=development npm run db:clear-users
+
+echo "🌱 Seeding cooks (local db)..."
+"$ROOT/scripts/mdd-seed-cooks"
+
+echo "🌱 Seeding members (local db)..."
+"$ROOT/scripts/mdd-seed-members"
+
+echo ""
+echo "✅ Re-seed complete! (Local DB)"

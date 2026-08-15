@@ -83,6 +83,10 @@ async function seed() {
       );
       const cookProfileId = profileResult.rows[0].id;
 
+      // Remove existing menus for this cook to avoid duplicates
+      // (menu_items cascade via FK)
+      await db.query('DELETE FROM menus WHERE cook_id = $1', [cookProfileId]);
+
       // Create 3 menus across the week
       for (let menuIdx = 0; menuIdx < 3; menuIdx++) {
         const template = menuTemplates[menuIdx % menuTemplates.length];
